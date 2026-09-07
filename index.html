@@ -1,89 +1,98 @@
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFB6A3">
 <title>우리 아기 이유식 노트</title><style>
-:root{--bg:#FFF9F5;--ink:#3E3A38;--sub:#8C8480;--ln:#F0E6DF;--pc:#FF9E7D;--pd:#F2734B;--mt:#7ED0B8;--lv:#A9A0E0;--sn:#FFC861;--rd:#EF6A4C;--bl:#7FA8D9}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;padding-bottom:76px}
-#app{max-width:540px;margin:0 auto}h1,h4{margin:0;line-height:1.35}
+:root{--bg:#FFF9F5;--ink:#3E3A38;--sub:#8C8480;--ln:#F0E6DF;--pc:#FF9E7D;--pd:#F2734B;--mt:#7ED0B8;--lv:#A9A0E0;--sn:#FFC861;--rd:#EF6A4C;--bl:#7FA8D9;--nw:60px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6}
+#wrap{padding-left:var(--nw);padding-top:env(safe-area-inset-top);min-height:100vh}
+#app{max-width:560px;margin:0 auto;padding-bottom:40px}
+h1,h4{margin:0;line-height:1.35}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
 input,select,textarea{font-family:inherit;font-size:16px}a{color:var(--pd);word-break:break-all}
-#ob{padding:40px 20px;text-align:center}
-.fd{text-align:left;margin-bottom:12px}.fd label{display:block;font-size:12px;font-weight:800;color:var(--sub);margin-bottom:5px}
-.fd input,.fd select,.fd textarea{width:100%;padding:12px;border:1.5px solid var(--ln);border-radius:12px;background:#fff;outline:none}
+nav{position:fixed;left:0;top:0;bottom:0;width:var(--nw);background:#fff;border-right:1px solid var(--ln);z-index:40;display:flex;flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top) + 8px) 0 12px;gap:1px;overflow-y:auto}
+nav button{width:53px;padding:8px 0 6px;border-radius:12px;font-size:9px;font-weight:800;color:#BDB1A9;line-height:1.15}
+nav button i{display:block;font-size:19px;font-style:normal;margin-bottom:1px}
+nav button.on{color:#fff;background:var(--pc)}nav .lg{font-size:19px;margin-bottom:5px}
+#ob{padding:36px 18px;text-align:center;max-width:460px;margin:0 auto}
+.fd{text-align:left;margin-bottom:11px}.fd label{display:block;font-size:12px;font-weight:800;color:var(--sub);margin-bottom:4px}
+.fd input,.fd select,.fd textarea{width:100%;padding:11px;border:1.5px solid var(--ln);border-radius:12px;background:#fff;outline:none}
 .fd input:focus,.fd textarea:focus{border-color:var(--pc)}
-.btn{display:block;width:100%;padding:14px;border-radius:13px;background:var(--pc);color:#fff;font-weight:800}
+.btn{display:block;width:100%;padding:13px;border-radius:13px;background:var(--pc);color:#fff;font-weight:800}
 .btn.g{background:#fff;color:var(--pd);border:1.5px solid var(--pc)}.btn.y{background:#fff;color:var(--sub);border:1.5px solid var(--ln)}
-.btn.s{padding:9px;font-size:13.5px;border-radius:11px}
-header{padding:16px 16px 12px;background:linear-gradient(160deg,#FFE7DC,#FFF9F5)}
+.btn.s{padding:9px;font-size:13px;border-radius:11px}
+header{padding:15px 15px 12px;background:linear-gradient(160deg,#FFE7DC,#FFF9F5)}
 .hg{font-size:11px;color:var(--pd);font-weight:800}.hn{font-size:20px;font-weight:800;margin:2px 0}.ha{font-size:12px;color:var(--sub)}
-.pl{display:inline-block;padding:4px 11px;border-radius:20px;font-size:11.5px;font-weight:800;color:#fff;margin-top:7px}
-main{padding:12px 12px 20px}
-.cd{background:#fff;border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(180,150,130,.07)}
-.st{font-size:11px;font-weight:800;color:var(--sub);letter-spacing:.5px;margin:16px 4px 7px}
-.rw{display:flex;gap:7px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:7px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pl{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;color:#fff;margin-top:6px}
+main{padding:11px 11px 24px}
+.cd{background:#fff;border-radius:16px;padding:13px;margin-bottom:10px;box-shadow:0 2px 10px rgba(180,150,130,.08)}
+.st{font-size:11px;font-weight:800;color:var(--sub);letter-spacing:.4px;margin:16px 4px 7px}
+.rw{display:flex;gap:6px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .tg{display:inline-block;padding:2px 7px;border-radius:7px;font-size:10px;font-weight:700;background:#F7F1EC;color:var(--sub);margin:1px}
 .tg.p{background:#FFEDE4;color:var(--pd)}.tg.m{background:#E4F6F0;color:#2E9C7D}.tg.v{background:#EEEBFB;color:#6B5FC7}.tg.r{background:#FDEAE5;color:var(--rd)}
-.mu{color:var(--sub);font-size:12px}.hr{height:1px;background:var(--ln);margin:11px 0}
-.pb{height:8px;border-radius:8px;background:#F1E7E0;overflow:hidden;margin:8px 0 3px}.pb i{display:block;height:100%;background:linear-gradient(90deg,var(--mt),var(--sn),var(--pc))}
-.nb{height:9px;border-radius:9px;background:#F1E7E0;overflow:hidden;margin-top:3px;position:relative}
-.nb i{display:block;height:100%;border-radius:9px}.nb u{position:absolute;top:-2px;width:2px;height:13px;background:#3E3A38;opacity:.35}
-.rm{position:relative;padding-left:24px}.rm:before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--ln)}
-.ri{position:relative;margin-bottom:13px}.ri .dt{position:absolute;left:-23px;top:4px;width:13px;height:13px;border-radius:50%;background:#fff;border:2.5px solid var(--ln)}
-.ri.dn .dt{background:var(--mt);border-color:var(--mt)}.ri.nw .dt{background:var(--pc);border-color:var(--pc);box-shadow:0 0 0 5px rgba(255,158,125,.22)}
-.ri h4{font-size:13.5px}.ri .wh{font-size:10.5px;color:var(--sub);font-weight:700}.ri.nw h4{color:var(--pd)}
+.mu{color:var(--sub);font-size:12px}.hr{height:1px;background:var(--ln);margin:10px 0}
+.sb2{height:13px;border-radius:13px;background:#F1E7E0;overflow:hidden;display:flex;position:relative;margin-top:4px}
+.sb2 i{display:block;height:100%}.sb2 u{position:absolute;top:-3px;width:2px;height:19px;background:#3E3A38;opacity:.4}
+.lgd{display:flex;gap:11px;font-size:10px;color:var(--sub);margin-top:7px;flex-wrap:wrap}
+.lgd b{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:3px;vertical-align:middle}
+.rm{position:relative;padding-left:23px}.rm:before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--ln)}
+.ri{position:relative;margin-bottom:12px}.ri .dt{position:absolute;left:-22px;top:4px;width:13px;height:13px;border-radius:50%;background:#fff;border:2.5px solid var(--ln)}
+.ri.dn .dt{background:var(--mt);border-color:var(--mt)}.ri.nw2 .dt{background:var(--pc);border-color:var(--pc);box-shadow:0 0 0 5px rgba(255,158,125,.22)}
+.ri h4{font-size:13.5px}.ri .wh{font-size:10.5px;color:var(--sub);font-weight:700}.ri.nw2 h4{color:var(--pd)}
 .ri ul{margin:3px 0 0;padding-left:15px;font-size:12px;color:var(--sub)}
-.tab{display:flex;gap:5px;margin-bottom:10px;overflow-x:auto;padding:2px}
+.tab{display:flex;gap:5px;margin-bottom:9px;overflow-x:auto;padding:2px}
 .tab button{flex:0 0 auto;padding:8px 12px;border-radius:11px;background:#fff;font-size:12.5px;font-weight:700;color:var(--sub);border:1.5px solid var(--ln)}
 .tab button.on{color:#fff;border-color:transparent;background:var(--ink)}
-.tt{display:flex;gap:5px;margin-bottom:10px}.tt button{flex:1;padding:9px 2px;border-radius:11px;background:#F5EFEA;font-size:12px;font-weight:700;color:var(--sub)}
+.tt{display:flex;gap:5px;margin-bottom:9px}.tt button{flex:1;padding:9px 2px;border-radius:11px;background:#F5EFEA;font-size:11.5px;font-weight:700;color:var(--sub)}
 .tt button.on{background:var(--ink);color:#fff}
-.rc{display:flex;gap:10px;align-items:center;background:#fff;border-radius:14px;padding:10px;margin-bottom:7px;box-shadow:0 2px 8px rgba(180,150,130,.07);width:100%;text-align:left}
+.rc{display:flex;gap:9px;align-items:center;background:#fff;border-radius:14px;padding:9px;margin-bottom:7px;box-shadow:0 2px 8px rgba(180,150,130,.08);width:100%;text-align:left}
 .rc .th{flex:0 0 48px;height:48px;border-radius:11px;overflow:hidden;background:#FBF6F2}
 .rc .th img,.rc .th svg{width:100%;height:100%;object-fit:cover;display:block}
-.rc .nm{font-weight:800;font-size:14px}.rc .ds{font-size:11px;color:var(--sub);margin-top:1px}.rc .ar{color:#DDD2CA;font-size:18px}
-.ig{background:#fff;border-radius:12px;padding:9px 4px;text-align:center;box-shadow:0 2px 8px rgba(180,150,130,.06)}
-.ig .e{font-size:23px}.ig .n{font-size:11.5px;font-weight:700}.ig .m{font-size:9.5px;color:var(--sub)}
+.rc .nm{font-weight:800;font-size:13.5px}.rc .ds{font-size:10.5px;color:var(--sub);margin-top:1px}.rc .ar{color:#DDD2CA;font-size:18px}
+.ig{background:#fff;border-radius:12px;padding:9px 3px;text-align:center;box-shadow:0 2px 8px rgba(180,150,130,.07)}
+.ig .e{font-size:23px}.ig .n{font-size:11px;font-weight:700}.ig .m{font-size:9px;color:var(--sub)}
 .ig.lk{opacity:.4}.ig .ok{font-size:9px;color:#2E9C7D;font-weight:800}
 .md{position:fixed;inset:0;background:rgba(50,40,35,.5);z-index:60;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:.2s}
 .md.on{opacity:1;pointer-events:auto}
-.sh{background:var(--bg);width:100%;max-width:540px;margin:0 auto;max-height:93vh;overflow-y:auto;border-radius:22px 22px 0 0;padding:8px 14px 36px;transform:translateY(26px);transition:.2s}
-.md.on .sh{transform:none}.gb{width:40px;height:4px;border-radius:4px;background:#E2D6CE;margin:6px auto 12px}
-.mt{font-size:18.5px;font-weight:800}
-.sl{padding:0;margin:0;list-style:none}.sl li{display:flex;gap:9px;margin-bottom:12px}
+.sh{background:var(--bg);width:100%;max-width:560px;margin:0 auto;max-height:92vh;overflow-y:auto;border-radius:22px 22px 0 0;padding:8px 13px 40px;transform:translateY(24px);transition:.2s}
+.md.on .sh{transform:none}.gb{width:40px;height:4px;border-radius:4px;background:#E2D6CE;margin:6px auto 11px}
+.mt2{font-size:18px;font-weight:800}
+.sl{padding:0;margin:0;list-style:none}.sl li{display:flex;gap:8px;margin-bottom:11px}
 .sl .no{flex:0 0 21px;height:21px;border-radius:50%;background:var(--pc);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:14px}
-.sl .ar2{flex:0 0 84px}.sl .bx{width:84px;height:64px;border-radius:10px;overflow:hidden;border:1px solid var(--ln);background:#fff}
+.sl .ar2{flex:0 0 82px}.sl .bx{width:82px;height:62px;border-radius:10px;overflow:hidden;border:1px solid var(--ln);background:#fff}
 .sl .bx img,.sl .bx svg{width:100%;height:100%;object-fit:cover;display:block}
-.sl .p2{display:flex;gap:4px;margin-top:3px}.sl .p2 button{flex:1;font-size:9.5px;color:var(--bl);font-weight:700;padding:3px 0;background:#F1F5FA;border-radius:6px}
-.sl .p2 button.d{flex:0 0 22px;color:var(--sub);background:#F5EFEA}.sl .tx{flex:1;font-size:13.5px;padding-top:9px}
-.ir{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--ln);font-size:13px}.ir:last-child{border:none}
+.sl .p2{display:flex;gap:3px;margin-top:3px}.sl .p2 button{flex:1;font-size:9px;color:var(--bl);font-weight:700;padding:4px 0;background:#F1F5FA;border-radius:6px}
+.sl .p2 button.d{flex:0 0 21px;color:var(--sub);background:#F5EFEA}.sl .tx{flex:1;font-size:13px;padding-top:9px}
+.ir{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--ln);font-size:12.5px}.ir:last-child{border:none}
 .qb{display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:8px 11px;margin-bottom:9px}
-.qb button{width:30px;height:30px;border-radius:9px;background:#F5EFEA;font-weight:800;color:var(--pd)}
-.tp{background:#FFF6EC;border-left:3px solid var(--sn);border-radius:10px;padding:10px 11px;font-size:12.5px}
-.wn{background:#FFEFEC;border-left:3px solid var(--rd);border-radius:10px;padding:10px 11px;font-size:12.5px}
-.sb{background:#F3F6FA;border-left:3px solid var(--bl);border-radius:10px;padding:10px 11px;font-size:12px}
-.lg{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln)}.lg:last-child{border:none}
-.ch{display:flex;gap:5px;flex-wrap:wrap}.ch button{padding:7px 11px;border-radius:19px;background:#F5EFEA;font-size:12.5px;font-weight:700;color:var(--sub)}
+.qb button{width:31px;height:31px;border-radius:9px;background:#F5EFEA;font-weight:800;color:var(--pd)}
+.tp{background:#FFF6EC;border-left:3px solid var(--sn);border-radius:10px;padding:10px;font-size:12.5px}
+.wn{background:#FFEFEC;border-left:3px solid var(--rd);border-radius:10px;padding:10px;font-size:12.5px}
+.sb{background:#F3F6FA;border-left:3px solid var(--bl);border-radius:10px;padding:10px;font-size:12px}
+.fe{background:#FFF1EE;border-left:3px solid var(--rd);border-radius:10px;padding:10px;font-size:12px}
+.lg2{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln)}.lg2:last-child{border:none}
+.ch{display:flex;gap:5px;flex-wrap:wrap}.ch button{padding:7px 11px;border-radius:19px;background:#F5EFEA;font-size:12px;font-weight:700;color:var(--sub)}
 .ch button.on{background:var(--pc);color:#fff}
-.cb{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--ln)}.cb:last-child{border:none}
+.cb{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--ln)}.cb:last-child{border:none}
 .sp{display:flex;align-items:center;gap:5px}.sp button{width:27px;height:27px;border-radius:8px;background:#F5EFEA;font-weight:800;color:var(--pd)}
-.tb{width:100%;border-collapse:collapse;font-size:11.5px}.tb th,.tb td{padding:5px 2px;border-bottom:1px solid var(--ln);text-align:right}
-.tb th:first-child,.tb td:first-child{text-align:left}.tb th{color:var(--sub);font-size:10.5px}
+.tb{width:100%;border-collapse:collapse;font-size:11px}.tb th,.tb td{padding:5px 2px;border-bottom:1px solid var(--ln);text-align:right}
+.tb th:first-child,.tb td:first-child{text-align:left}.tb th{color:var(--sub);font-size:10px}
 .ei{display:flex;gap:4px;align-items:center;margin-bottom:6px}
-.ei input,.ei select{padding:9px 6px;border:1.5px solid var(--ln);border-radius:10px;background:#fff;outline:none;font-size:13.5px;min-width:0}
-.sc{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--ln)}
+.ei input,.ei select{padding:9px 5px;border:1.5px solid var(--ln);border-radius:10px;background:#fff;outline:none;font-size:13px;min-width:0}
+.sc{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--ln)}
 .sc .bx2{flex:0 0 22px;height:22px;border-radius:6px;border:2px solid var(--ln);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
 .sc.on .bx2{background:var(--mt);border-color:var(--mt)}.sc.on .nm2{text-decoration:line-through;color:var(--sub)}
-.wk{width:100%;border-collapse:separate;border-spacing:3px;font-size:11px}
-.wk td,.wk th{padding:5px 3px;border-radius:8px;text-align:center;vertical-align:middle}
+.wk{width:100%;border-collapse:separate;border-spacing:3px;font-size:10.5px}
+.wk td,.wk th{padding:5px 2px;border-radius:8px;text-align:center;vertical-align:middle}
 .wk th{background:#F5EFEA;color:var(--sub);font-size:10px;font-weight:800}
-.wk td{background:#fff;line-height:1.3}.wk td.tdy{outline:2px solid var(--pc)}
-.wk .mn{font-weight:700;font-size:10.5px;display:block}
-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid var(--ln);display:flex;z-index:50;padding-bottom:env(safe-area-inset-bottom)}
-nav>div{max-width:540px;margin:0 auto;width:100%;display:flex}
-nav button{flex:1;padding:7px 0 6px;font-size:9.5px;font-weight:700;color:#C3B7AF}
-nav button i{display:block;font-size:18px;font-style:normal}nav button.on{color:var(--pd)}
-.hd{display:none!important}code{background:#F2EDE8;padding:1px 5px;border-radius:5px;font-size:12px}
+.wk td{background:#fff;line-height:1.3}.wk td.tdy{outline:2px solid var(--pc)}.wk .mn{font-weight:700;font-size:10px;display:block}
+.mlk{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mlk button{padding:11px 0;border-radius:11px;background:#EEF4FB;color:#4B7CB5;font-weight:800;font-size:13px}
+.gc{width:100%;height:auto;display:block;background:#fff;border-radius:12px}
+.pill2{display:inline-block;padding:3px 9px;border-radius:14px;font-size:11px;font-weight:800}
+.hd{display:none!important}code{background:#F2EDE8;padding:1px 4px;border-radius:5px;font-size:11.5px}
+@media(min-width:900px){:root{--nw:86px}nav button{width:74px;font-size:10px}}
 </style></head><body>
 <svg style="position:absolute;width:0;height:0"><defs>
 <linearGradient id="gW" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#DCD0C6"/></linearGradient>
@@ -97,129 +106,191 @@ nav button i{display:block;font-size:18px;font-style:normal}nav button.on{color:
 <linearGradient id="gK" x2="0" y2="1"><stop stop-color="#75706C"/><stop offset="1" stop-color="#3A3735"/></linearGradient>
 <radialGradient id="gL" cx=".35" cy=".28" r=".75"><stop stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
 </defs></svg>
-<div id="app">
-<section id="ob"><div style="font-size:56px">🍼</div>
-<h1 style="font-size:22px;margin-bottom:5px">우리 아기 이유식 노트</h1>
-<p class="mu" style="margin:0 0 22px">이름·생일·하루 끼니 수만 입력하면<br>끼니별 추천 · 주간식단 · 영양(%)까지 계산해 드려요</p>
-<div class="fd"><label>아기 이름</label><input id="iN" placeholder="예: 하윤"></div>
-<div class="fd"><label>태어난 날</label><input id="iB" type="date"></div>
-<div class="fd"><label>수유 방식</label><select id="iF"><option value="b">모유 위주</option><option value="f">분유 위주</option><option value="m">혼합</option></select></div>
-<div class="fd"><label>하루 이유식 끼니 수</label><select id="iM"><option value="1">1끼 (초기 시작)</option><option value="2" selected>2끼</option><option value="3">3끼</option></select></div>
-<button class="btn" onclick="saveBaby()">시작하기</button>
-<p class="mu" style="margin-top:14px;font-size:10.5px">데이터는 이 기기에만 저장됩니다.</p></section>
-<section id="mv" class="hd"><header id="hdr"></header><main id="vw"></main></section></div>
-<nav id="nv" class="hd"><div>
+<nav id="nv" class="hd"><div class="lg">🍼</div>
 <button data-t="home" class="on"><i>🏠</i>홈</button><button data-t="plan"><i>🗓</i>식단</button>
 <button data-t="menu"><i>🍲</i>메뉴</button><button data-t="food"><i>🥕</i>재료</button>
-<button data-t="log"><i>📝</i>기록</button><button data-t="info"><i>📖</i>정보</button></div></nav>
+<button data-t="grow"><i>📈</i>성장</button><button data-t="log"><i>📝</i>기록</button>
+<button data-t="info"><i>📖</i>정보</button></nav>
+<div id="wrap"><div id="app">
+<section id="ob"><div style="font-size:54px">🍼</div>
+<h1 style="font-size:22px;margin-bottom:5px">우리 아기 이유식 노트</h1>
+<p class="mu" style="margin:0 0 20px">개월수·체중 기반 영양 계산 · 철분 흡수율 · 성장곡선까지</p>
+<div class="fd"><label>아기 이름</label><input id="iN" placeholder="예: 예린"></div>
+<div class="fd"><label>태어난 날</label><input id="iB" type="date"></div>
+<div class="fd"><label>성별 <span style="font-weight:400">(성장곡선 계산에 필요)</span></label><select id="iS"><option value="f">여아</option><option value="m">남아</option></select></div>
+<div class="fd"><label>현재 몸무게 (kg) <span style="font-weight:400">· 선택</span></label><input id="iW" type="number" step="0.1" placeholder="8.2"></div>
+<div class="fd"><label>현재 키 (cm) <span style="font-weight:400">· 선택</span></label><input id="iH" type="number" step="0.1" placeholder="70.5"></div>
+<div class="fd"><label>수유 방식</label><select id="iF"><option value="f">분유 위주</option><option value="b">모유 위주</option><option value="m">혼합</option></select></div>
+<div class="fd"><label>하루 이유식 끼니 수</label><select id="iM"><option value="1">1끼</option><option value="2" selected>2끼</option><option value="3">3끼</option></select></div>
+<div class="fd"><label>1회 수유량 (ml)</label><input id="iV" type="number" value="180"></div>
+<button class="btn" onclick="saveBaby()">시작하기</button>
+<p class="mu" style="margin-top:13px;font-size:10.5px">데이터는 이 기기에만 저장됩니다.</p></section>
+<section id="mv" class="hd"><header id="hdr"></header><main id="vw"></main></section>
+</div></div>
 <div class="md" id="md" onclick="if(event.target===this)closeM()"><div class="sh"><div class="gb"></div><div id="mb"></div></div></div>
 <input type="file" id="fi" accept="image/*" style="display:none"><input type="file" id="fj" accept=".json" style="display:none">
 <script>
-/*==== 출처 ====*/
-var SRC={ppibbo:{n:'『삐뽀삐뽀 119 소아과/이유식』 하정훈',t:'도서·전문가',u:'https://search.naver.com/search.naver?query=%EC%82%90%EB%B3%B4%EC%82%90%EB%B3%B4119+%EC%9D%B4%EC%9C%A0%EC%8B%9D',d:'앱의 기본 골격 근거. 만 6개월 시작/고기 초기부터 매일/돌까지 무간/알레르기 식품 늦추지 않기/숟가락·컵/스스로 먹기/30분 후 치우기. ※문장·레시피표를 그대로 옮기지 않고 널리 알려진 원칙을 재구성했습니다.'},
+/*======= 출처 =======*/
+var SRC={ppibbo:{n:'『삐뽀삐뽀 119 소아과/이유식』 하정훈',t:'도서·전문가',u:'https://search.naver.com/search.naver?query=%EC%82%90%EB%B3%B4%EC%82%90%EB%B3%B4119+%EC%9D%B4%EC%9C%A0%EC%8B%9D',d:'앱의 기본 골격 근거. 만 6개월 시작/고기 초기부터 매일/돌까지 무간/알레르기 식품 늦추지 않기/숟가락·컵/스스로 먹기/30분 후 치우기. ※책 문장·레시피표를 그대로 옮기지 않고 널리 알려진 원칙을 재구성했습니다.'},
 bboon:{n:'『뿐이이유식』 등 국내 죽이유식 자료',t:'레시피 자료',u:'https://search.naver.com/search.naver?query=%EB%BF%88%EC%9D%B4%EC%9D%B4%EC%9C%A0%EC%8B%9D',d:'10배죽→7배죽→5배죽→진밥 배죽 비율 체계와 단계별 재료 조합·스케줄 구성 방식 참고.'},
-topping:{n:'토핑이유식(큐브 소분형) 방법론',t:'조리 방식',u:'https://search.naver.com/search.naver?query=%ED%86%A0%ED%95%91%EC%9D%B4%EC%9C%A0%EC%8B%9D+%ED%81%90%EB%B8%8C',d:'기본 죽(밥) 위에 재료별 큐브를 올려 주는 방식. 재료별 반응 확인과 대량 준비에 유리.'},
-rda:{n:'농촌진흥청 국가표준식품성분표(제10개정판)',t:'공공 데이터',u:'https://koreanfood.rda.go.kr',d:'모든 영양 계산 100g당 기준값 출처. 조리 손실 미반영 원물 기준 추정치.'},
-kdri:{n:'2020 한국인 영양소 섭취기준',t:'공공 기준',u:'https://www.kns.or.kr',d:'6~11개월 700kcal·단백질 15g·철 6mg·칼슘 300mg·아연 3mg / 1~2세 900kcal·20g·6mg·500mg·3mg.'},
+topping:{n:'토핑이유식(큐브 소분형) 방법론',t:'조리 방식',u:'https://search.naver.com/search.naver?query=%ED%86%A0%ED%95%91%EC%9D%B4%EC%9C%A0%EC%8B%9D+%ED%81%90%EB%B8%8C',d:'기본 죽(밥) 위에 재료별 큐브를 올려 주는 방식. 재료별 반응 확인·대량 준비에 유리.'},
+rda:{n:'농촌진흥청 국가표준식품성분표(제10개정판)',t:'공공 데이터',u:'https://koreanfood.rda.go.kr',d:'열량·단백질·철·칼슘·아연·비타민C 100g당 기준값 출처. 조리 손실 미반영 원물 기준 추정치.'},
+kdri:{n:'2020 한국인 영양소 섭취기준',t:'공공 기준',u:'https://www.kns.or.kr',d:'0~5개월 500kcal·단백질 10g·철 0.3mg·칼슘 250mg·아연 2mg / 6~11개월 600kcal·15g·6mg·300mg·3mg / 12~23개월 900kcal·20g·6mg·500mg·3mg. 체중당 에너지필요추정량(6~11개월 약 80kcal/kg)도 이 기준을 따릅니다.'},
+fe:{n:'철분 흡수율 — WHO/FAO 및 영양학 문헌 일반값',t:'계산 모델',u:'https://www.who.int/publications/i/item/9241546123',d:'헴철(고기·생선) 흡수율 약 15~25%, 비헴철(곡류·채소·달걀·두부) 약 2~8%. 비타민C는 비헴철 흡수를 2~3배까지 높이고, 육류가 함께 있으면 흡수가 증가합니다(육류인자). 반대로 차·커피의 탄닌, 곡류의 피트산은 흡수를 방해합니다. 본 앱은 헴철 25%, 비헴철 5%(비타민C·육류인자로 최대 18%까지 상향)로 계산한 추정치입니다.'},
+who:{n:'WHO Child Growth Standards',t:'국제기구 성장기준',u:'https://www.who.int/tools/child-growth-standards',d:'성장곡선의 P3·P50·P97 참고값 출처. 0~24개월 월별 표를 근사 반영했습니다.'},
+kdca:{n:'질병관리청 2017 소아·청소년 성장도표',t:'정부기관',u:'https://knhanes.kdca.go.kr',d:'국내 공식 성장도표. 만 0~24개월은 WHO 기준을 채택하고 있습니다. 정밀 판정은 공식 도표와 소아과 진료로 확인하세요.'},
+milk:{n:'조제분유 표준 조성 · 모유 성분 평균값',t:'참고 기준',u:'https://www.foodsafetykorea.go.kr',d:'수유 영양 계산 기준(100ml당). 분유 67kcal·단백질 1.4g·철 0.8mg·칼슘 55mg·아연 0.5mg·비타민C 9mg(철 흡수율 약 10%) / 모유 65kcal·1.0g·0.03mg·32mg·0.15mg·4mg(철 흡수율 약 50%). 제품마다 다르므로 캔 표기값을 확인하세요.'},
 mfds:{n:'식품의약품안전처 식품안전나라',t:'정부기관',u:'https://www.foodsafetykorea.go.kr',d:'보관·해동 안전, 질식 위험 식품(떡·젤리·통포도·통견과류), 돌 전 꿀 금지.'},
-who:{n:'WHO Complementary feeding',t:'국제기구',u:'https://www.who.int/health-topics/complementary-feeding',d:'6개월 보완식 시작, 철분 풍부 식품 우선, 반응적 수유.'},
 aap:{n:'AAP HealthyChildren — Starting Solid Foods',t:'미국소아과학회',u:'https://www.healthychildren.org/English/ages-stages/baby/feeding-nutrition/Pages/Starting-Solid-Foods.aspx',d:'시작 신호, 하루 횟수·양, 생우유 12개월 이후, 주스 비권장.'},
 niaid:{n:'NIAID 식품알레르기 지침(LEAP)',t:'미국 NIH',u:'https://www.niaid.nih.gov/diseases-conditions/food-allergy',d:'알레르기 유발 식품 조기 도입이 예방에 유리.'}};
 function sT(k){return '<span class="tg v" style="cursor:pointer" onclick="openSrc(\''+k+'\')">📎 '+SRC[k].t+'</span>'}
-/*==== 영양 DB ====*/
-var NUT={'불린 쌀':[160,2.9,.36,2,.63],'쌀':[357,6.4,.8,5,1.4],'오트밀':[380,13,3.7,54,2.5],'밥':[143,2.6,.2,3,.5],'진밥':[120,2.2,.17,3,.42],
-'10배죽':[40,.7,.09,1,.15],'7배죽':[60,1.1,.13,1,.22],'5배죽':[85,1.5,.19,2,.3],'전분':[340,.3,.2,10,.1],'소면':[280,9,1,15,.6],
-'감자':[66,1.9,.4,5,.3],'고구마':[141,1.4,.5,24,.2],'애호박':[20,1,.3,15,.2],'브로콜리':[34,3,.73,46,.4],'청경채':[12,1,.6,88,.2],
-'단호박':[66,1.4,.5,22,.3],'양파':[34,1,.2,16,.2],'당근':[34,.9,.4,40,.2],'양배추':[24,1.2,.3,45,.2],'시금치':[23,3,2.6,40,.6],
-'무':[18,.7,.2,22,.1],'표고버섯':[25,2,.4,2,.7],'토마토':[18,.9,.3,9,.1],'가지':[22,1.1,.3,10,.2],'파프리카':[30,1,.4,8,.2],
-'오이':[11,.9,.2,15,.1],'미역':[15,1.6,1,100,.3],'김':[170,38,11,325,3.7],'소고기':[130,21,2.4,5,4.3],'닭고기':[106,23,.4,4,.8],
-'돼지고기':[130,22,.9,5,2],'달걀':[143,12.4,1.8,52,1.3],'달걀노른자':[355,16,4.5,140,3.5],'두부':[84,9.6,1.5,126,.9],
-'흰살생선':[80,17,.2,15,.4],'연어':[183,20,.3,10,.4],'새우':[82,18,.5,60,1.2],'배':[51,.3,.1,2,.1],'사과':[53,.2,.1,4,.1],
-'바나나':[84,1.1,.3,6,.2],'아보카도':[187,2,.6,12,.6],'블루베리':[48,.6,.3,8,.1],'딸기':[34,.7,.4,15,.1],
-'요거트':[65,3.5,.1,120,.5],'아기치즈':[300,20,.3,600,2.5],'우유':[65,3.1,.1,105,.4],'참기름':[900,0,0,0,0],'아몬드가루':[600,21,3.7,260,3.1]};
+/*======= 영양 DB [kcal,단백,철,칼슘,아연,비타민C,철종류] =======*/
+var NUT={'불린 쌀':[160,2.9,.36,2,.63,0,'n'],'쌀':[357,6.4,.8,5,1.4,0,'n'],'오트밀':[380,13,3.7,54,2.5,0,'n'],
+'밥':[143,2.6,.2,3,.5,0,'n'],'진밥':[120,2.2,.17,3,.42,0,'n'],'10배죽':[40,.7,.09,1,.15,0,'n'],
+'7배죽':[60,1.1,.13,1,.22,0,'n'],'5배죽':[85,1.5,.19,2,.3,0,'n'],'전분':[340,.3,.2,10,.1,0,'n'],'소면':[280,9,1,15,.6,0,'n'],
+'감자':[66,1.9,.4,5,.3,20,'n'],'고구마':[141,1.4,.5,24,.2,25,'n'],'애호박':[20,1,.3,15,.2,12,'n'],
+'브로콜리':[34,3,.73,46,.4,70,'n'],'청경채':[12,1,.6,88,.2,45,'n'],'단호박':[66,1.4,.5,22,.3,15,'n'],
+'양파':[34,1,.2,16,.2,8,'n'],'당근':[34,.9,.4,40,.2,6,'n'],'양배추':[24,1.2,.3,45,.2,36,'n'],
+'시금치':[23,3,2.6,40,.6,28,'n'],'무':[18,.7,.2,22,.1,15,'n'],'표고버섯':[25,2,.4,2,.7,0,'n'],
+'토마토':[18,.9,.3,9,.1,14,'n'],'가지':[22,1.1,.3,10,.2,3,'n'],'파프리카':[30,1,.4,8,.2,120,'n'],
+'오이':[11,.9,.2,15,.1,5,'n'],'미역':[15,1.6,1,100,.3,15,'n'],'김':[170,38,11,325,3.7,90,'n'],
+'비타민(다채)':[20,2.5,1.5,120,.4,60,'n'],
+'소고기':[130,21,2.4,5,4.3,0,'h'],'닭고기':[106,23,.4,4,.8,0,'h'],'돼지고기':[130,22,.9,5,2,0,'h'],
+'달걀':[143,12.4,1.8,52,1.3,0,'n'],'달걀노른자':[355,16,4.5,140,3.5,0,'n'],'두부':[84,9.6,1.5,126,.9,0,'n'],
+'흰살생선':[80,17,.2,15,.4,0,'h'],'연어':[183,20,.3,10,.4,0,'h'],'새우':[82,18,.5,60,1.2,0,'h'],'멸치가루':[300,50,12,1500,4,0,'h'],
+'배':[51,.3,.1,2,.1,4,'n'],'사과':[53,.2,.1,4,.1,4,'n'],'바나나':[84,1.1,.3,6,.2,9,'n'],
+'아보카도':[187,2,.6,12,.6,10,'n'],'블루베리':[48,.6,.3,8,.1,10,'n'],'딸기':[34,.7,.4,15,.1,60,'n'],
+'요거트':[65,3.5,.1,120,.5,1,'n'],'아기치즈':[300,20,.3,600,2.5,0,'n'],'우유':[65,3.1,.1,105,.4,1,'n'],
+'참기름':[900,0,0,0,0,0,'n'],'아몬드가루':[600,21,3.7,260,3.1,0,'n']};
 var NK=['kcal','p','fe','ca','zn'],NL={kcal:['열량','kcal','#FFC861'],p:['단백질','g','#7ED0B8'],fe:['철분','mg','#EF6A4C'],ca:['칼슘','mg','#7FA8D9'],zn:['아연','mg','#A9A0E0']};
+var MILK={f:{n:'분유',v:[67,1.4,.8,55,.5],vc:9,ab:.10},b:{n:'모유',v:[65,1.0,.03,32,.15],vc:4,ab:.50}};
 var PCG={'달걀':50,'달걀노른자':17};
 function gOf(x){var q=+x[1]||0,u=x[2],k=x[3];if(u==='개')return q*(x[4]?+x[4]:(PCG[k]||10));if(u==='방울')return q*.5;if(u==='ml')return NUT[k]?q:0;return q}
-function nutOf(r,ml){ml=ml||1;var t={kcal:0,p:0,fe:0,ca:0,zn:0},d=[],ms=[],sv=r.sv||1;
+function absFe(hm,nh,vc,meat){var f=.05*(1+Math.min(2,vc/25));if(meat>15)f*=1.3;f=Math.min(.18,f);return hm*.25+nh*f}
+function nutOf(r,ml){ml=ml||1;var t={kcal:0,p:0,fe:0,ca:0,zn:0,vc:0},hm=0,nh=0,meat=0,d=[],ms=[],sv=r.sv||1;
 (r.g||[]).forEach(function(x){var v=NUT[x[3]];if(!v){if(x[2]!=='ml')ms.push(x[0]);return}
-var gr=gOf(x)*ml/sv,o={n:x[0],g:gr};NK.forEach(function(k,i){o[k]=v[i]*gr/100;t[k]+=o[k]});d.push(o)});
-return{t:t,d:d,ms:ms}}
-function DRI(m){return m<12?{kcal:700,p:15,fe:6,ca:300,zn:3,lb:'6~11개월'}:{kcal:900,p:20,fe:6,ca:500,zn:3,lb:'1~2세'}}
-/*==== 단계 (sf=이유식이 담당할 비중) ====*/
-var STG=[{id:'ready',n:'준비기',lb:'~만 6개월',f:0,t:6,c:'#B9AFA8',sf:.1,ra:'-',ct:'수유만',am:'-',tx:'-',ds:'아직 시작하지 않는 시기. 목을 가누고 앉은 자세를 유지하며 어른 음식에 관심을 보이면 준비 신호.',td:['만 4개월 이전 시작은 권하지 않아요','숟가락·그릇·턱받이 준비','6개월부터 컵으로 물 연습 예정']},
+var gr=gOf(x)*ml/sv,o={n:x[0],g:gr};NK.forEach(function(k,i){o[k]=v[i]*gr/100;t[k]+=o[k]});
+o.vc=v[5]*gr/100;t.vc+=o.vc;var fe=v[2]*gr/100;o.ty=v[6];
+if(v[6]==='h'){hm+=fe*.4;nh+=fe*.6;meat+=gr}else nh+=fe;d.push(o)});
+t.feAb=absFe(hm,nh,t.vc,meat);return{t:t,d:d,ms:ms,hm:hm,nh:nh,meat:meat}}
+function milkNut(v,tp){var M=MILK[tp]||MILK.f,o={};NK.forEach(function(k,i){o[k]=M.v[i]*v/100});o.vc=M.vc*v/100;o.feAb=o.fe*M.ab;return o}
+function DRI(m){if(m<6)return{kcal:500,p:10,fe:.3,ca:250,zn:2,lb:'0~5개월',ekg:95,pkg:1.4};
+if(m<12)return{kcal:600,p:15,fe:6,ca:300,zn:3,lb:'6~11개월',ekg:80,pkg:1.2};
+if(m<24)return{kcal:900,p:20,fe:6,ca:500,zn:3,lb:'12~23개월',ekg:82,pkg:1.1};
+return{kcal:1400,p:25,fe:7,ca:600,zn:4,lb:'만 3~5세',ekg:75,pkg:1.05}}
+/*======= 성장 기준 (WHO 근사, 0~24개월) =======*/
+var GD={w:{m:{p3:[2.5,3.4,4.3,5,5.6,6,6.4,6.7,6.9,7.1,7.4,7.6,7.7,7.9,8.1,8.3,8.4,8.6,8.8,8.9,9.1,9.2,9.4,9.5,9.7],
+p50:[3.3,4.5,5.6,6.4,7,7.5,7.9,8.3,8.6,8.9,9.2,9.4,9.6,9.9,10.1,10.3,10.5,10.7,10.9,11.1,11.3,11.5,11.8,12,12.2],
+p97:[4.4,5.8,7.1,8,8.7,9.3,9.8,10.3,10.7,11,11.4,11.7,12,12.3,12.6,12.8,13.1,13.4,13.7,13.9,14.2,14.5,14.7,15,15.3]},
+f:{p3:[2.4,3.2,3.9,4.6,5.1,5.5,5.8,6.1,6.3,6.6,6.8,7,7.1,7.3,7.5,7.7,7.8,8,8.2,8.3,8.5,8.7,8.8,9,9.2],
+p50:[3.2,4.2,5.1,5.8,6.4,6.9,7.3,7.6,7.9,8.2,8.5,8.7,8.9,9.2,9.4,9.6,9.8,10,10.2,10.4,10.6,10.9,11.1,11.3,11.5],
+p97:[4.2,5.5,6.6,7.5,8.2,8.8,9.3,9.8,10.2,10.5,10.9,11.2,11.5,11.8,12.1,12.4,12.7,13,13.3,13.5,13.8,14.1,14.4,14.6,14.9]}},
+h:{m:{p3:[46.3,51.1,54.7,57.6,60,61.9,63.6,65.1,66.5,67.7,69,70.2,71.3,72.4,73.4,74.4,75.4,76.3,77.2,78.1,79,79.8,80.6,81.4,82.2],
+p50:[49.9,54.7,58.4,61.4,63.9,65.9,67.6,69.2,70.6,72,73.3,74.5,75.7,76.9,78,79.1,80.2,81.2,82.3,83.2,84.2,85.1,86,86.9,87.8],
+p97:[53.4,58.4,62.2,65.3,67.8,69.9,71.6,73.2,74.7,76.2,77.6,78.9,80.2,81.5,82.7,83.9,85,86.1,87.3,88.4,89.4,90.5,91.5,92.5,93.5]},
+f:{p3:[45.6,50,53.2,55.8,58,59.6,61.2,62.7,64,65.3,66.5,67.7,68.9,70,71,72,73,74,74.9,75.8,76.7,77.5,78.4,79.2,80],
+p50:[49.1,53.7,57.1,59.8,62.1,64,65.7,67.3,68.7,70.1,71.5,72.8,74,75.2,76.4,77.5,78.6,79.7,80.7,81.7,82.7,83.7,84.6,85.5,86.4],
+p97:[52.7,57.4,61.1,64,66.4,68.5,70.3,71.9,73.5,75,76.4,77.8,79.2,80.5,81.7,83,84.2,85.4,86.5,87.7,88.8,89.9,90.9,92,93]}},
+c:{m:{p50:[34.5,37.3,39.1,40.5,41.6,42.6,43.3,44,44.5,45,45.4,45.8,46.1,46.3,46.6,46.8,47,47.2,47.4,47.5,47.7,47.8,48,48.1,48.3]},
+f:{p50:[33.9,36.5,38.3,39.5,40.6,41.5,42.2,42.8,43.4,43.8,44.2,44.6,44.9,45.2,45.4,45.7,45.9,46.1,46.2,46.4,46.6,46.7,46.9,47,47.2]}}};
+function gArr(kind,sx){var D=GD[kind][sx];if(kind==='c'){return{p3:D.p50.map(function(v){return Math.round((v-2.6)*10)/10}),p50:D.p50,p97:D.p50.map(function(v){return Math.round((v+2.6)*10)/10})}}return D}
+function ncdf(z){var t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2);
+var p=1-d*t*(1.330274*Math.pow(t,4)-1.821256*Math.pow(t,3)+1.781478*t*t-.356538*t+.319381);return z>0?p:1-p}
+function pctOf(v,p3,p50,p97){var z;if(v<p50)z=-1.881*(p50-v)/Math.max(.01,p50-p3);else z=1.881*(v-p50)/Math.max(.01,p97-p50);
+var p=ncdf(z)*100;return Math.max(.1,Math.min(99.9,p))}
+function ipol(a,m){var i=Math.floor(m);if(i>=a.length-1)return a[a.length-1];if(i<0)return a[0];return a[i]+(a[i+1]-a[i])*(m-i)}
+/*======= 단계 =======*/
+var STG=[{id:'ready',n:'준비기',lb:'~만 6개월',f:0,t:6,c:'#B9AFA8',sf:.1,ra:'-',ct:'수유만',am:'-',tx:'-',ds:'아직 시작하지 않는 시기. 목을 가누고 앉은 자세를 유지하며 어른 음식에 관심을 보이면 준비 신호.',td:['만 4개월 이전 시작은 권하지 않아요','숟가락·그릇·턱받이 준비','6개월부터 컵으로 물 연습']},
 {id:'early',n:'초기',lb:'만 6~7개월',f:6,t:7,c:'#8FD3C7',sf:.3,ra:'10배죽(불린쌀1:물10)',ct:'하루 1~2회',am:'1회 30~80g',tx:'곱게 갈아 체에 내린 미음',ds:'쌀미음으로 시작해 고기·채소를 빠르게 더해가는 시기.',td:['첫날 1~2숟갈(5~10g)','오전 수유 전 배고플 때','새 재료 한 가지씩 2~3일 관찰','철분 위해 소고기 매일 소량','간 금지']},
 {id:'mid',n:'중기',lb:'만 7~9개월',f:7,t:9,c:'#FFC861',sf:.5,ra:'7배죽(불린쌀1:물7)',ct:'하루 2~3회',am:'1회 80~120g',tx:'2~3mm 다진 무른 죽',ds:'입자를 키워 씹는 연습을 시작. 미음에 오래 머물지 않기.',td:['체에 걸르지 않고 다져서','달걀·생선·두부 확대','컵으로 물 연습','이유식→수유 순서','30분 넘으면 치우기']},
 {id:'late',n:'후기',lb:'만 9~12개월',f:9,t:12,c:'#FF9E7D',sf:.75,ra:'5배죽→진밥',ct:'하루 3회+간식',am:'1회 120~180g',tx:'0.5cm 진밥',ds:'하루 세 끼 리듬 형성. 핑거푸드로 스스로 먹기 연습.',td:['핑거푸드 매일 한 가지','숟가락 스스로 쥐기','젖병 대신 컵','간식은 정해진 시간','생우유는 돌 이후']},
 {id:'final',n:'완료기',lb:'만 12개월~',f:12,t:99,c:'#A9A0E0',sf:1,ra:'진밥→된밥',ct:'3식+간식 2회',am:'어른 1/3',tx:'어른과 비슷하게 작게',ds:'밥·반찬 중심 유아식. 가족과 함께 식사.',td:['생우유 400~500ml 이내','젖병 떼기 완료','꿀 가능','간은 최소한','쫓아다니며 먹이지 않기']}];
 var IDS=['ready','early','mid','late','final'],TY={p:'🍲 죽',t:'🧊 토핑',f:'✋ 핑거',m:'🍚 유아식'};
-/*==== 레시피 ====*/
+/*======= 레시피 =======*/
 var BASE=[
 {i:'e1',s:1,y:'p',n:'첫 쌀미음(10배죽)',e:'🍚',tm:'20분',tag:'첫 이유식',sr:['ppibbo','bboon'],g:[['불린 쌀',15,'g','불린 쌀'],['물',150,'ml','']],st:['쌀을 30분 이상 불려 체에 건집니다.','불린 쌀과 물을 아주 곱게 갈아줍니다.','약불에서 저으며 8~10분 끓입니다.','고운 체에 걸러 매끈하게 만듭니다.','체온 정도로 식혀 숟가락으로 먹입니다.'],tip:'첫날은 1~2숟갈만. 며칠 안에 고기·채소를 추가하세요.'},
-{i:'e2',s:1,y:'p',n:'소고기미음',e:'🥩',tm:'30분',tag:'철분 필수',sr:['ppibbo','rda'],g:[['불린 쌀',15,'g','불린 쌀'],['소고기',10,'g','소고기'],['물',170,'ml','']],st:['소고기를 찬물에 15분 담가 핏물을 뺍니다.','끓는 물에 삶고 육수는 따로 둡니다.','삶은 고기를 아주 곱게 갈아줍니다.','불린 쌀과 육수를 갈아 8분 끓입니다.','고기를 넣고 5분 더 끓여 체에 내립니다.'],tip:'6개월 이후 모유·분유만으로는 철분이 부족합니다. 고기는 매일 조금씩.'},
+{i:'e2',s:1,y:'p',n:'소고기미음',e:'🥩',tm:'30분',tag:'철분 필수',sr:['ppibbo','fe'],g:[['불린 쌀',15,'g','불린 쌀'],['소고기',10,'g','소고기'],['물',170,'ml','']],st:['소고기를 찬물에 15분 담가 핏물을 뺍니다.','끓는 물에 삶고 육수는 따로 둡니다.','삶은 고기를 아주 곱게 갈아줍니다.','불린 쌀과 육수를 갈아 8분 끓입니다.','고기를 넣고 5분 더 끓여 체에 내립니다.'],tip:'소고기의 헴철은 흡수율이 높아 초기부터 매일 조금씩 주는 것이 좋습니다.'},
 {i:'e3',s:1,y:'p',n:'소고기애호박미음',e:'🥒',tm:'30분',sr:['bboon'],g:[['불린 쌀',15,'g','불린 쌀'],['소고기',10,'g','소고기'],['애호박',10,'g','애호박'],['물',170,'ml','']],st:['애호박은 껍질과 씨를 제거하고 속살만 씁니다.','소고기는 핏물 빼고 삶아 곱게 갑니다.','애호박은 살짝 찐 후 곱게 갈아둡니다.','불린 쌀과 육수를 갈아 8분 끓입니다.','재료를 넣고 3~5분 더 끓여 체에 내립니다.'],tip:'애호박은 초기에 소화가 잘 되고 거부가 적어요.'},
-{i:'e4',s:1,y:'p',n:'소고기브로콜리미음',e:'🥦',tm:'30분',sr:['bboon'],g:[['불린 쌀',15,'g','불린 쌀'],['소고기',10,'g','소고기'],['브로콜리',8,'g','브로콜리'],['물',170,'ml','']],st:['브로콜리 꽃 부분만 떼어 물에 담가 씻습니다.','끓는 물에 2~3분 데쳐 곱게 갑니다.','소고기는 삶아 갈고 육수는 남깁니다.','불린 쌀과 육수를 갈아 8분 끓입니다.','재료를 넣고 3분 더 끓여 체에 내립니다.'],tip:'줄기는 질겨서 초기에는 꽃 부분만 사용하세요.'},
+{i:'e4',s:1,y:'p',n:'소고기브로콜리미음',e:'🥦',tm:'30분',tag:'철분 흡수↑',sr:['bboon','fe'],g:[['불린 쌀',15,'g','불린 쌀'],['소고기',10,'g','소고기'],['브로콜리',8,'g','브로콜리'],['물',170,'ml','']],st:['브로콜리 꽃 부분만 떼어 물에 담가 씻습니다.','끓는 물에 2~3분 데쳐 곱게 갑니다.','소고기는 삶아 갈고 육수는 남깁니다.','불린 쌀과 육수를 갈아 8분 끓입니다.','재료를 넣고 3분 더 끓여 체에 내립니다.'],tip:'브로콜리의 비타민C가 철분 흡수를 도와주는 좋은 조합입니다.'},
 {i:'e5',s:1,y:'p',n:'단호박미음',e:'🎃',tm:'25분',sr:['bboon'],g:[['불린 쌀',15,'g','불린 쌀'],['단호박',15,'g','단호박'],['물',160,'ml','']],st:['단호박은 껍질과 씨를 제거합니다.','부드러울 때까지 찝니다.','체에 곱게 내려 으깨둡니다.','불린 쌀과 물을 갈아 8분 끓입니다.','으깬 단호박을 넣고 3분 더 끓입니다.'],tip:'단맛이 강해 잘 받지만 담백한 채소와 번갈아 주세요.'},
 {i:'e6',s:1,y:'p',n:'닭고기고구마미음',e:'🍠',tm:'35분',sr:['bboon'],g:[['불린 쌀',15,'g','불린 쌀'],['닭 안심',10,'g','닭고기'],['고구마',15,'g','고구마'],['물',170,'ml','']],st:['닭 안심은 힘줄을 제거하고 찬물에 10분 담급니다.','완전히 익힌 후 곱게 갑니다.','고구마는 쪄서 으깨둡니다.','불린 쌀과 육수를 갈아 8분 끓입니다.','재료를 넣고 3~5분 더 끓여 체에 내립니다.'],tip:'닭고기는 반드시 완전히 익혀 사용하세요.'},
-{i:'e7',s:1,y:'p',n:'오트밀미음',e:'🌾',tm:'15분',tag:'철분',sr:['who','rda'],g:[['오트밀',10,'g','오트밀'],['물',120,'ml','']],st:['오트밀을 곱게 갈아둡니다.','물과 함께 약불에서 5분 저으며 끓입니다.','걸쭉해지면 체에 한 번 걸러줍니다.'],tip:'조리가 빨라 바쁜 날 대체용으로 좋아요.'},
-{i:'t1',s:1,y:'t',n:'[기본] 토핑 큐브 만들기',e:'🧊',tm:'60분',tag:'주 1회 준비',sr:['topping','mfds'],sv:7,g:[['소고기',70,'g','소고기'],['애호박',70,'g','애호박'],['브로콜리',50,'g','브로콜리'],['단호박',70,'g','단호박']],st:['재료별로 손질 후 각각 삶거나 찝니다.','초기용은 각각 아주 곱게 갈아 퓨레로 만듭니다.','실리콘 큐브 트레이에 10g씩 나눠 담습니다.','완전히 식힌 후 뚜껑을 덮어 냉동합니다.','굳으면 지퍼백에 옮기고 재료명·날짜를 적습니다.'],tip:'만든 큐브는 식단>큐브 탭에 등록하면 유효기간을 알려드려요.',wn:'냉동 큐브는 1주(최대 2주) 내 사용. 실온 방치·재냉동 금지.'},
-{i:'t2',s:1,y:'t',n:'쌀죽+소고기+애호박',e:'🍚',tm:'10분',tag:'토핑 2종',sr:['topping'],g:[['10배죽',60,'g','10배죽'],['소고기 큐브',1,'개','소고기',10],['애호박 큐브',1,'개','애호박',10]],st:['기본죽 60g을 중탕으로 데웁니다.','냉장 해동한 큐브를 함께 데웁니다.','그릇에 죽을 담고 토핑을 나란히 올립니다.','한 숟갈씩 죽과 토핑을 섞어 먹입니다.'],tip:'토핑을 각각 맛보게 한 뒤 섞어주면 좋습니다.'},
+{i:'e7',s:1,y:'p',n:'오트밀미음',e:'🌾',tm:'15분',tag:'철분',sr:['rda'],g:[['오트밀',10,'g','오트밀'],['물',120,'ml','']],st:['오트밀을 곱게 갈아둡니다.','물과 함께 약불에서 5분 저으며 끓입니다.','걸쭉해지면 체에 한 번 걸러줍니다.'],tip:'오트밀 철분은 비헴철이라 흡수율이 낮아요. 과일·채소와 함께 주면 좋습니다.'},
+{i:'t0',s:1,y:'t',n:'[준비] 초기 토핑 큐브 8종',e:'🧊',tm:'70분',tag:'주 1회 준비',sr:['topping','mfds'],sv:8,g:[['소고기',80,'g','소고기'],['닭 안심',60,'g','닭고기'],['애호박',80,'g','애호박'],['브로콜리',60,'g','브로콜리'],['단호박',80,'g','단호박'],['고구마',80,'g','고구마'],['감자',60,'g','감자'],['청경채',50,'g','청경채']],st:['재료별로 손질 후 각각 삶거나 찝니다.','초기용은 각각 아주 곱게 갈아 퓨레로 만듭니다.','실리콘 큐브 트레이에 10g씩 나눠 담습니다.','완전히 식힌 후 뚜껑을 덮어 냉동합니다.','굳으면 지퍼백에 옮기고 재료명·날짜를 적습니다.'],tip:'만든 큐브는 식단>큐브 탭에 등록하면 유효기간·장보기에 자동 반영됩니다.',wn:'냉동 큐브는 1주(최대 2주) 내 사용. 실온 방치·재냉동 금지.'},
+{i:'t1',s:1,y:'t',n:'쌀죽+소고기+애호박',e:'🍚',tm:'10분',tag:'토핑 2종',sr:['topping'],g:[['10배죽',60,'g','10배죽'],['소고기 큐브',1,'개','소고기',10],['애호박 큐브',1,'개','애호박',10]],st:['기본죽 60g을 중탕으로 데웁니다.','냉장 해동한 큐브를 함께 데웁니다.','그릇에 죽을 담고 토핑을 나란히 올립니다.','한 숟갈씩 죽과 토핑을 섞어 먹입니다.'],tip:'토핑을 각각 맛보게 한 뒤 섞어주면 좋습니다.'},
+{i:'t2',s:1,y:'t',n:'쌀죽+소고기+브로콜리',e:'🥦',tm:'10분',tag:'철분 흡수↑',sr:['topping','fe'],g:[['10배죽',60,'g','10배죽'],['소고기 큐브',1,'개','소고기',10],['브로콜리 큐브',1,'개','브로콜리',10]],st:['기본죽과 큐브를 데웁니다.','죽 위에 토핑을 올려 완성합니다.'],tip:'고기+비타민C 채소 조합으로 철분 흡수가 좋아집니다.'},
 {i:'t3',s:1,y:'t',n:'쌀죽+닭고기+단호박',e:'🍠',tm:'10분',tag:'토핑 2종',sr:['topping'],g:[['10배죽',60,'g','10배죽'],['닭고기 큐브',1,'개','닭고기',10],['단호박 큐브',1,'개','단호박',10]],st:['기본죽과 큐브를 데웁니다.','죽 위에 토핑을 올려 완성합니다.'],tip:'고기 토핑은 하루 한 번 이상 포함하세요.'},
-{i:'m1',s:2,y:'p',n:'소고기양배추죽',e:'🥬',tm:'30분',sr:['bboon'],g:[['불린 쌀',30,'g','불린 쌀'],['소고기',15,'g','소고기'],['양배추',15,'g','양배추'],['물',210,'ml','']],st:['소고기는 삶아 2~3mm로 다집니다.','양배추는 심을 빼고 데쳐 잘게 다집니다.','불린 쌀은 반만 으깨 입자를 남깁니다.','쌀과 육수를 12분 끓입니다.','재료를 넣고 5분 더 끓입니다.'],tip:'중기부터는 체에 걸르지 않습니다.'},
+{i:'t4',s:1,y:'t',n:'쌀죽+소고기+감자+청경채',e:'🥔',tm:'10분',tag:'토핑 3종',sr:['topping'],g:[['10배죽',70,'g','10배죽'],['소고기 큐브',1,'개','소고기',10],['감자 큐브',1,'개','감자',10],['청경채 큐브',1,'개','청경채',10]],st:['기본죽과 큐브 3종을 데웁니다.','죽을 담고 토핑을 삼각으로 올립니다.'],tip:'감자는 담백해 초록 채소의 낯선 맛을 완화해 줍니다.'},
+{i:'t5',s:1,y:'t',n:'쌀죽+닭고기+고구마+애호박',e:'🍗',tm:'10분',tag:'토핑 3종',sr:['topping'],g:[['10배죽',70,'g','10배죽'],['닭고기 큐브',1,'개','닭고기',10],['고구마 큐브',1,'개','고구마',10],['애호박 큐브',1,'개','애호박',10]],st:['기본죽과 큐브를 데웁니다.','색이 잘 보이게 나란히 담아냅니다.'],tip:'고구마는 변비가 있을 때 도움이 됩니다.'},
+{i:'t6',s:1,y:'t',n:'오트밀죽+소고기+단호박',e:'🌾',tm:'12분',tag:'철분 강화',sr:['topping','fe'],g:[['오트밀',10,'g','오트밀'],['물',110,'ml',''],['소고기 큐브',1,'개','소고기',10],['단호박 큐브',1,'개','단호박',10]],st:['오트밀을 곱게 갈아 물과 5분 끓입니다.','큐브를 데워 위에 올립니다.'],tip:'오트밀+소고기는 철분 총량 확보에 유리합니다.'},
+{i:'m1',s:2,y:'p',n:'소고기양배추죽',e:'🥬',tm:'30분',tag:'철분 흡수↑',sr:['bboon','fe'],g:[['불린 쌀',30,'g','불린 쌀'],['소고기',15,'g','소고기'],['양배추',15,'g','양배추'],['물',210,'ml','']],st:['소고기는 삶아 2~3mm로 다집니다.','양배추는 심을 빼고 데쳐 잘게 다집니다.','불린 쌀은 반만 으깨 입자를 남깁니다.','쌀과 육수를 12분 끓입니다.','재료를 넣고 5분 더 끓입니다.'],tip:'중기부터는 체에 걸르지 않습니다. 양배추 비타민C가 철분 흡수를 돕습니다.'},
 {i:'m2',s:2,y:'p',n:'닭고기당근죽',e:'🥕',tm:'30분',sr:['bboon'],g:[['불린 쌀',30,'g','불린 쌀'],['닭 안심',15,'g','닭고기'],['당근',12,'g','당근'],['양파',8,'g','양파'],['물',210,'ml','']],st:['닭 안심을 삶아 잘게 다집니다.','당근과 양파를 아주 잘게 다져 데칩니다.','쌀과 육수를 12분 끓입니다.','재료를 넣고 5분 더 끓입니다.'],tip:'당근은 기름에 살짝 볶으면 흡수가 좋아집니다.'},
-{i:'m3',s:2,y:'p',n:'소고기시금치죽',e:'🌿',tm:'30분',tag:'철분+엽산',sr:['bboon','mfds'],g:[['불린 쌀',30,'g','불린 쌀'],['소고기',15,'g','소고기'],['시금치',12,'g','시금치'],['물',210,'ml','']],st:['시금치는 잎만 끓는 물에 30초 데칩니다.','물기를 꼭 짜고 잘게 다집니다.','소고기는 삶아 다지고 육수를 남깁니다.','쌀과 육수를 12분 끓인 뒤 재료를 넣고 5분 더 끓입니다.'],tip:'데친 물은 버리세요.'},
+{i:'m3',s:2,y:'p',n:'소고기시금치죽',e:'🌿',tm:'30분',tag:'철분+엽산',sr:['bboon','fe'],g:[['불린 쌀',30,'g','불린 쌀'],['소고기',15,'g','소고기'],['시금치',12,'g','시금치'],['물',210,'ml','']],st:['시금치는 잎만 끓는 물에 30초 데칩니다.','물기를 꼭 짜고 잘게 다집니다.','소고기는 삶아 다지고 육수를 남깁니다.','쌀과 육수를 12분 끓인 뒤 재료를 넣고 5분 더 끓입니다.'],tip:'시금치 철분은 비헴철로 흡수율이 낮지만, 고기와 함께 먹으면 흡수가 올라갑니다. 데친 물은 버리세요.'},
 {i:'m4',s:2,y:'p',n:'흰살생선 두부죽',e:'🐟',tm:'30분',tag:'첫 생선',sr:['ppibbo','niaid'],g:[['불린 쌀',30,'g','불린 쌀'],['대구살',15,'g','흰살생선'],['두부',15,'g','두부'],['애호박',10,'g','애호박'],['물',210,'ml','']],st:['생선은 가시를 꼼꼼히 제거하고 살만 발라냅니다.','완전히 익혀 잘게 부숩니다.','두부는 데쳐 곱게 으깹니다.','쌀과 물을 12분 끓인 뒤 재료를 넣고 5분 더 끓입니다.'],tip:'오전에 소량부터 2~3일 관찰하세요.',wn:'가시 제거를 두 번 확인. 큰 생선은 수은 우려로 피하세요.'},
-{i:'m5',s:2,y:'p',n:'달걀노른자 애호박죽',e:'🥚',tm:'25분',sr:['niaid'],g:[['불린 쌀',30,'g','불린 쌀'],['달걀 노른자',1,'개','달걀노른자'],['애호박',12,'g','애호박'],['물',210,'ml','']],st:['달걀을 12분 이상 완전히 삶아 노른자만 분리합니다.','노른자를 체에 내려 곱게 만듭니다.','쌀과 물을 12분 끓이고 애호박을 넣어 4분 더 끓입니다.','불을 끈 뒤 노른자를 섞어 완성합니다.'],tip:'1/4→1/2→1개 순으로 늘려가세요.'},
+{i:'m5',s:2,y:'p',n:'달걀노른자 애호박죽',e:'🥚',tm:'25분',sr:['niaid'],g:[['불린 쌀',30,'g','불린 쌀'],['달걀 노른자',1,'개','달걀노른자'],['애호박',12,'g','애호박'],['물',210,'ml','']],st:['달걀을 12분 이상 완전히 삶아 노른자만 분리합니다.','노른자를 체에 내려 곱게 만듭니다.','쌀과 물을 12분 끓이고 애호박을 넣어 4분 더 끓입니다.','불을 끈 뒤 노른자를 섞어 완성합니다.'],tip:'노른자 철분은 흡수율이 낮은 편이라 과일·채소와 함께 주면 좋습니다. 1/4→1/2→1개 순으로 늘리세요.'},
 {i:'m6',s:2,y:'p',n:'소고기표고버섯죽',e:'🍄',tm:'30분',sr:['bboon'],g:[['불린 쌀',30,'g','불린 쌀'],['소고기',15,'g','소고기'],['표고버섯',10,'g','표고버섯'],['청경채',10,'g','청경채'],['물',210,'ml','']],st:['표고는 기둥을 떼고 갓만 잘게 다집니다.','청경채는 잎만 데쳐 다집니다.','소고기는 삶아 다집니다.','쌀과 육수를 12분 끓인 뒤 재료를 넣고 5분 더 끓입니다.'],tip:'버섯은 감칠맛이 있어 간 없이도 맛이 좋습니다.'},
-{i:'mt1',s:2,y:'t',n:'7배죽+소고기·브로콜리·당근',e:'🍲',tm:'10분',tag:'토핑 3종',sr:['topping'],g:[['7배죽',100,'g','7배죽'],['소고기 큐브',1,'개','소고기',12],['브로콜리 큐브',1,'개','브로콜리',12],['당근 큐브',1,'개','당근',12]],st:['7배죽과 큐브 3종을 각각 데웁니다.','죽을 담고 토핑을 삼각으로 올립니다.'],tip:'중기 큐브는 2~3mm로 다져 얼립니다.'},
+{i:'mt0',s:2,y:'t',n:'[준비] 중기 토핑 큐브 8종',e:'🧊',tm:'75분',tag:'주 1회 준비',sr:['topping','mfds'],sv:8,g:[['소고기',100,'g','소고기'],['닭 안심',80,'g','닭고기'],['두부',80,'g','두부'],['브로콜리',70,'g','브로콜리'],['당근',70,'g','당근'],['시금치',60,'g','시금치'],['양배추',80,'g','양배추'],['단호박',80,'g','단호박']],st:['재료별로 손질하고 각각 삶거나 데칩니다.','중기용은 갈지 않고 2~3mm로 잘게 다집니다.','큐브 트레이에 12g씩 나눠 담습니다.','완전히 식힌 후 냉동합니다.','굳으면 지퍼백에 재료명·날짜를 적어 보관합니다.'],tip:'두부는 냉동하면 퍼석해져요. 조리 당일 데쳐 쓰는 편이 좋습니다.',wn:'2주 내 사용, 재냉동 금지.'},
+{i:'mt1',s:2,y:'t',n:'7배죽+소고기·브로콜리·당근',e:'🍲',tm:'10분',tag:'철분 흡수↑',sr:['topping','fe'],g:[['7배죽',100,'g','7배죽'],['소고기 큐브',1,'개','소고기',12],['브로콜리 큐브',1,'개','브로콜리',12],['당근 큐브',1,'개','당근',12]],st:['7배죽과 큐브 3종을 각각 데웁니다.','죽을 담고 토핑을 삼각으로 올립니다.'],tip:'중기 큐브는 2~3mm로 다져 얼립니다.'},
 {i:'mt2',s:2,y:'t',n:'7배죽+닭고기·시금치·애호박',e:'🍲',tm:'10분',tag:'토핑 3종',sr:['topping'],g:[['7배죽',100,'g','7배죽'],['닭고기 큐브',1,'개','닭고기',12],['시금치 큐브',1,'개','시금치',12],['애호박 큐브',1,'개','애호박',12]],st:['죽과 큐브를 데워 담아냅니다.'],tip:'초록 채소를 거부하면 고기 토핑과 섞어주세요.'},
+{i:'mt3',s:2,y:'t',n:'7배죽+두부·단호박·청경채',e:'⬜',tm:'12분',tag:'식물성 단백',sr:['topping'],g:[['7배죽',100,'g','7배죽'],['두부',20,'g','두부'],['단호박 큐브',1,'개','단호박',12],['청경채 큐브',1,'개','청경채',12]],st:['두부는 데쳐 물기를 빼고 잘게 으깹니다.','죽과 큐브를 데워 함께 담아냅니다.'],tip:'두부는 그날 데쳐 쓰는 게 식감이 좋습니다.'},
+{i:'mt4',s:2,y:'t',n:'7배죽+달걀노른자·양배추·당근',e:'🥚',tm:'15분',tag:'토핑 3종',sr:['topping','niaid'],g:[['7배죽',100,'g','7배죽'],['달걀 노른자',1,'개','달걀노른자'],['양배추 큐브',1,'개','양배추',12],['당근 큐브',1,'개','당근',12]],st:['달걀을 완숙으로 삶아 노른자만 체에 내립니다.','죽과 큐브를 데워 담고 노른자를 올립니다.'],tip:'노른자는 철분과 콜린이 풍부합니다.'},
+{i:'mt5',s:2,y:'t',n:'7배죽+흰살생선·브로콜리·감자',e:'🐟',tm:'15분',tag:'토핑 3종',sr:['topping','niaid'],g:[['7배죽',100,'g','7배죽'],['대구살',18,'g','흰살생선'],['브로콜리 큐브',1,'개','브로콜리',12],['감자 큐브',1,'개','감자',12]],st:['생선은 가시를 제거해 완전히 익혀 부숩니다.','죽과 큐브를 데워 함께 담아냅니다.'],tip:'생선은 조리 당일 사용하고 가시를 두 번 확인하세요.',wn:'가시 확인 필수.'},
+{i:'mt6',s:2,y:'t',n:'7배죽+소고기·표고·비타민',e:'🍄',tm:'12분',tag:'감칠맛',sr:['topping'],g:[['7배죽',100,'g','7배죽'],['소고기 큐브',1,'개','소고기',12],['표고버섯',10,'g','표고버섯'],['비타민(다채)',10,'g','비타민(다채)']],st:['표고와 비타민은 데쳐 잘게 다집니다.','죽과 소고기 큐브를 데워 함께 담습니다.'],tip:'비타민(다채)은 칼슘·비타민C가 함께 풍부합니다.'},
 {i:'l1',s:3,y:'p',n:'소고기미역진밥',e:'🌊',tm:'30분',tag:'칼슘',sr:['bboon'],g:[['불린 쌀',50,'g','불린 쌀'],['소고기',20,'g','소고기'],['불린 미역',15,'g','미역'],['참기름',2,'방울','참기름'],['물',250,'ml','']],st:['미역은 충분히 불려 여러 번 씻어 염분을 뺀 뒤 다집니다.','소고기는 0.5cm로 썹니다.','참기름 몇 방울로 미역과 고기를 볶습니다.','쌀과 물을 넣고 15분 끓여 진밥 농도로 맞춥니다.'],tip:'미역은 반드시 여러 번 헹궈주세요. 간은 하지 않습니다.'},
 {i:'l2',s:3,y:'p',n:'닭고기채소진밥',e:'🍗',tm:'30분',sr:['bboon'],g:[['불린 쌀',50,'g','불린 쌀'],['닭 안심',20,'g','닭고기'],['양배추',15,'g','양배추'],['당근',12,'g','당근'],['양파',12,'g','양파'],['물',250,'ml','']],st:['닭고기는 삶아 0.5cm로 찢습니다.','채소는 0.5cm 크기로 썹니다.','육수와 쌀을 12분 끓입니다.','재료를 넣고 5~7분 더 끓여 완성합니다.'],tip:'후기에는 재료 크기를 일부러 키워주세요.'},
 {i:'l3',s:3,y:'p',n:'새우두부진밥',e:'🍤',tm:'25분',tag:'갑각류',sr:['niaid'],g:[['불린 쌀',50,'g','불린 쌀'],['생새우살',20,'g','새우'],['두부',20,'g','두부'],['애호박',15,'g','애호박'],['물',250,'ml','']],st:['새우는 내장을 제거하고 잘게 다집니다.','끓는 물에 완전히 익힙니다.','두부는 데쳐 으깨고 애호박은 잘게 썹니다.','쌀과 물을 12분 끓인 후 재료를 넣고 5분 더 끓입니다.'],tip:'오전에 아주 소량으로 첫 시도하세요.',wn:'호흡 곤란·얼굴 부기 시 즉시 응급실로 가세요.'},
-{i:'l4',s:3,y:'p',n:'소고기토마토진밥',e:'🍅',tm:'25분',sr:['bboon'],g:[['불린 쌀',50,'g','불린 쌀'],['소고기',20,'g','소고기'],['토마토',30,'g','토마토'],['양파',12,'g','양파'],['물',240,'ml','']],st:['토마토는 칼집을 내 데친 후 껍질과 씨를 제거합니다.','과육만 잘게 썹니다.','고기와 양파를 볶다가 토마토를 넣고 졸입니다.','쌀과 물을 넣고 15분 끓입니다.'],tip:'산미를 싫어하면 충분히 익혀 단맛을 올려주세요.'},
+{i:'l4',s:3,y:'p',n:'소고기토마토진밥',e:'🍅',tm:'25분',tag:'철분 흡수↑',sr:['bboon','fe'],g:[['불린 쌀',50,'g','불린 쌀'],['소고기',20,'g','소고기'],['토마토',30,'g','토마토'],['양파',12,'g','양파'],['물',240,'ml','']],st:['토마토는 칼집을 내 데친 후 껍질과 씨를 제거합니다.','과육만 잘게 썹니다.','고기와 양파를 볶다가 토마토를 넣고 졸입니다.','쌀과 물을 넣고 15분 끓입니다.'],tip:'토마토의 비타민C가 철분 흡수를 도와 좋은 궁합입니다.'},
 {i:'l5',s:3,y:'p',n:'연어애호박진밥',e:'🍣',tm:'25분',sr:['bboon'],g:[['불린 쌀',50,'g','불린 쌀'],['생연어',20,'g','연어'],['애호박',15,'g','애호박'],['브로콜리',12,'g','브로콜리'],['물',250,'ml','']],st:['연어는 껍질·가시를 제거하고 쪄서 익힙니다.','잘게 부숩니다.','채소는 0.5cm로 썹니다.','쌀과 물을 12분 끓인 뒤 재료를 넣고 5분 더 끓입니다.'],tip:'훈제 연어는 염분이 높아 사용하지 않습니다.'},
-{i:'lt1',s:3,y:'t',n:'진밥+소고기·시금치·파프리카',e:'🍛',tm:'10분',tag:'토핑 3종',sr:['topping'],g:[['진밥',120,'g','진밥'],['소고기 큐브',1,'개','소고기',15],['시금치 큐브',1,'개','시금치',15],['파프리카 큐브',1,'개','파프리카',15]],st:['진밥과 큐브를 데워 색깔별로 담습니다.','스스로 숟가락을 쥐어보게 해줍니다.'],tip:'후기 큐브는 0.5cm로 다져 15g씩 얼립니다.'},
+{i:'lt0',s:3,y:'t',n:'[준비] 후기 토핑 큐브 8종',e:'🧊',tm:'80분',tag:'주 1회 준비',sr:['topping','mfds'],sv:8,g:[['소고기',120,'g','소고기'],['닭 안심',100,'g','닭고기'],['연어',80,'g','연어'],['브로콜리',80,'g','브로콜리'],['파프리카',70,'g','파프리카'],['시금치',70,'g','시금치'],['단호박',100,'g','단호박'],['양배추',90,'g','양배추']],st:['재료를 손질해 각각 익힙니다.','후기용은 0.5cm 크기로 굵게 다집니다.','큐브 트레이에 15g씩 담습니다.','완전히 식혀 냉동하고 지퍼백에 옮깁니다.'],tip:'입자를 크게 남겨 씹는 연습을 돕습니다.',wn:'2주 내 사용, 재냉동 금지.'},
+{i:'lt1',s:3,y:'t',n:'진밥+소고기·시금치·파프리카',e:'🍛',tm:'10분',tag:'철분 흡수↑↑',sr:['topping','fe'],g:[['진밥',120,'g','진밥'],['소고기 큐브',1,'개','소고기',15],['시금치 큐브',1,'개','시금치',15],['파프리카 큐브',1,'개','파프리카',15]],st:['진밥과 큐브를 데워 색깔별로 담습니다.','스스로 숟가락을 쥐어보게 해줍니다.'],tip:'파프리카는 비타민C가 매우 풍부해 시금치의 비헴철 흡수를 크게 높여줍니다.'},
+{i:'lt2',s:3,y:'t',n:'진밥+닭고기·단호박·양배추',e:'🍛',tm:'10분',tag:'토핑 3종',sr:['topping'],g:[['진밥',120,'g','진밥'],['닭고기 큐브',1,'개','닭고기',15],['단호박 큐브',1,'개','단호박',15],['양배추 큐브',1,'개','양배추',15]],st:['모두 데워 담아냅니다.','핑거푸드 한 가지를 곁들이면 좋습니다.'],tip:'스스로 집어먹을 수 있게 접시를 낮게 두세요.'},
+{i:'lt3',s:3,y:'t',n:'진밥+연어·브로콜리·파프리카',e:'🍣',tm:'12분',tag:'오메가3',sr:['topping'],g:[['진밥',120,'g','진밥'],['연어 큐브',1,'개','연어',15],['브로콜리 큐브',1,'개','브로콜리',15],['파프리카 큐브',1,'개','파프리카',15]],st:['진밥과 큐브를 데워 담아냅니다.'],tip:'연어는 고소해서 잘 먹는 편입니다.'},
+{i:'lt4',s:3,y:'t',n:'진밥+소고기·미역·아기치즈',e:'🧈',tm:'12분',tag:'칼슘 강화',sr:['topping'],g:[['진밥',120,'g','진밥'],['소고기 큐브',1,'개','소고기',15],['불린 미역',15,'g','미역'],['아기치즈',5,'g','아기치즈']],st:['미역은 여러 번 씻어 잘게 다집니다.','진밥·소고기와 데워 담고 치즈를 얹어 살짝 녹입니다.'],tip:'치즈는 나트륨이 낮은 아기 전용 제품을 하루 반 장 이내로.'},
+{i:'lt5',s:3,y:'t',n:'진밥+돼지고기·감자·당근',e:'🐖',tm:'12분',tag:'토핑 3종',sr:['topping'],g:[['진밥',120,'g','진밥'],['돼지고기',20,'g','돼지고기'],['감자 큐브',1,'개','감자',15],['당근 큐브',1,'개','당근',15]],st:['돼지고기 안심을 완전히 익혀 0.5cm로 썹니다.','진밥과 큐브를 데워 함께 담습니다.'],tip:'기름기 적은 안심 부위를 사용하세요.'},
 {i:'f1',s:3,y:'f',n:'고구마 스틱',e:'🍠',tm:'20분',tag:'첫 핑거푸드',sr:['ppibbo','mfds'],sv:3,g:[['고구마',100,'g','고구마']],st:['고구마를 손가락 굵기, 5cm 길이로 썹니다.','찜기에 12~15분 부드럽게 찝니다.','손으로 눌러 살짝 으깨질 정도가 알맞습니다.','완전히 식혀 아기가 쥐게 해줍니다.'],tip:'반드시 앉은 자세로, 옆에서 지켜봐 주세요.',wn:'딱딱한 생채소·통포도·통견과류·떡·젤리는 질식 위험!'},
 {i:'f2',s:3,y:'f',n:'두부 채소 동그랑땡',e:'🥘',tm:'25분',sr:['topping'],sv:4,g:[['두부',80,'g','두부'],['소고기 간 것',30,'g','소고기'],['애호박·당근',30,'g','당근'],['쌀가루',10,'g','쌀']],st:['두부는 데쳐 물기를 꼭 짜서 으깹니다.','모든 재료를 섞어 반죽합니다.','작고 납작하게 빚습니다.','기름을 얇게 두른 팬에 약불로 양면을 익힙니다.'],tip:'넉넉히 만들어 소분 냉동하면 간식용으로 편합니다.'},
 {i:'f3',s:3,y:'f',n:'브로콜리·당근 찜',e:'🥦',tm:'12분',sr:['ppibbo'],sv:3,g:[['브로콜리',40,'g','브로콜리'],['당근',40,'g','당근']],st:['브로콜리는 줄기를 남겨 잡기 좋게 자릅니다.','당근은 스틱 모양으로 썹니다.','찜기에 8~12분 푹 찝니다.','식혀서 손에 쥐어줍니다.'],tip:'줄기가 손잡이 역할을 해서 잡기 쉬워요.'},
 {i:'v1',s:4,y:'m',n:'소고기채소 볶음밥(무간)',e:'🍚',tm:'20분',sr:['ppibbo'],g:[['밥',120,'g','밥'],['소고기 간 것',30,'g','소고기'],['애호박·당근·양파',50,'g','당근'],['참기름',2,'방울','참기름']],st:['채소를 잘게 썰어 준비합니다.','팬에 기름을 살짝 두르고 고기를 볶습니다.','채소를 넣고 무르게 볶습니다.','밥을 넣고 고루 섞어 마무리합니다.'],tip:'간은 하지 않아도 충분히 맛있습니다.'},
 {i:'v2',s:4,y:'m',n:'두부 계란찜',e:'🥚',tm:'15분',sr:['bboon'],g:[['달걀',1,'개','달걀'],['두부',50,'g','두부'],['육수',60,'ml',''],['다진 채소',20,'g','애호박']],st:['달걀을 잘 풀고 물, 으깬 두부, 채소를 섞습니다.','체에 한 번 걸러 부드럽게 만듭니다.','내열 그릇에 담아 찜기에 10분 찝니다.','한 김 식혀 작게 잘라줍니다.'],tip:'냉장 1일 이내로 드세요.'},
 {i:'v3',s:4,y:'m',n:'진밥+흰살생선구이+채소',e:'🐟',tm:'20분',sr:['aap'],g:[['진밥',120,'g','진밥'],['흰살생선',40,'g','흰살생선'],['브로콜리·애호박',50,'g','브로콜리']],st:['생선은 가시를 제거하고 기름 없이 굽습니다.','채소는 부드럽게 찝니다.','한 접시에 담아 스스로 먹게 합니다.'],tip:'가족과 같은 식탁에서 먹으면 식사 태도 형성에 좋습니다.'}];
-/*==== 재료 도감 ====*/
-var FD=[['쌀','🍚','곡류',6,'쌀','이유식의 시작. 알레르기가 적고 소화가 쉬워요.',0],['오트밀','🌾','곡류',6,'오트밀','철분·식이섬유 풍부. 조리가 간단.',0],
+/*======= 재료 도감 =======*/
+var FD=[['쌀','🍚','곡류',6,'쌀','이유식의 시작. 알레르기가 적고 소화가 쉬워요.',0],['오트밀','🌾','곡류',6,'오트밀','철분·식이섬유 풍부. 비헴철이라 과일·채소와 함께.',0],
 ['감자','🥔','채소',6,'감자','담백하고 부드러움. 싹·녹색 부분 제거.',0],['고구마','🍠','채소',6,'고구마','단맛이 좋고 변비에 도움.',0],
-['애호박','🥒','채소',6,'애호박','초기 대표 채소. 껍질·씨 제거.',0],['브로콜리','🥦','채소',6,'브로콜리','초기엔 꽃 부분만 데쳐서.',0],
+['애호박','🥒','채소',6,'애호박','초기 대표 채소. 껍질·씨 제거.',0],['브로콜리','🥦','채소',6,'브로콜리','비타민C가 풍부해 철분 흡수를 도와요. 초기엔 꽃 부분만.',0],
 ['청경채','🥬','채소',6,'청경채','잎 부분을 데쳐서 사용.',0],['단호박','🎃','채소',6,'단호박','단맛이 강해 거부가 적어요.',0],
-['소고기','🥩','육류',6,'소고기','초기부터 매일 조금씩! 철분·아연의 핵심.',0],['닭고기','🍗','육류',6,'닭고기','안심, 힘줄 제거 후 완전히 익혀서.',0],
+['소고기','🥩','육류',6,'소고기','헴철 흡수율 20~25%! 철분·아연의 핵심. 초기부터 매일.',0],['닭고기','🍗','육류',6,'닭고기','안심, 힘줄 제거 후 완전히 익혀서.',0],
 ['배','🍐','과일',6,'배','갈아서 소량. 변비에 도움.',0],['사과','🍎','과일',6,'사과','초기엔 익혀 갈아주면 부담이 적어요.',0],
 ['양파','🧅','채소',7,'양파','익히면 단맛이 나 국물 맛이 좋아져요.',0],['당근','🥕','채소',7,'당근','기름에 살짝 볶으면 흡수율이 올라갑니다.',0],
-['양배추','🥬','채소',7,'양배추','두꺼운 심 제거, 연한 잎만.',0],['시금치','🌿','채소',7,'시금치','잎만 데쳐서, 데친 물은 버리세요.',0],
-['무','⚪','채소',7,'무','푹 익히면 부드럽고 시원한 맛.',0],['표고버섯','🍄','채소',7,'표고버섯','갓만 잘게. 감칠맛이 좋아요.',0],
-['두부','⬜','콩·유제품',7,'두부','데쳐서 사용. 냉동은 식감이 나빠집니다.',1],['달걀 노른자','🥚','육류',7,'달걀노른자','완숙으로, 1/4개부터 늘려가세요.',1],
+['양배추','🥬','채소',7,'양배추','비타민C 풍부. 두꺼운 심 제거, 연한 잎만.',0],['시금치','🌿','채소',7,'시금치','철분은 많지만 비헴철이라 흡수율이 낮아요. 고기와 함께!',0],
+['비타민(다채)','🍃','채소',7,'비타민(다채)','칼슘·비타민C가 함께 풍부한 잎채소.',0],['무','⚪','채소',7,'무','푹 익히면 부드럽고 시원한 맛.',0],
+['표고버섯','🍄','채소',7,'표고버섯','갓만 잘게. 감칠맛이 좋아요.',0],
+['두부','⬜','콩·유제품',7,'두부','칼슘·단백질 풍부. 데쳐서 사용, 냉동은 식감 저하.',1],['달걀 노른자','🥚','육류',7,'달걀노른자','완숙으로, 1/4개부터 늘려가세요.',1],
 ['흰살생선','🐟','어패류',7,'흰살생선','대구·광어 등. 가시 제거 두 번 확인!',1],['바나나','🍌','과일',7,'바나나','으깨서 소량. 단맛이 강해 양 조절.',0],
 ['아보카도','🥑','과일',7,'아보카도','좋은 지방 풍부. 잘 익은 것만.',0],['달걀 흰자','🍳','육류',8,'달걀','노른자에 문제 없으면 시도.',1],
-['미역','🌊','어패류',8,'미역','염분을 충분히 헹궈내고 사용.',0],['토마토','🍅','채소',8,'토마토','껍질·씨 제거 후 익혀서.',0],
-['가지','🍆','채소',8,'가지','껍질 벗겨 무르게 익혀주세요.',0],['파프리카','🫑','채소',8,'파프리카','껍질을 벗기면 더 부드러워요.',0],
+['미역','🌊','어패류',8,'미역','칼슘 풍부. 염분을 충분히 헹궈내고 사용.',0],['토마토','🍅','채소',8,'토마토','비타민C로 철분 흡수 도움. 껍질·씨 제거 후 익혀서.',0],
+['가지','🍆','채소',8,'가지','껍질 벗겨 무르게 익혀주세요.',0],['파프리카','🫑','채소',8,'파프리카','비타민C 최강! 철분 흡수를 크게 높여줍니다.',0],
 ['연어','🍣','어패류',8,'연어','오메가3 풍부. 훈제는 부적합.',1],['돼지고기','🐖','육류',8,'돼지고기','기름기 적은 안심으로.',0],
-['블루베리','🫐','과일',8,'블루베리','통째로는 위험. 으깨거나 4등분.',0],['딸기','🍓','과일',8,'딸기','잘게 잘라 소량부터.',1],
+['블루베리','🫐','과일',8,'블루베리','통째로는 위험. 으깨거나 4등분.',0],['딸기','🍓','과일',8,'딸기','비타민C 풍부. 잘게 잘라 소량부터.',1],
 ['견과류(가루)','🥜','기타',8,'아몬드가루','곱게 갈아 소량. 알맹이는 4~5세까지 금지!',2],
 ['플레인 요거트','🥛','콩·유제품',9,'요거트','무가당만. 생우유는 아직 안 돼요.',1],['새우','🍤','어패류',9,'새우','완전히 익혀 잘게. 오전 소량 첫 시도.',1],
-['아기 치즈','🧈','콩·유제품',9,'아기치즈','나트륨 낮은 제품, 하루 반 장.',1],['오이','🥒','채소',9,'오이','껍질·씨 제거해 잘게.',0],
+['아기 치즈','🧈','콩·유제품',9,'아기치즈','칼슘 풍부. 나트륨 낮은 제품 하루 반 장.',1],['오이','🥒','채소',9,'오이','껍질·씨 제거해 잘게.',0],
+['멸치가루','🐟','어패류',9,'멸치가루','칼슘·철분 매우 풍부. 무염 제품을 아주 소량.',1],
 ['참기름','🫗','기타',9,'참기름','풍미용으로 1~2방울.',0],['생우유','🥛','콩·유제품',12,'우유','돌 이후, 하루 400~500ml 이내.',1],
 ['꿀','🍯','기타',12,'','돌 전에는 보툴리누스 위험으로 절대 금지!',2],['소금·설탕','🧂','기타',12,'','돌까지 무간 원칙.',2]];
-/*==== 원칙 ====*/
-var RL=[['이유식은 만 6개월에 시작',['ppibbo','who'],'만 4개월 이전 시작은 권하지 않고, 6개월을 크게 넘겨 늦추는 것도 좋지 않습니다.'],
+/*======= 원칙 =======*/
+var RL=[['이유식은 만 6개월에 시작',['ppibbo'],'만 4개월 이전 시작은 권하지 않고, 6개월을 크게 넘겨 늦추는 것도 좋지 않습니다.'],
 ['쌀미음에 오래 머물지 않기',['ppibbo','bboon'],'며칠 안에 고기와 채소를 더해 종류를 빠르게 늘립니다.'],
-['고기는 처음부터 매일',['ppibbo','kdri'],'6개월 이후 모유·분유만으로는 철분이 부족합니다. 하루 철 6mg의 상당 부분을 이유식에서 채워야 합니다.'],
+['고기는 처음부터 매일',['ppibbo','kdri','fe'],'6개월 이후 모유·분유만으로는 철분이 부족합니다. 고기의 헴철은 흡수율이 20~25%로 채소 철분보다 훨씬 높습니다.'],
+['철분은 비타민C와 함께',['fe'],'브로콜리·파프리카·토마토·양배추 등 비타민C가 많은 채소를 함께 주면 곡류·채소의 비헴철 흡수가 2~3배까지 올라갑니다.'],
 ['알레르기 걱정으로 늦추지 않기',['ppibbo','niaid'],'달걀·생선·밀·땅콩을 일부러 늦추는 것은 예방에 도움되지 않습니다. 가족력이 강하면 소아과와 먼저 상의하세요.'],
 ['새 음식은 한 가지씩 2~3일 관찰',['ppibbo'],'오전에 소량으로 시작해 지켜본 뒤 다음 재료로. 재료 탭의 관찰 타이머를 이용하세요.'],
 ['돌까지는 간을 하지 않습니다',['ppibbo','mfds'],'소금·설탕·간장 없이 재료 본래의 맛으로 먹입니다.'],
 ['숟가락으로 먹이고 컵을 연습',['ppibbo','aap'],'젖병에 이유식을 넣지 않습니다. 6개월부터 컵 연습.'],
 ['스스로 손으로 집어먹게',['ppibbo'],'9개월부터 핑거푸드를 매일. 지저분해지는 것을 허용해야 스스로 먹는 힘이 자랍니다.'],
-['시간과 자리를 정해서',['ppibbo','who'],'정해진 시간, 아기 식탁 의자에서. 영상 보여주며 먹이지 마세요.'],
-['안 먹으면 30분 후 치우기',['ppibbo'],'억지로 먹이거나 쫓아다니지 않습니다.'],
+['시간과 자리를 정해서',['ppibbo'],'정해진 시간, 아기 식탁 의자에서. 영상 보여주며 먹이지 마세요.'],
+['안 먹으면 30분 후 치우기',['ppibbo'],'억지로 먹이거나 쫓아다니지 않습니다. 성장곡선이 정상 범위면 대개 괜찮습니다.'],
 ['질식 위험 음식 금지',['mfds'],'통포도·통견과류·떡·젤리·딱딱한 생채소. 견과류 알맹이는 4~5세까지.'],
 ['돌 이후 생우유, 밥과 반찬으로',['ppibbo','aap'],'생우유 하루 400~500ml 이내, 식사는 가족과 같은 형태로.']];
-/*==== 일러스트 ====*/
+/*======= 일러스트 =======*/
 function ART(t){var S={
 soak:'<path d="M22 34h56l-6 26a6 6 0 0 1-6 5H34a6 6 0 0 1-6-5z" fill="url(#gW)"/><ellipse cx="50" cy="34" rx="28" ry="7" fill="#EDE3DA"/><ellipse cx="50" cy="35" rx="24" ry="5.5" fill="url(#gB)"/><ellipse cx="44" cy="35" rx="2.6" ry="1.5" fill="#fff"/><ellipse cx="53" cy="37" rx="2.6" ry="1.5" fill="#fff"/>',
 blend:'<path d="M34 18h32l-4 42a7 7 0 0 1-7 6H45a7 7 0 0 1-7-6z" fill="url(#gS)"/><path d="M38 40h24l-2 20a7 7 0 0 1-7 6H47a7 7 0 0 1-7-6z" fill="url(#gY)"/><rect x="32" y="13" width="36" height="6" rx="3" fill="url(#gK)"/><circle cx="50" cy="49" r="3" fill="#6B6663"/>',
@@ -239,105 +310,161 @@ serve:'<path d="M18 34h64l-6 26a8 8 0 0 1-8 6H32a8 8 0 0 1-8-6z" fill="url(#gW)"
 return '<svg viewBox="0 0 100 76" preserveAspectRatio="xMidYMid slice"><rect width="100" height="76" fill="#FBF6F2"/><ellipse cx="50" cy="66" rx="30" ry="4" fill="#000" opacity=".07"/>'+(S[t]||S.serve)+'<rect width="100" height="76" fill="url(#gL)" opacity=".3"/></svg>'}
 function kOf(s){var K=[['불려|불린|담가','soak'],['갈아|믹서|갑니다','blend'],['체에|걸러','sieve'],['끓|졸입','boil'],['찝니다|찜기|삶|데쳐|데칩|익힙','steam'],['다집|다져|썰|썹','chop'],['큐브|트레이|냉동|지퍼백','cube'],['볶|팬에|굽습','fry'],['으깨|으깹|부숩|빚','mash'],['가시','bone'],['씻|헹궈','wash'],['식혀|식힌','cool'],['달걀|노른자','egg'],['섞|풀어','mix'],['담고|담아|올립|먹입|쥐게','serve']];
 for(var i=0;i<K.length;i++)if(new RegExp(K[i][0]).test(s))return K[i][1];return 'serve'}
-/*==== 상태 ====*/
-var KY={b:'b4.baby',l:'b4.log',f:'b4.food',m:'b4.my',c:'b4.cube',o:'b4.ov',p:'b4.ph',w:'b4.plan',a:'b4.obs',s:'b4.shop',t:'b4.today'};
+/*======= 상태 =======*/
+var KY={b:'b6.baby',l:'b6.log',f:'b6.food',m:'b6.my',c:'b6.cube',o:'b6.ov',p:'b6.ph',w:'b6.plan',a:'b6.obs',s:'b6.shop',t:'b6.today',v:'b6.fav',g:'b6.grow'};
 function LS(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v===null?d:v}catch(e){return d}}
-var baby=LS(KY.b,null),logs=LS(KY.l,[]),tried=LS(KY.f,{}),myR=LS(KY.m,[]),cubes=LS(KY.c,[]),ov=LS(KY.o,{}),ph=LS(KY.p,{}),plan=LS(KY.w,null),obs=LS(KY.a,[]),shopChk=LS(KY.s,{}),todaySel=LS(KY.t,null);
+var baby=LS(KY.b,null),logs=LS(KY.l,[]),tried=LS(KY.f,{}),myR=LS(KY.m,[]),cubes=LS(KY.c,[]),ov=LS(KY.o,{}),ph=LS(KY.p,{}),plan=LS(KY.w,null),obs=LS(KY.a,[]),shopChk=LS(KY.s,{}),todaySel=LS(KY.t,null),fav=LS(KY.v,{}),grow=LS(KY.g,[]);
 function save(){localStorage.setItem(KY.b,JSON.stringify(baby));localStorage.setItem(KY.l,JSON.stringify(logs));localStorage.setItem(KY.f,JSON.stringify(tried));
 localStorage.setItem(KY.m,JSON.stringify(myR));localStorage.setItem(KY.c,JSON.stringify(cubes));localStorage.setItem(KY.o,JSON.stringify(ov));
-localStorage.setItem(KY.w,JSON.stringify(plan));localStorage.setItem(KY.a,JSON.stringify(obs));localStorage.setItem(KY.s,JSON.stringify(shopChk));localStorage.setItem(KY.t,JSON.stringify(todaySel));
+localStorage.setItem(KY.w,JSON.stringify(plan));localStorage.setItem(KY.a,JSON.stringify(obs));localStorage.setItem(KY.s,JSON.stringify(shopChk));
+localStorage.setItem(KY.t,JSON.stringify(todaySel));localStorage.setItem(KY.v,JSON.stringify(fav));localStorage.setItem(KY.g,JSON.stringify(grow));
 try{localStorage.setItem(KY.p,JSON.stringify(ph))}catch(e){alert('사진 저장 공간이 부족합니다.')}}
 function RCP(){return BASE.map(function(r){var o=ov[r.i];if(!o)return r;var c={};for(var k in r)c[k]=r[k];for(var k2 in o)c[k2]=o[k2];c.ed=1;return c}).concat(myR)}
 function getR(id){var a=RCP();for(var i=0;i<a.length;i++)if(a[i].i===id)return a[i];return null}
-var tab='home',selS=null,selT='p',qty=1,curR=null,fCat='전체',lRx='😋',mTab='s',ME=null,phT=null,pTab='w';
-/*==== 날짜 ====*/
+var tab='home',selS=null,selT='p',qty=1,curR=null,fCat='전체',lRx='😋',mTab='s',ME=null,phT=null,pTab='w',srch='',gK='w';
+/*======= 날짜 =======*/
 function d0(s){var d=new Date(s);d.setHours(0,0,0,0);return d}
 function TD(){var d=new Date();d.setHours(0,0,0,0);return d}
 function addM(d,m){var x=new Date(d),g=x.getDate();x.setMonth(x.getMonth()+m);if(x.getDate()<g)x.setDate(0);return x}
 function addD(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
-function ageM(){var b=d0(baby.birth),n=TD(),m=(n.getFullYear()-b.getFullYear())*12+(n.getMonth()-b.getMonth());if(n.getDate()<b.getDate())m--;return m+Math.floor((n-addM(b,m))/864e5)/30}
+function ageMAt(dt){var b=d0(baby.birth),n=d0(dt),m=(n.getFullYear()-b.getFullYear())*12+(n.getMonth()-b.getMonth());if(n.getDate()<b.getDate())m--;return m+Math.floor((n-addM(b,m))/864e5)/30}
+function ageM(){return ageMAt(TD())}
 function dOld(){return Math.floor((TD()-d0(baby.birth))/864e5)}
 function fmt(d){return d.getFullYear()+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+('0'+d.getDate()).slice(-2)}
 function ymd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
 function ageT(){var m=Math.floor(ageM());return '생후 '+dOld()+'일 · 만 '+m+'개월 '+Math.floor((TD()-addM(d0(baby.birth),m))/864e5)+'일'}
 function curS(){var m=ageM();for(var i=0;i<STG.length;i++)if(m>=STG[i].f&&m<STG[i].t)return STG[i];return STG[0]}
+function nextStage(){var i=IDS.indexOf(curS().id);return i<4?STG[i+1]:null}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function rnd(n){return Math.round(n*10)/10}
+function rnd2(n){return Math.round(n*100)/100}
 function wkStart(){var d=TD(),w=d.getDay();return addD(d,-((w+6)%7))}
-/*==== 목표/추천 ====*/
+/*======= 목표 =======*/
 function MEALS(){return (baby&&baby.meals)||2}
 function SLOTS(){var n=MEALS();return n===1?['아침']:n===2?['아침','저녁']:['아침','점심','저녁']}
-function target(){var dri=DRI(ageM()),sf=curS().sf,t={};NK.forEach(function(k){t[k]=dri[k]*sf});t.lb=dri.lb;t.sf=sf;t.dri=dri;return t}
+function MTYPE(){return baby.feed==='b'?'b':'f'}
+function lastG(k){var a=grow.filter(function(g){return g[k]!=null&&g[k]!==''}).sort(function(x,y){return x.d<y.d?1:-1});return a.length?a[0]:null}
+function curW(){var g=lastG('w');return g?+g.w:null}
+function TG(){var m=ageM(),dri=DRI(m),w=curW(),use=(baby.useW!==0)&&w,day={};
+NK.forEach(function(k){day[k]=dri[k]});
+if(use){day.kcal=Math.round(w*dri.ekg);day.p=rnd(w*dri.pkg)}
+var sf=curS().sf,solid={},meal={};
+NK.forEach(function(k){solid[k]=day[k]*sf;meal[k]=solid[k]/MEALS()});
+return {day:day,solid:solid,meal:meal,dri:dri,sf:sf,w:w,use:!!use,feAb:day.fe*.10,lb:dri.lb}}
 function mainKeys(r){var s={};(r.g||[]).forEach(function(x){if(x[3]&&['소고기','닭고기','돼지고기','흰살생선','연어','새우','두부','달걀','달걀노른자'].indexOf(x[3])>=0)s['P'+x[3]]=1;else if(x[3])s[x[3]]=1});return Object.keys(s)}
-function score(r,acc,tg,used){var nu=nutOf(r).t,sc=0,W={kcal:1,p:1.4,fe:2.6,ca:1.1,zn:1.3};
-NK.forEach(function(k){var need=Math.max(0,tg[k]-(acc[k]||0));sc+=Math.min(nu[k],need)/tg[k]*W[k]});
+function score(r,acc,tg,used){var n=nutOf(r),nu=n.t,sc=0,W={kcal:1,p:1.4,fe:1.4,ca:1.2,zn:1.3};
+NK.forEach(function(k){var need=Math.max(0,tg[k]-(acc[k]||0));sc+=Math.min(nu[k],need)/Math.max(.01,tg[k])*W[k]});
+sc+=Math.min(nu.feAb,Math.max(0,tg.feAb-(acc.feAb||0)))/Math.max(.001,tg.feAb)*1.8;
 var mk=mainKeys(r),dup=0;mk.forEach(function(k){if(used[k])dup++});return sc-dup*.45}
-function pool(si){return RCP().filter(function(r){return r.s===si&&r.y!=='f'})}
+function pool(si){return RCP().filter(function(r){return r.s===si&&r.y!=='f'&&(r.g||[]).length&&(r.sv||1)<5})}
 function recommend(si,seed,mealN,pre){var P=pool(si);if(!P.length)return [];
-var tg=target(),acc={kcal:0,p:0,fe:0,ca:0,zn:0},used={},out=[];
-(pre||[]).forEach(function(k){used[k]=1});
+var T=TG(),tgt={};NK.forEach(function(k){tgt[k]=T.solid[k]});tgt.feAb=T.feAb*T.sf;
+var acc={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0},used={},out=[];(pre||[]).forEach(function(k){used[k]=1});
 for(var s=0;s<mealN;s++){var best=null,bs=-99;
- P.forEach(function(r,idx){if(out.filter(function(o){return o.i===r.i}).length)return;
-  var v=score(r,acc,tg,used)+((idx+seed*7+s*13)%5)*.012;if(v>bs){bs=v;best=r}});
- if(!best)break;out.push(best);var nu=nutOf(best).t;NK.forEach(function(k){acc[k]+=nu[k]});mainKeys(best).forEach(function(k){used[k]=1})}
+P.forEach(function(r,idx){if(out.filter(function(o){return o.i===r.i}).length)return;
+var v=score(r,acc,tgt,used)+((idx+seed*7+s*13)%5)*.012+(fav[r.i]?.15:0);if(v>bs){bs=v;best=r}});
+if(!best)break;out.push(best);var nu=nutOf(best).t;NK.forEach(function(k){acc[k]+=nu[k]});acc.feAb+=nu.feAb;mainKeys(best).forEach(function(k){used[k]=1})}
 return out}
-function altList(si,exclude){var P=pool(si),tg=target();return P.filter(function(r){return exclude.indexOf(r.i)<0})
-.sort(function(a,b){return score(b,{},tg,{})-score(a,{},tg,{})})}
+function altList(si,ex){var P=pool(si),T=TG(),tgt={};NK.forEach(function(k){tgt[k]=T.solid[k]});tgt.feAb=T.feAb*T.sf;
+return P.filter(function(r){return ex.indexOf(r.i)<0}).sort(function(a,b){return score(b,{},tgt,{})-score(a,{},tgt,{})})}
 function todayRec(){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),sl=SLOTS(),key=fmt(TD())+'|'+MEALS();
-if(todaySel&&todaySel.k===key&&todaySel.ids.length===sl.length)return todaySel.ids.map(getR);
+if(todaySel&&todaySel.k===key&&todaySel.ids.length===sl.length){var a=todaySel.ids.map(getR);if(a.indexOf(null)<0)return a}
 var rs=recommend(si,dOld(),sl.length);todaySel={k:key,ids:rs.map(function(r){return r.i})};save();return rs}
-/*==== 부팅 ====*/
+/*======= 부팅 =======*/
 function saveBaby(){var n=document.getElementById('iN').value.trim(),b=document.getElementById('iB').value;
 if(!n)return alert('아기 이름을 입력해 주세요');if(!b)return alert('태어난 날을 선택해 주세요');if(d0(b)>TD())return alert('오늘 이후 날짜는 안 돼요');
-baby={name:n,birth:b,feed:document.getElementById('iF').value,meals:+document.getElementById('iM').value};save();boot()}
+baby={name:n,birth:b,sex:document.getElementById('iS').value,feed:document.getElementById('iF').value,meals:+document.getElementById('iM').value,vol:+document.getElementById('iV').value||180,useW:1};
+var w=+document.getElementById('iW').value,h=+document.getElementById('iH').value;
+if(w||h)grow.push({id:'g'+Date.now(),d:ymd(TD()),w:w||null,h:h||null,c:null});
+save();boot()}
 function boot(){if(!baby){document.getElementById('ob').classList.remove('hd');document.getElementById('mv').classList.add('hd');document.getElementById('nv').classList.add('hd');return}
 document.getElementById('ob').classList.add('hd');document.getElementById('mv').classList.remove('hd');document.getElementById('nv').classList.remove('hd');
 if(!selS)selS=curS().id==='ready'?'early':curS().id;render();notiCheck()}
-function render(){var s=curS();
-document.getElementById('hdr').innerHTML='<div class="hg">TODAY · '+fmt(TD())+' · 하루 '+MEALS()+'끼</div><div class="hn">'+esc(baby.name)+' <span style="font-size:13px;font-weight:600;color:var(--sub)">이유식 노트</span></div><div class="ha">'+ageT()+'</div><span class="pl" style="background:'+s.c+'">'+s.n+' · '+s.lb+'</span>';
-document.getElementById('vw').innerHTML=({home:vHome,plan:vPlan,menu:vMenu,food:vFood,log:vLog,info:vInfo})[tab]();
-window.scrollTo(0,0);var bs=document.querySelectorAll('nav button');for(var i=0;i<bs.length;i++)bs[i].className=bs[i].dataset.t===tab?'on':''}
-document.getElementById('nv').addEventListener('click',function(e){var b=e.target.closest('button');if(b){tab=b.dataset.t;render()}});
-/*==== 공통 ====*/
+function render(){var s=curS(),T=TG();
+document.getElementById('hdr').innerHTML='<div class="hg">TODAY · '+fmt(TD())+' · 이유식 '+MEALS()+'끼'+(T.w?' · '+T.w+'kg':'')+'</div><div class="hn">'+esc(baby.name)+' <span style="font-size:13px;font-weight:600;color:var(--sub)">이유식 노트</span></div><div class="ha">'+ageT()+'</div><span class="pl" style="background:'+s.c+'">'+s.n+' · '+s.lb+'</span>';
+document.getElementById('vw').innerHTML=({home:vHome,plan:vPlan,menu:vMenu,food:vFood,grow:vGrow,log:vLog,info:vInfo})[tab]();
+window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
+var bs=document.querySelectorAll('nav button');for(var i=0;i<bs.length;i++)bs[i].className=bs[i].dataset.t===tab?'on':''}
+document.getElementById('nv').addEventListener('click',function(e){var b=e.target.closest('button');if(b&&b.dataset.t){tab=b.dataset.t;render()}});
+/*======= 공통 =======*/
 function cell(k,v){return '<div style="background:#FBF6F2;border-radius:11px;padding:8px 10px"><div class="mu" style="font-size:10.5px;font-weight:700">'+k+'</div><div style="font-size:13px;font-weight:700">'+v+'</div></div>'}
 function thumb(r){var p=ph[r.i+'_0'];return p?'<img src="'+p+'">':ART(kOf((r.st&&r.st[0])||''))}
-function rcard(r,ex){return '<button class="rc" onclick="openR(\''+r.i+'\')"><div class="th">'+thumb(r)+'</div><div style="flex:1"><div class="nm">'+esc(r.n)+(r.my?' <span class="tg m">내 메뉴</span>':'')+(r.ed?' <span class="tg p">수정</span>':'')+'</div><div class="ds">⏱ '+(r.tm||'-')+' · 철 '+rnd(nutOf(r).t.fe)+'mg'+(ex||'')+'</div></div><div class="ar">›</div></button>'}
-function bars(acc,tg,showTarget){return NK.map(function(k){var L=NL[k],pc=acc[k]/tg[k]*100,dp=acc[k]/tg.dri[k]*100;
-return '<div style="margin-bottom:9px"><div class="rw" style="justify-content:space-between;font-size:12.5px"><span style="font-weight:700">'+L[0]+'</span><span>'+rnd(acc[k])+' / '+rnd(tg[k])+L[1]+' <b style="color:'+L[2]+'">'+Math.round(pc)+'%</b></span></div><div class="nb"><i style="width:'+Math.min(100,pc)+'%;background:'+L[2]+'"></i>'+(showTarget?'<u style="left:100%"></u>':'')+'</div><div class="mu" style="font-size:10px">하루 권장('+tg.lb+') 대비 '+Math.round(dp)+'%</div></div>'}).join('')}
-function nutBlock(nu,ml){var tg=target();
-return '<div class="cd"><b style="font-size:13.5px">🍀 영양 (1회 분량'+(ml>1?' ×'+ml:'')+')</b><div class="mu" style="font-size:10.5px;margin:3px 0 9px">기준: 하루 권장 '+tg.lb+' × 이유식 담당 '+Math.round(tg.sf*100)+'% ÷ '+MEALS()+'끼</div>'
-+NK.map(function(k){var per=tg[k]/MEALS(),pc=nu.t[k]/per*100,L=NL[k];
-return '<div style="margin-bottom:8px"><div class="rw" style="justify-content:space-between;font-size:12.5px"><span style="font-weight:700">'+L[0]+'</span><span>'+rnd(nu.t[k])+L[1]+' <b style="color:'+L[2]+'">1끼 목표의 '+Math.round(pc)+'%</b></span></div><div class="nb"><i style="width:'+Math.min(100,pc)+'%;background:'+L[2]+'"></i></div><div class="mu" style="font-size:10px">하루 권장 '+tg.dri[k]+L[1]+' 대비 '+Math.round(nu.t[k]/tg.dri[k]*100)+'%</div></div>'}).join('')
-+'<div class="hr"></div><b style="font-size:12.5px">재료별 기여도</b><table class="tb" style="margin-top:5px"><tr><th>재료</th><th>중량</th><th>kcal</th><th>단백</th><th>철</th><th>칼슘</th><th>아연</th></tr>'
-+nu.d.map(function(o){return '<tr><td>'+esc(o.n)+'</td><td>'+rnd(o.g)+'g</td><td>'+Math.round(o.kcal)+'</td><td>'+rnd(o.p)+'</td><td>'+rnd(o.fe)+'</td><td>'+Math.round(o.ca)+'</td><td>'+rnd(o.zn)+'</td></tr>'}).join('')+'</table>'
+function rcard(r,x){var n=nutOf(r).t;return '<button class="rc" onclick="openR(\''+r.i+'\')"><div class="th">'+thumb(r)+'</div><div style="flex:1"><div class="nm">'+(fav[r.i]?'⭐ ':'')+esc(r.n)+(r.my?' <span class="tg m">내 메뉴</span>':'')+(r.ed?' <span class="tg p">수정</span>':'')+'</div><div class="ds">⏱ '+(r.tm||'-')+' · 철 '+rnd(n.fe)+'mg(흡수 '+rnd2(n.feAb)+') · 단백 '+rnd(n.p)+'g'+(x||'')+'</div></div><div class="ar">›</div></button>'}
+function todayLogs(){return logs.filter(function(l){return l.d===fmt(TD())})}
+function todaySum(){var f={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0},m={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0},ml=0,cnt=0;
+todayLogs().forEach(function(l){if(l.k==='milk'){ml+=+l.ml||0;var n=milkNut(+l.ml||0,l.mt||MTYPE());NK.forEach(function(k){m[k]+=n[k]});m.feAb+=n.feAb}
+else{cnt++;NK.forEach(function(k){f[k]+=(l.nu&&l.nu[k])||0});f.feAb+=(l.nu&&l.nu.feAb)||0}});
+return {f:f,m:m,ml:ml,cnt:cnt}}
+function stackBars(f,m,day){return NK.map(function(k){var L=NL[k],fp=f[k]/day[k]*100,mp=m[k]/day[k]*100,tot=fp+mp;
+var w1=Math.min(100,fp),w2=Math.max(0,Math.min(100-w1,mp));
+return '<div style="margin-bottom:11px"><div class="rw" style="justify-content:space-between;font-size:13px"><span style="font-weight:800">'+L[0]+'</span><span>'+rnd(f[k]+m[k])+' / '+rnd(day[k])+L[1]+' <b style="color:'+(tot>=95?'#2E9C7D':tot>=70?L[2]:'var(--rd)')+'">'+Math.round(tot)+'%</b></span></div>'
++'<div class="sb2"><i style="width:'+w1+'%;background:'+L[2]+'"></i><i style="width:'+w2+'%;background:'+L[2]+';opacity:.34"></i><u style="left:100%"></u></div>'
++'<div class="mu" style="font-size:10px;margin-top:2px">🍲 이유식 '+Math.round(fp)+'% + 🍼 수유 '+Math.round(mp)+'%</div></div>'}).join('')
++'<div class="lgd"><span><b style="background:var(--pd)"></b>이유식</span><span><b style="background:var(--pd);opacity:.34"></b>수유</span><span>┃ 검은 선 = 하루 목표 100%</span></div>'}
+function feCoach(n){var msg=[];
+if(n.meat<=0&&n.t.fe>0.3)msg.push('고기·생선이 없어 <b>비헴철</b>만 들어 있습니다(흡수율 낮음). 소고기 10~20g을 더하면 흡수 철분이 크게 늘어요.');
+if(n.t.vc<10&&n.nh>0.3)msg.push('비타민C 재료가 적습니다. <b>브로콜리·파프리카·토마토·양배추</b>를 곁들이면 비헴철 흡수가 2~3배 올라갑니다.');
+if(n.meat>15&&n.t.vc>=20)msg.push('고기(헴철) + 비타민C 조합으로 <b>철분 흡수 조건이 좋습니다</b> 👍');
+return msg.length?'<div class="fe">🩸 <b>철분 흡수 코칭</b><br>'+msg.join('<br>')+'<div class="mu" style="font-size:10px;margin-top:5px">계산 모델: 헴철 25% / 비헴철 5%(비타민C·육류인자로 최대 18%) '+sT('fe')+'</div></div>':''}
+function nutBlock(nu,ml){var T=TG();
+return '<div class="cd"><b style="font-size:13.5px">🍀 영양 (1회 분량'+(ml>1?' ×'+ml:'')+')</b><div class="mu" style="font-size:10.5px;margin:3px 0 9px">1끼 목표 = '+(T.use?'체중 '+T.w+'kg 기준':'표준('+T.lb+')')+' 하루 목표 × 이유식 '+Math.round(T.sf*100)+'% ÷ '+MEALS()+'끼</div>'
++NK.map(function(k){var per=T.meal[k],pc=nu.t[k]/per*100,L=NL[k];
+return '<div style="margin-bottom:9px"><div class="rw" style="justify-content:space-between;font-size:12.5px"><span style="font-weight:700">'+L[0]+'</span><span>'+rnd(nu.t[k])+L[1]+' <b style="color:'+L[2]+'">1끼 목표의 '+Math.round(pc)+'%</b></span></div><div class="sb2" style="height:9px"><i style="width:'+Math.min(100,pc)+'%;background:'+L[2]+'"></i></div><div class="mu" style="font-size:10px">하루 목표 '+rnd(T.day[k])+L[1]+' 대비 '+Math.round(nu.t[k]/T.day[k]*100)+'%</div></div>'}).join('')
++'<div class="hr"></div><div class="rw" style="justify-content:space-between;font-size:12.5px"><span style="font-weight:800;color:var(--rd)">🩸 흡수 추정 철분</span><span><b>'+rnd2(nu.t.feAb)+'mg</b> / 하루 흡수 목표 '+rnd2(T.feAb)+'mg <b style="color:var(--rd)">'+Math.round(nu.t.feAb/T.feAb*100)+'%</b></span></div>'
++'<div class="sb2" style="height:9px"><i style="width:'+Math.min(100,nu.t.feAb/T.feAb*100)+'%;background:var(--rd)"></i></div>'
++'<div class="mu" style="font-size:10px;margin-top:3px">헴철 '+rnd2(nu.hm)+'mg · 비헴철 '+rnd2(nu.nh)+'mg · 비타민C '+rnd(nu.t.vc)+'mg · 고기 '+Math.round(nu.meat)+'g</div>'
++'<div class="hr"></div><b style="font-size:12.5px">재료별 기여도</b><table class="tb" style="margin-top:5px"><tr><th>재료</th><th>g</th><th>kcal</th><th>단백</th><th>철</th><th>칼슘</th><th>비타민C</th></tr>'
++nu.d.map(function(o){return '<tr><td>'+esc(o.n)+(o.ty==='h'?' <span class="tg r" style="padding:0 4px">헴</span>':'')+'</td><td>'+rnd(o.g)+'</td><td>'+Math.round(o.kcal)+'</td><td>'+rnd(o.p)+'</td><td>'+rnd2(o.fe)+'</td><td>'+Math.round(o.ca)+'</td><td>'+rnd(o.vc)+'</td></tr>'}).join('')+'</table>'
 +(nu.ms.length?'<div class="mu" style="font-size:10.5px;margin-top:6px">※ 영양 미반영: '+nu.ms.join(', ')+'</div>':'')
-+'<div class="mu" style="font-size:10.5px;margin-top:6px">※ 국가표준식품성분표 기준 원물 추정치(조리 손실 미반영). 나머지는 모유·분유가 보충합니다.</div></div>'}
-/*==== 홈 ====*/
-function vHome(){var s=curS(),m=ageM(),tg=target(),rec=todayRec(),sl=SLOTS();
-var tl=logs.filter(function(l){return l.d===fmt(TD())}),acc={kcal:0,p:0,fe:0,ca:0,zn:0};
-tl.forEach(function(l){NK.forEach(function(k){acc[k]+=(l.nu&&l.nu[k])||0})});
-var pAcc={kcal:0,p:0,fe:0,ca:0,zn:0};rec.forEach(function(r){if(!r)return;var n=nutOf(r).t;NK.forEach(function(k){pAcc[k]+=n[k]})});
++'<div class="mu" style="font-size:10.5px;margin-top:6px">※ 원물 기준 추정치(조리 손실 미반영). '+sT('rda')+sT('kdri')+'</div></div>'+feCoach(nu)}
+/*======= 홈 =======*/
+function vHome(){var s=curS(),T=TG(),rec=todayRec(),sl=SLOTS(),D=todaySum();
+var pAcc={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0};rec.forEach(function(r){if(!r)return;var n=nutOf(r).t;NK.forEach(function(k){pAcc[k]+=n[k]});pAcc.feAb+=n.feAb});
 var due=obs.filter(function(o){return !o.done&&dObs(o)<=3});
-var exp=cubes.filter(function(c){return c.q>0&&dLeft(c)<=2}).length;
+var exp=cubes.filter(function(c){return c.q>0&&dLeft(c)<=2});
+var ns=nextStage(),nd=ns?Math.ceil((addM(d0(baby.birth),ns.f)-TD())/864e5):999;
+var low=[];NK.forEach(function(k){if((D.f[k]+D.m[k])/T.day[k]<.7)low.push(NL[k][0])});
+var feTot=D.f.feAb+D.m.feAb,fePc=feTot/T.feAb*100;
+var dri=T.dri,w=T.w;
 return (s.id==='ready'?'<div class="cd" style="background:#FFF6EC"><b>🕒 아직 이유식 시작 전</b><p class="mu" style="margin:5px 0 0">시작 예정일 <b style="color:var(--pd)">'+fmt(addM(d0(baby.birth),6))+'</b> · <b>'+Math.max(0,Math.ceil((addM(d0(baby.birth),6)-TD())/864e5))+'일</b> 남음</p></div>':'')
-+(due.length?'<div class="cd" style="background:#FFF6EC"><b>🔔 알레르기 관찰 중 '+due.length+'건</b>'+due.map(function(o){return '<div class="mu" style="margin-top:4px">· '+esc(o.n)+' — 관찰 '+dObs(o)+'일차 (D+'+(dObs(o)-1)+')</div>'}).join('')+'<button class="btn g s" style="margin-top:8px" onclick="tab=\'food\';render()">관찰 기록하기</button></div>':'')
-+(exp?'<div class="cd wn">🧊 유효기간 임박 큐브 <b>'+exp+'종</b><button class="btn g s" style="margin-top:8px" onclick="tab=\'plan\';pTab=\'c\';render()">큐브 보기</button></div>':'')
-+'<div class="st">📊 오늘의 영양 달성 ('+tl.length+'끼 기록)</div><div class="cd">'+bars(acc,tg,1)
-+'<div class="hr"></div><div class="mu" style="font-size:11px">검은 선(100%)은 <b>이유식이 담당할 목표</b>입니다. '+s.n+'에는 하루 권장량의 약 '+Math.round(tg.sf*100)+'%를 이유식에서 채우고 나머지는 모유·분유가 보충합니다.'+(acc.fe/tg.fe<.7?' <b style="color:var(--rd)">철분이 부족해요 — 고기·달걀노른자 메뉴를 추가해 보세요.</b>':'')+'</div>'
-+'<div class="hr"></div><b style="font-size:12.5px">추천 식단을 모두 먹으면</b>'+NK.map(function(k){return '<div class="rw" style="justify-content:space-between;font-size:11.5px"><span>'+NL[k][0]+'</span><b style="color:'+NL[k][2]+'">'+Math.round(pAcc[k]/tg[k]*100)+'%</b></div>'}).join('')+'</div>'
-+'<div class="st">🍽 오늘 '+MEALS()+'끼 추천 (영양 균형 자동 계산)</div>'
-+rec.map(function(r,i){if(!r)return '';return '<div class="cd" style="padding:10px"><div class="rw" style="justify-content:space-between;align-items:center;margin-bottom:6px"><b style="font-size:12.5px;color:var(--pd)">'+sl[i]+'</b><button class="mu" style="font-weight:700;color:var(--bl)" onclick="openAlt('+i+')">🔄 다른 메뉴 고르기</button></div>'+rcard(r)+'<button class="btn g s" onclick="qLog(\''+r.i+'\')">📝 먹었어요 기록</button></div>'}).join('')
++(ns&&nd>0&&nd<=14?'<div class="cd" style="background:#F3FAF7"><b>🎉 '+nd+'일 후 '+ns.n+'로 넘어가요</b><p class="mu" style="margin:4px 0 0">'+fmt(addM(d0(baby.birth),ns.f))+'부터 <b>'+ns.ra+'</b> · '+ns.ct+'</p></div>':'')
++(due.length?'<div class="cd" style="background:#FFF6EC"><b>🔔 알레르기 관찰 중 '+due.length+'건</b>'+due.map(function(o){return '<div class="mu" style="margin-top:3px">· '+esc(o.n)+' — '+dObs(o)+'일차</div>'}).join('')+'<button class="btn g s" style="margin-top:8px" onclick="tab=\'food\';render()">관찰 기록</button></div>':'')
++(exp.length?'<div class="cd wn">🧊 유효기간 임박: <b>'+exp.map(function(c){return c.n}).join(', ')+'</b><button class="btn g s" style="margin-top:8px" onclick="tab=\'plan\';pTab=\'c\';render()">큐브 보기</button></div>':'')
+/* 목표 기준 */
++'<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><b style="font-size:13.5px">🎯 오늘의 하루 목표 기준</b><button class="mu" style="color:var(--bl);font-weight:700" onclick="tab=\'grow\';render()">📈 성장기록</button></div>'
++'<div class="g2" style="margin-top:8px">'
++'<div style="background:'+(T.use?'#fff':'#FFEDE4')+';border:1.5px solid '+(T.use?'var(--ln)':'var(--pc)')+';border-radius:11px;padding:9px;cursor:pointer" onclick="baby.useW=0;save();render()"><div class="mu" style="font-size:10px;font-weight:800">표준 기준 ('+T.lb+')</div><b style="font-size:13px">'+dri.kcal+'kcal · 단백 '+dri.p+'g</b><div class="mu" style="font-size:10px">2020 섭취기준</div></div>'
++'<div style="background:'+(T.use?'#FFEDE4':'#fff')+';border:1.5px solid '+(T.use?'var(--pc)':'var(--ln)')+';border-radius:11px;padding:9px;cursor:pointer" onclick="if(!'+(w?1:0)+'){alert(\'성장 탭에서 몸무게를 먼저 기록해 주세요\');return}baby.useW=1;save();render()"><div class="mu" style="font-size:10px;font-weight:800">우리 아기 체중 기준</div><b style="font-size:13px">'+(w?Math.round(w*dri.ekg)+'kcal · 단백 '+rnd(w*dri.pkg)+'g':'몸무게 미입력')+'</b><div class="mu" style="font-size:10px">'+(w?w+'kg × '+dri.ekg+'kcal/kg':'성장 탭에서 입력')+'</div></div></div>'
++'<div class="mu" style="font-size:10.5px;margin-top:7px">눌러서 기준을 바꿀 수 있어요. 현재 적용: <b style="color:var(--pd)">'+(T.use?'체중 기준':'표준 기준')+'</b> · 철·칼슘·아연은 체중과 무관하게 표준값을 사용합니다. '+sT('kdri')+'</div></div>'
+/* 수유 */
++'<div class="st">🍼 오늘 수유 입력</div><div class="cd"><div class="rw" style="justify-content:space-between;align-items:baseline;margin-bottom:8px"><b style="font-size:15px">'+D.ml+' ml</b><span class="mu">'+MILK[MTYPE()].n+' · '+todayLogs().filter(function(l){return l.k==='milk'}).length+'회</span></div>'
++'<div class="mlk">'+[100,120,150,180,200,220].map(function(v){return '<button onclick="addMilk('+v+')">+'+v+'</button>'}).join('')
++'<button onclick="addMilkP()" style="background:#F5EFEA;color:var(--sub)">직접</button><button onclick="undoMilk()" style="background:#FDEAE5;color:var(--rd)">↩︎</button></div>'
++'<div class="mu" style="font-size:10.5px;margin-top:8px">'+(MTYPE()==='f'?'분유 100ml당 67kcal·철 0.8mg(흡수율 약 10%)':'모유 100ml당 65kcal·철 0.03mg(흡수율 약 50%)')+' 기준 합산. '+sT('milk')+'</div></div>'
+/* 그래프 */
++'<div class="st">📊 오늘의 하루 영양 달성 (이유식 '+D.cnt+'끼 + 수유 '+D.ml+'ml)</div><div class="cd">'+stackBars(D.f,D.m,T.day)
++'<div class="hr"></div><div class="rw" style="justify-content:space-between;font-size:13px"><span style="font-weight:800;color:var(--rd)">🩸 흡수 추정 철분</span><span>'+rnd2(feTot)+' / '+rnd2(T.feAb)+'mg <b style="color:'+(fePc>=95?'#2E9C7D':fePc>=70?'var(--sn)':'var(--rd)')+'">'+Math.round(fePc)+'%</b></span></div>'
++'<div class="sb2"><i style="width:'+Math.min(100,D.f.feAb/T.feAb*100)+'%;background:var(--rd)"></i><i style="width:'+Math.max(0,Math.min(100-D.f.feAb/T.feAb*100,D.m.feAb/T.feAb*100))+'%;background:var(--rd);opacity:.34"></i><u style="left:100%"></u></div>'
++'<div class="mu" style="font-size:10px;margin-top:3px">철 권장량 '+dri.fe+'mg은 흡수율 약 10%를 가정한 값이라, 실제 몸에 흡수되는 목표는 <b>'+rnd2(T.feAb)+'mg</b>입니다. 총 섭취 철분 '+rnd(D.f.fe+D.m.fe)+'mg 중 흡수 추정 '+rnd2(feTot)+'mg</div>'
++'<div class="hr"></div><div class="mu" style="font-size:11.5px">'+(low.length?'<b style="color:var(--rd)">부족: '+low.join(', ')+'</b> — '+(low.indexOf('철분')>=0?'소고기·달걀노른자 + 비타민C 채소(파프리카·브로콜리) 조합을 넣어보세요.':low.indexOf('칼슘')>=0?'두부·아기치즈·미역·요거트가 도움이 됩니다.':'고기·생선·두부를 늘려보세요.'):'<b style="color:#2E9C7D">주요 영양소가 잘 채워졌어요 👍</b>')+'</div></div>'
++'<div class="cd" style="background:#FBF6F2"><b style="font-size:12.5px">추천 '+MEALS()+'끼를 모두 먹으면 (이유식만)</b><div class="g3" style="margin-top:7px">'+NK.map(function(k){return '<div style="text-align:center"><div class="mu" style="font-size:10px">'+NL[k][0]+'</div><b style="color:'+NL[k][2]+';font-size:14px">'+Math.round(pAcc[k]/T.solid[k]*100)+'%</b></div>'}).join('')+'</div><div class="mu" style="font-size:10px;margin-top:5px">이유식 담당 목표 대비 · 흡수철 '+rnd2(pAcc.feAb)+'mg</div></div>'
+/* 추천 */
++'<div class="st">🍽 오늘 '+MEALS()+'끼 추천</div>'
++rec.map(function(r,i){if(!r)return '';return '<div class="cd" style="padding:10px"><div class="rw" style="justify-content:space-between;align-items:center;margin-bottom:6px"><b style="font-size:12.5px;color:var(--pd)">'+sl[i]+'</b><span><button class="mu" style="font-weight:700;color:var(--bl)" onclick="openAlt('+i+')">🔄 대안</button> <button class="mu" style="font-weight:700;color:var(--pd);margin-left:8px" onclick="openEd(\''+r.i+'\')">✏️ 수정</button></span></div>'+rcard(r)+'<div class="rw"><button class="btn g s" onclick="qLog(\''+r.i+'\')">📝 먹었어요</button><button class="btn y s" onclick="toggleFav(\''+r.i+'\')">'+(fav[r.i]?'⭐ 해제':'☆ 즐겨찾기')+'</button></div></div>'}).join('')
 +'<button class="btn y s" onclick="reRec()">🎲 추천 다시 받기</button>'
-+'<div class="st">'+s.n+' 기준</div><div class="cd"><div class="g2">'+cell('농도',s.ra)+cell('횟수',s.ct)+cell('1회 양',s.am)+cell('입자',s.tx)+'</div><p class="mu" style="margin:10px 0 0">'+s.ds+'</p><div class="hr"></div><ul style="margin:0;padding-left:17px;font-size:13px">'+s.td.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul><div style="margin-top:8px">'+sT('ppibbo')+sT('kdri')+'</div></div>'
++'<div class="st">'+s.n+' 기준</div><div class="cd"><div class="g2">'+cell('농도',s.ra)+cell('횟수',s.ct)+cell('1회 양',s.am)+cell('입자',s.tx)+'</div><p class="mu" style="margin:10px 0 0">'+s.ds+'</p><div class="hr"></div><ul style="margin:0;padding-left:17px;font-size:13px">'+s.td.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul><div style="margin-top:8px">'+sT('ppibbo')+'</div></div>'
 +'<div class="st">'+esc(baby.name)+'의 로드맵</div><div class="cd"><div class="rm">'+roadmap()+'</div></div>'
 +'<p class="mu" style="text-align:center;font-size:10.5px;margin:14px 6px 0">참고 자료입니다. 최종 판단은 담당 소아과와 상의하세요.</p>'}
-function reRec(){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id);var rs=recommend(si,dOld()+Math.floor(Math.random()*97),SLOTS().length);
+function addMilk(v){logs.push({id:''+Date.now(),d:fmt(TD()),k:'milk',ml:v,mt:MTYPE(),n:MILK[MTYPE()].n+' '+v+'ml',t:'수유'});save();render()}
+function addMilkP(){var v=prompt('수유량(ml)',baby.vol||180);if(v===null)return;v=+v;if(!v)return;addMilk(v)}
+function undoMilk(){for(var i=logs.length-1;i>=0;i--)if(logs[i].k==='milk'&&logs[i].d===fmt(TD())){logs.splice(i,1);break}save();render()}
+function toggleFav(id){fav[id]=fav[id]?0:1;if(!fav[id])delete fav[id];save();render()}
+function reRec(){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),rs=recommend(si,dOld()+Math.floor(Math.random()*97),SLOTS().length);
 todaySel={k:fmt(TD())+'|'+MEALS(),ids:rs.map(function(r){return r.i})};save();render()}
-function openAlt(idx){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),cur=todaySel.ids,L=altList(si,cur),tg=target();
-document.getElementById('mb').innerHTML='<div class="mt">🔄 '+SLOTS()[idx]+' 메뉴 바꾸기</div><p class="mu" style="margin:6px 0 10px">영양 기여가 높은 순으로 정렬했습니다. 1끼 목표 대비 %로 표시됩니다.</p>'
-+L.map(function(r){var n=nutOf(r).t;return '<button class="rc" onclick="pickAlt('+idx+',\''+r.i+'\')"><div class="th">'+thumb(r)+'</div><div style="flex:1"><div class="nm">'+esc(r.n)+'</div><div class="ds">철 '+Math.round(n.fe/(tg.fe/MEALS())*100)+'% · 단백 '+Math.round(n.p/(tg.p/MEALS())*100)+'% · 열량 '+Math.round(n.kcal/(tg.kcal/MEALS())*100)+'%</div></div><div class="ar">＋</div></button>'}).join('')
-+'<button class="btn y" onclick="closeM()">닫기</button>';
-document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
+function openAlt(idx){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),L=altList(si,todaySel.ids),T=TG();
+document.getElementById('mb').innerHTML='<div class="mt2">🔄 '+SLOTS()[idx]+' 메뉴 바꾸기</div><p class="mu" style="margin:6px 0 10px">영양 기여가 높은 순 · 1끼 목표 대비 %</p>'
++L.map(function(r){var n=nutOf(r).t;return '<button class="rc" onclick="pickAlt('+idx+',\''+r.i+'\')"><div class="th">'+thumb(r)+'</div><div style="flex:1"><div class="nm">'+esc(r.n)+'</div><div class="ds">흡수철 '+rnd2(n.feAb)+'mg · 단백 '+Math.round(n.p/T.meal.p*100)+'% · 칼슘 '+Math.round(n.ca/T.meal.ca*100)+'% · '+Math.round(n.kcal)+'kcal</div></div><div class="ar">＋</div></button>'}).join('')
++'<button class="btn y" onclick="closeM()">닫기</button>';document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
 function pickAlt(idx,id){todaySel.ids[idx]=id;save();closeM();render()}
 function miles(){var b=d0(baby.birth);return [[4,'이유식 준비 관찰',['목 가누기·앉은 자세 확인','어른 음식에 관심 보이는지 관찰']],
 [6,'이유식 시작 · 초기(10배죽)',['쌀미음 1~2숟갈로 시작','1주 안에 소고기 추가','하루 1회, 오전 수유 전']],
@@ -347,68 +474,113 @@ function miles(){var b=d0(baby.birth);return [[4,'이유식 준비 관찰',['목
 [12,'완료기 · 유아식 전환',['밥과 반찬 중심','생우유 400~500ml','젖병 떼기 완료']]]
 .map(function(x){var dt=addM(b,Math.floor(x[0]));if(x[0]%1)dt.setDate(dt.getDate()+15);return {m:x[0],t:x[1],td:x[2],dt:dt,dd:Math.ceil((dt-TD())/864e5)}})}
 function roadmap(){var M=miles(),ni=-1;for(var i=0;i<M.length;i++)if(M[i].dd>0){ni=i;break}
-return M.map(function(x,i){var c=x.dd<=0?(i===(ni===-1?M.length-1:ni-1)?'nw':'dn'):'';
+return M.map(function(x,i){var c=x.dd<=0?(i===(ni===-1?M.length-1:ni-1)?'nw2':'dn'):'';
 return '<div class="ri '+c+'"><div class="dt"></div><div class="wh">만 '+x.m+'개월 · '+fmt(x.dt)+(x.dd>0?' <span style="color:var(--pd)">D-'+x.dd+'</span>':'')+'</div><h4>'+x.t+'</h4><ul>'+x.td.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul></div>'}).join('')}
-/*==== 주간 식단 / 장보기 / 큐브 ====*/
+/*======= 성장 =======*/
+var GN={w:['몸무게','kg'],h:['키','cm'],c:['머리둘레','cm']};
+function vGrow(){var sx=baby.sex||'f',A=gArr(gK,sx),recs=grow.filter(function(g){return g[gK]!=null&&g[gK]!==''}).sort(function(a,b){return a.d<b.d?-1:1});
+var last=recs.length?recs[recs.length-1]:null,prev=recs.length>1?recs[recs.length-2]:null;
+var pc=null;if(last){var m=Math.min(24,Math.max(0,ageMAt(last.d)));pc=pctOf(+last[gK],ipol(A.p3,m),ipol(A.p50,m),ipol(A.p97,m))}
+return '<div class="cd"><b>📈 성장 기록</b><p class="mu" style="margin:5px 0 10px">몸무게를 기록하면 <b>체중 기반 영양 목표</b>가 자동 계산되고, WHO 성장곡선 위에 백분위가 표시됩니다.</p>'
++'<div class="rw"><div class="fd" style="flex:1;margin:0"><label>날짜</label><input id="grD" type="date" value="'+ymd(TD())+'"></div></div>'
++'<div class="rw" style="margin-top:8px"><div class="fd" style="flex:1;margin:0"><label>몸무게 kg</label><input id="grW" type="number" step="0.01" placeholder="8.2"></div><div class="fd" style="flex:1;margin:0"><label>키 cm</label><input id="grH" type="number" step="0.1" placeholder="70.5"></div><div class="fd" style="flex:1;margin:0"><label>머리둘레 cm</label><input id="grC" type="number" step="0.1" placeholder="44"></div></div>'
++'<button class="btn" style="margin-top:10px" onclick="addGrow()">＋ 측정 기록 저장</button></div>'
++'<div class="tt">'+['w','h','c'].map(function(k){return '<button class="'+(gK===k?'on':'')+'" onclick="gK=\''+k+'\';render()">'+GN[k][0]+'</button>'}).join('')+'</div>'
++(last?'<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><div><b style="font-size:19px">'+last[gK]+GN[gK][1]+'</b> <span class="mu">'+last.d+'</span>'
++(prev?'<div class="mu" style="font-size:11px">지난 기록('+prev.d+') 대비 <b style="color:'+(+last[gK]>=+prev[gK]?'#2E9C7D':'var(--rd)')+'">'+(+last[gK]-+prev[gK]>=0?'+':'')+rnd2(+last[gK]-+prev[gK])+GN[gK][1]+'</b></div>':'')+'</div>'
++'<div style="text-align:right"><span class="pill2" style="background:'+(pc<3||pc>97?'#FDEAE5':pc<15||pc>85?'#FFF6EC':'#E4F6F0')+';color:'+(pc<3||pc>97?'var(--rd)':pc<15||pc>85?'#B07C13':'#2E9C7D')+'">추정 '+(pc<1?'<1':pc>99?'>99':Math.round(pc))+' 백분위</span><div class="mu" style="font-size:10px;margin-top:3px">만 '+Math.floor(ageMAt(last.d))+'개월 · '+(sx==='m'?'남아':'여아')+'</div></div></div>'
++'<div class="mu" style="font-size:11px;margin-top:8px">'+(pc<3?'⚠️ 3 백분위 미만입니다. 성장 속도와 함께 소아과에서 확인해 보세요.':pc>97?'⚠️ 97 백분위를 넘습니다. 소아과에서 확인해 보세요.':pc<15?'하위 구간이지만 정상 범위입니다. 곡선을 따라 꾸준히 올라가는지가 더 중요해요.':pc>85?'상위 구간이지만 정상 범위입니다.':'정상 범위(3~97 백분위)에서 잘 자라고 있어요 👍')+'</div></div>':'<div class="cd mu">아직 '+GN[gK][0]+' 기록이 없어요.</div>')
++'<div class="cd" style="padding:10px">'+gChart(gK,sx)+'<div class="lgd" style="justify-content:center"><span><b style="background:#DCE9F7"></b>3~97 백분위</span><span><b style="background:#6E9FD4"></b>50 백분위</span><span><b style="background:var(--pd)"></b>우리 아기</span></div></div>'
++(recs.length?'<div class="st">측정 이력</div><div class="cd">'+recs.slice().reverse().map(function(g){var m=Math.min(24,Math.max(0,ageMAt(g.d))),p=pctOf(+g[gK],ipol(A.p3,m),ipol(A.p50,m),ipol(A.p97,m));
+return '<div class="cb"><div style="flex:1"><b style="font-size:13.5px">'+g[gK]+GN[gK][1]+'</b> <span class="mu">'+g.d+' · 만 '+Math.floor(m)+'개월</span></div><span class="mu">'+Math.round(p)+'%ile</span><button class="mu" style="font-size:15px;padding:0 4px" onclick="delGrow(\''+g.id+'\')">✕</button></div>'}).join('')+'</div>':'')
++'<div class="cd" style="background:#F3F6FA;font-size:11.5px"><b>성장곡선 읽는 법</b><ul style="margin:5px 0 0;padding-left:16px;color:var(--sub)"><li>한 시점의 백분위보다 <b>곡선을 따라 꾸준히 자라는지</b>가 중요합니다.</li><li>2개 이상의 백분위 구간을 급하게 벗어나면 소아과 상담을 권합니다.</li><li>모유수유아는 6개월 이후 체중 증가가 완만해지는 것이 자연스럽습니다.</li></ul><div style="margin-top:7px">'+sT('who')+sT('kdca')+'</div><div class="mu" style="font-size:10px;margin-top:5px">※ 본 곡선은 WHO 기준의 월별 근사값이며 머리둘레는 P50±2.6cm로 근사했습니다. 정밀 판정은 공식 성장도표와 진료로 확인하세요.</div></div>'}
+function gChart(k,sx){var A=gArr(k,sx),W=320,H=210,L=34,R=8,Tp=10,B=24,recs=grow.filter(function(g){return g[k]!=null&&g[k]!==''});
+var lo=A.p3[0],hi=A.p97[24];recs.forEach(function(g){var v=+g[k];if(v<lo)lo=v;if(v>hi)hi=v});
+lo=Math.floor(lo-1);hi=Math.ceil(hi+1);
+function X(m){return L+(W-L-R)*m/24}function Y(v){return Tp+(H-Tp-B)*(1-(v-lo)/(hi-lo))}
+function line(a){return a.map(function(v,i){return (i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)}).join(' ')}
+var band=line(A.p97)+' '+A.p3.slice().reverse().map(function(v,i){return 'L'+X(24-i).toFixed(1)+' '+Y(v).toFixed(1)}).join(' ')+' Z';
+var g='<svg class="gc" viewBox="0 0 '+W+' '+H+'"><rect width="'+W+'" height="'+H+'" fill="#fff"/>';
+for(var t=0;t<=4;t++){var v=lo+(hi-lo)*t/4;g+='<line x1="'+L+'" y1="'+Y(v)+'" x2="'+(W-R)+'" y2="'+Y(v)+'" stroke="#F0E6DF"/><text x="'+(L-4)+'" y="'+(Y(v)+3.5)+'" font-size="8" fill="#8C8480" text-anchor="end">'+rnd(v)+'</text>'}
+for(var mm=0;mm<=24;mm+=6){g+='<line x1="'+X(mm)+'" y1="'+Tp+'" x2="'+X(mm)+'" y2="'+(H-B)+'" stroke="#F7F1EC"/><text x="'+X(mm)+'" y="'+(H-B+13)+'" font-size="8" fill="#8C8480" text-anchor="middle">'+mm+'개월</text>'}
+g+='<path d="'+band+'" fill="#DCE9F7" opacity=".55"/><path d="'+line(A.p50)+'" fill="none" stroke="#6E9FD4" stroke-width="1.8"/>';
+g+='<path d="'+line(A.p3)+'" fill="none" stroke="#A9C4E0" stroke-width="1" stroke-dasharray="3 2"/><path d="'+line(A.p97)+'" fill="none" stroke="#A9C4E0" stroke-width="1" stroke-dasharray="3 2"/>';
+var pts=recs.map(function(r){return {x:X(Math.min(24,Math.max(0,ageMAt(r.d)))),y:Y(+r[k])}}).sort(function(a,b){return a.x-b.x});
+if(pts.length>1)g+='<path d="'+pts.map(function(p,i){return (i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)}).join(' ')+'" fill="none" stroke="#F2734B" stroke-width="2"/>';
+pts.forEach(function(p){g+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="3.4" fill="#F2734B" stroke="#fff" stroke-width="1.4"/>'});
+g+='<text x="'+(L+2)+'" y="'+(Tp+9)+'" font-size="9" font-weight="bold" fill="#3E3A38">'+GN[k][0]+' ('+GN[k][1]+') · '+(sx==='m'?'남아':'여아')+'</text></svg>';
+return g}
+function addGrow(){var d=document.getElementById('grD').value,w=document.getElementById('grW').value,h=document.getElementById('grH').value,c=document.getElementById('grC').value;
+if(!d)return alert('날짜를 선택해 주세요');if(!w&&!h&&!c)return alert('측정값을 하나 이상 입력해 주세요');
+grow.push({id:'g'+Date.now(),d:d,w:w||null,h:h||null,c:c||null});save();render()}
+function delGrow(id){if(!confirm('이 기록을 삭제할까요?'))return;grow=grow.filter(function(g){return g.id!==id});save();render()}
+/*======= 식단 =======*/
 function genPlan(){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),ws=wkStart(),n=SLOTS().length,d=[],prev=[];
 for(var i=0;i<7;i++){var rs=recommend(si,dOld()+i*3,n,prev);d.push(rs.map(function(r){return r.i}));
 prev=[];rs.forEach(function(r){mainKeys(r).forEach(function(k){if(k.charAt(0)==='P')prev.push(k)})})}
 plan={ws:ymd(ws),n:n,d:d};shopChk={};save()}
-function vPlan(){return '<div class="tt"><button class="'+(pTab==='w'?'on':'')+'" onclick="pTab=\'w\';render()">🗓 주간 식단</button><button class="'+(pTab==='s'?'on':'')+'" onclick="pTab=\'s\';render()">🛒 장보기</button><button class="'+(pTab==='c'?'on':'')+'" onclick="pTab=\'c\';render()">🧊 큐브</button></div>'
-+(pTab==='w'?vWeek():pTab==='s'?vShop():vCube())}
+function vPlan(){return '<div class="tt"><button class="'+(pTab==='w'?'on':'')+'" onclick="pTab=\'w\';render()">🗓 주간</button><button class="'+(pTab==='s'?'on':'')+'" onclick="pTab=\'s\';render()">🛒 장보기</button><button class="'+(pTab==='c'?'on':'')+'" onclick="pTab=\'c\';render()">🧊 큐브</button></div>'+(pTab==='w'?vWeek():pTab==='s'?vShop():vCube())}
 function vWeek(){if(!plan||plan.ws!==ymd(wkStart())||plan.n!==SLOTS().length)genPlan();
-var ws=d0(plan.ws),sl=SLOTS(),DW=['월','화','수','목','금','토','일'],tg=target();
-var h='<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><b>🗓 '+fmt(ws)+' 주간 식단</b><button class="mu" style="color:var(--bl);font-weight:700" onclick="genPlan();render()">🎲 자동 편성</button></div><p class="mu" style="margin:5px 0 0">단백질 재료가 이어지지 않게 배치했습니다. 칸을 눌러 개별 교체할 수 있어요.</p></div>';
+var ws=d0(plan.ws),sl=SLOTS(),DW=['월','화','수','목','금','토','일'],T=TG();
+var h='<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><b>🗓 '+fmt(ws)+' 주간 식단</b><button class="mu" style="color:var(--bl);font-weight:700" onclick="genPlan();render()">🎲 자동 편성</button></div><p class="mu" style="margin:5px 0 0">단백질 재료가 이어지지 않게 배치했습니다. 칸을 눌러 교체하세요.</p></div>';
 h+='<div class="cd" style="padding:8px"><table class="wk"><tr><th></th>'+sl.map(function(s){return '<th>'+s+'</th>'}).join('')+'</tr>';
 for(var i=0;i<7;i++){var dt=addD(ws,i),td=ymd(dt)===ymd(TD());
 h+='<tr><th>'+DW[i]+'<br><span style="font-weight:400">'+(dt.getMonth()+1)+'/'+dt.getDate()+'</span></th>';
 for(var j=0;j<sl.length;j++){var r=getR(plan.d[i][j]);
-h+='<td class="'+(td?'tdy':'')+'" onclick="swapPlan('+i+','+j+')">'+(r?'<span class="mn">'+esc(r.n.length>11?r.n.slice(0,11)+'…':r.n)+'</span><span class="mu" style="font-size:9.5px">철 '+rnd(nutOf(r).t.fe)+'mg</span>':'-')+'</td>'}
-h+='</tr>'}
-h+='</table></div>';
-var wk={kcal:0,p:0,fe:0,ca:0,zn:0},cnt=0;
-plan.d.forEach(function(day){day.forEach(function(id){var r=getR(id);if(r){var n=nutOf(r).t;NK.forEach(function(k){wk[k]+=n[k]});cnt++}})});
-h+='<div class="st">주간 평균 (1일 기준)</div><div class="cd">'+NK.map(function(k){var v=wk[k]/7,pc=v/tg[k]*100;
-return '<div style="margin-bottom:7px"><div class="rw" style="justify-content:space-between;font-size:12px"><span style="font-weight:700">'+NL[k][0]+'</span><span>'+rnd(v)+NL[k][1]+' <b style="color:'+NL[k][2]+'">'+Math.round(pc)+'%</b></span></div><div class="nb"><i style="width:'+Math.min(100,pc)+'%;background:'+NL[k][2]+'"></i></div></div>'}).join('')
-+'<div class="mu" style="font-size:10.5px;margin-top:5px">총 '+cnt+'끼 · 이유식 담당 목표 대비 비율</div></div>'
-+'<button class="btn g s" onclick="pTab=\'s\';render()">🛒 이 식단으로 장보기 리스트 만들기</button>';
-return h}
-function swapPlan(i,j){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),L=altList(si,[plan.d[i][j]]),tg=target();
-document.getElementById('mb').innerHTML='<div class="mt">메뉴 교체</div><p class="mu" style="margin:6px 0 10px">'+['월','화','수','목','금','토','일'][i]+'요일 '+SLOTS()[j]+'</p>'
-+L.map(function(r){var n=nutOf(r).t;return '<button class="rc" onclick="doSwap('+i+','+j+',\''+r.i+'\')"><div class="th">'+thumb(r)+'</div><div style="flex:1"><div class="nm">'+esc(r.n)+'</div><div class="ds">철 '+rnd(n.fe)+'mg · 단백 '+rnd(n.p)+'g · '+Math.round(n.kcal)+'kcal</div></div><div class="ar">＋</div></button>'}).join('')
+h+='<td class="'+(td?'tdy':'')+'" onclick="swapPlan('+i+','+j+')">'+(r?'<span class="mn">'+esc(r.n.length>11?r.n.slice(0,11)+'…':r.n)+'</span><span class="mu" style="font-size:9px">흡수철 '+rnd2(nutOf(r).t.feAb)+'</span>':'-')+'</td>'}
+h+='</tr>'}h+='</table></div>';
+var wk={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0},cnt=0;
+plan.d.forEach(function(day){day.forEach(function(id){var r=getR(id);if(r){var n=nutOf(r).t;NK.forEach(function(k){wk[k]+=n[k]});wk.feAb+=n.feAb;cnt++}})});
+h+='<div class="st">주간 평균 (1일 이유식 기준)</div><div class="cd">'+NK.map(function(k){var v=wk[k]/7,pc=v/T.solid[k]*100;
+return '<div style="margin-bottom:8px"><div class="rw" style="justify-content:space-between;font-size:12.5px"><span style="font-weight:700">'+NL[k][0]+'</span><span>'+rnd(v)+NL[k][1]+' <b style="color:'+NL[k][2]+'">'+Math.round(pc)+'%</b></span></div><div class="sb2" style="height:9px"><i style="width:'+Math.min(100,pc)+'%;background:'+NL[k][2]+'"></i></div></div>'}).join('')
++'<div class="mu" style="font-size:10.5px;margin-top:5px">총 '+cnt+'끼 · 하루 흡수철 평균 '+rnd2(wk.feAb/7)+'mg (이유식 담당 목표 '+rnd2(T.feAb*T.sf)+'mg)</div></div>'
++'<button class="btn g s" onclick="pTab=\'s\';render()">🛒 장보기 리스트 만들기</button>';return h}
+function swapPlan(i,j){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),L=altList(si,[plan.d[i][j]]);
+document.getElementById('mb').innerHTML='<div class="mt2">메뉴 교체</div><p class="mu" style="margin:6px 0 10px">'+['월','화','수','목','금','토','일'][i]+'요일 '+SLOTS()[j]+'</p>'
++L.map(function(r){var n=nutOf(r).t;return '<button class="rc" onclick="doSwap('+i+','+j+',\''+r.i+'\')"><div class="th">'+thumb(r)+'</div><div style="flex:1"><div class="nm">'+esc(r.n)+'</div><div class="ds">흡수철 '+rnd2(n.feAb)+'mg · 단백 '+rnd(n.p)+'g · '+Math.round(n.kcal)+'kcal</div></div><div class="ar">＋</div></button>'}).join('')
 +'<button class="btn y" onclick="closeM()">닫기</button>';document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
 function doSwap(i,j,id){plan.d[i][j]=id;shopChk={};save();closeM();render()}
 function shopList(){if(!plan)genPlan();var need={};
 plan.d.forEach(function(day){day.forEach(function(id){var r=getR(id);if(!r)return;var sv=r.sv||1;
-(r.g||[]).forEach(function(x){var nm=x[3]||x[0];if(!nm||x[0]==='물'||nm==='물')return;
-var gr=gOf(x)/sv;if(!gr)return;need[nm]=(need[nm]||0)+gr})})});
+(r.g||[]).forEach(function(x){var nm=x[3]||x[0];if(!nm||x[0]==='물'||nm==='물')return;var gr=gOf(x)/sv;if(!gr)return;need[nm]=(need[nm]||0)+gr})})});
 var have={};cubes.forEach(function(c){if(c.q>0)have[c.n]=(have[c.n]||0)+c.q*c.g});
-return Object.keys(need).map(function(k){var n=need[k],h=have[k]||0,buy=Math.max(0,n-h);
-return {n:k,need:n,have:h,buy:Math.ceil(buy/10)*10}}).sort(function(a,b){return b.buy-a.buy})}
+return Object.keys(need).map(function(k){var n=need[k],h=have[k]||0;return {n:k,need:n,have:h,buy:Math.ceil(Math.max(0,n-h)/10)*10}}).sort(function(a,b){return b.buy-a.buy})}
 function vShop(){var L=shopList(),ws=d0(plan.ws);
-return '<div class="cd"><b>🛒 장보기 리스트</b><p class="mu" style="margin:5px 0 0">'+fmt(ws)+' 주간 식단('+plan.n+'끼×7일)에 필요한 총량에서 <b>냉동 큐브 재고를 차감</b>해 계산했습니다. 손실을 감안해 10g 단위로 올림했어요.</p></div>'
-+(L.length?'<div class="cd">'+L.map(function(x,i){var on=shopChk[x.n];
-return '<div class="sc '+(on?'on':'')+'" onclick="shopChk[\''+x.n.replace(/'/g,"")+'\']='+(on?'0':'1')+';save();render()"><div class="bx2">'+(on?'✓':'')+'</div><div style="flex:1"><b class="nm2" style="font-size:13.5px">'+esc(x.n)+'</b><div class="mu" style="font-size:10.5px">필요 '+Math.round(x.need)+'g'+(x.have?' · 큐브보유 '+Math.round(x.have)+'g':'')+'</div></div><b style="color:'+(x.buy?'var(--pd)':'var(--mt)')+'">'+(x.buy?x.buy+'g':'충분')+'</b></div>'}).join('')+'</div>':'<div class="cd mu">식단을 먼저 편성해 주세요.</div>')
-+'<button class="btn g s" onclick="copyShop()">📋 리스트 텍스트 복사 (카톡 전송용)</button>'
-+'<div class="cd" style="background:#F3FAF7;font-size:12px;margin-top:10px"><b>구매 팁</b><ul style="margin:5px 0 0;padding-left:16px;color:var(--sub)"><li>고기는 소분 냉동해 두면 매번 손질하지 않아도 됩니다.</li><li>채소는 큐브로 만들어 1~2주 내 소진하세요.</li><li>두부·생선은 조리 당일 구매를 권합니다.</li></ul></div>'}
+return '<div class="cd"><b>🛒 장보기 리스트</b><p class="mu" style="margin:5px 0 0">'+fmt(ws)+' 주간 식단('+plan.n+'끼×7일) 총량에서 <b>냉동 큐브 재고 차감</b>. 10g 단위 올림.</p></div>'
++(L.length?'<div class="cd">'+L.map(function(x){var on=shopChk[x.n];
+return '<div class="sc '+(on?'on':'')+'" onclick="shopChk[\''+x.n.replace(/'/g,'')+'\']='+(on?'0':'1')+';save();render()"><div class="bx2">'+(on?'✓':'')+'</div><div style="flex:1"><b class="nm2" style="font-size:13.5px">'+esc(x.n)+'</b><div class="mu" style="font-size:10.5px">필요 '+Math.round(x.need)+'g'+(x.have?' · 큐브 '+Math.round(x.have)+'g 보유':'')+'</div></div><b style="color:'+(x.buy?'var(--pd)':'var(--mt)')+'">'+(x.buy?x.buy+'g':'충분')+'</b></div>'}).join('')+'</div>':'<div class="cd mu">식단을 먼저 편성해 주세요.</div>')
++'<button class="btn g s" onclick="copyShop()">📋 텍스트 복사 (카톡 전송용)</button>'
++'<div class="cd" style="background:#F3FAF7;font-size:12px;margin-top:10px"><b>구매 팁</b><ul style="margin:5px 0 0;padding-left:16px;color:var(--sub)"><li>고기는 소분 냉동해 두면 편합니다.</li><li>비타민C 채소(파프리카·브로콜리)는 철분 흡수용으로 늘 준비하세요.</li><li>두부·생선은 조리 당일 구매를 권합니다.</li></ul></div>'}
 function copyShop(){var L=shopList().filter(function(x){return x.buy>0});
 var t='🛒 '+baby.name+' 이유식 장보기 ('+fmt(d0(plan.ws))+' 주)\n'+L.map(function(x){return '· '+x.n+' '+x.buy+'g'}).join('\n');
-if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){alert('복사했어요!')});else prompt('복사하세요',t)}
+if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){alert('복사했어요!')},function(){prompt('복사하세요',t)});else prompt('복사하세요',t)}
 function dLeft(c){return 14-Math.floor((TD()-d0(c.dt))/864e5)}
 function vCube(){var act=cubes.filter(function(c){return c.q>0});
-return '<div class="cd"><b>🧊 냉동 큐브 재고</b><p class="mu" style="margin:5px 0 10px">만든 날 기준 14일까지를 권장 사용기한으로 계산합니다. 장보기 리스트에서 자동 차감돼요.</p>'
+return '<div class="cd"><b>🧊 냉동 큐브 재고</b><p class="mu" style="margin:5px 0 10px">만든 날 기준 14일까지를 권장 사용기한으로 계산하고 장보기에서 자동 차감합니다.</p>'
 +'<div class="rw"><div class="fd" style="flex:1.3;margin:0"><label>재료</label><input id="cN" list="cL" placeholder="소고기"><datalist id="cL">'+Object.keys(NUT).map(function(k){return '<option>'+k+'</option>'}).join('')+'</datalist></div><div class="fd" style="flex:.6;margin:0"><label>개수</label><input id="cQ" type="number" placeholder="7"></div><div class="fd" style="flex:.6;margin:0"><label>1개 g</label><input id="cG" type="number" placeholder="10"></div></div>'
 +'<div class="fd" style="margin:10px 0 0"><label>만든 날</label><input id="cD" type="date" value="'+ymd(TD())+'"></div><button class="btn" style="margin-top:10px" onclick="addCube()">＋ 큐브 등록</button></div>'
 +'<div class="st">보유 중 ('+act.length+'종)</div>'
 +(act.length?'<div class="cd">'+act.map(function(c){var d=dLeft(c);
-return '<div class="cb"><div style="flex:0 0 32px;height:32px;border-radius:9px;overflow:hidden">'+ART('cube')+'</div><div style="flex:1"><b style="font-size:13.5px">'+esc(c.n)+'</b><div class="mu" style="font-size:10.5px">'+c.g+'g/개 · '+c.dt+' · '+(d>0?'<b style="color:'+(d<=2?'var(--rd)':'var(--sub)')+'">D-'+d+'</b>':'<b style="color:var(--rd)">기한 초과</b>')+'</div></div><div class="sp"><button onclick="cQ2(\''+c.id+'\',-1)">−</button><b style="width:20px;text-align:center">'+c.q+'</b><button onclick="cQ2(\''+c.id+'\',1)">＋</button><button style="color:var(--sub);padding:0 3px" onclick="cD2(\''+c.id+'\')">✕</button></div></div>'}).join('')+'</div>':'<div class="cd mu">등록된 큐브가 없어요.</div>')
-+'<div class="cd" style="background:#F3FAF7;font-size:12px"><b>보관 팁</b><ul style="margin:5px 0 0;padding-left:16px;color:var(--sub)"><li>완전히 식힌 뒤 뚜껑을 덮어 냉동하세요.</li><li>굳은 뒤 지퍼백에 옮기고 재료명·날짜를 적어두세요.</li><li>실온 방치·재냉동은 피하세요.</li></ul><div style="margin-top:6px">'+sT('mfds')+'</div></div>'}
+return '<div class="cb"><div style="flex:0 0 30px;height:30px;border-radius:9px;overflow:hidden">'+ART('cube')+'</div><div style="flex:1"><b style="font-size:13.5px">'+esc(c.n)+'</b><div class="mu" style="font-size:10.5px">'+c.g+'g/개 · 총 '+(c.q*c.g)+'g · '+(d>0?'<b style="color:'+(d<=2?'var(--rd)':'var(--sub)')+'">D-'+d+'</b>':'<b style="color:var(--rd)">기한 초과</b>')+'</div></div><div class="sp"><button onclick="cQ2(\''+c.id+'\',-1)">−</button><b style="width:20px;text-align:center">'+c.q+'</b><button onclick="cQ2(\''+c.id+'\',1)">＋</button><button style="color:var(--sub);padding:0 3px" onclick="cD2(\''+c.id+'\')">✕</button></div></div>'}).join('')
++'<div class="mu" style="font-size:10.5px;margin-top:8px">− 버튼으로 사용한 개수를 차감하세요.</div></div>':'<div class="cd mu">등록된 큐브가 없어요. 메뉴 > 토핑 > [준비] 큐브 만들기를 참고하세요.</div>')
++'<div class="cd" style="background:#F3FAF7;font-size:12px"><b>보관 팁</b><ul style="margin:5px 0 0;padding-left:16px;color:var(--sub)"><li>완전히 식힌 뒤 뚜껑을 덮어 냉동.</li><li>지퍼백에 재료명·날짜를 적어두세요.</li><li>실온 방치·재냉동은 피하세요.</li></ul><div style="margin-top:6px">'+sT('mfds')+'</div></div>'}
 function addCube(){var n=document.getElementById('cN').value.trim(),q=+document.getElementById('cQ').value,g=+document.getElementById('cG').value||10,dt=document.getElementById('cD').value;
 if(!n)return alert('재료명을 입력해 주세요');if(!q)return alert('개수를 입력해 주세요');cubes.push({id:'c'+Date.now(),n:n,q:q,g:g,dt:dt});save();render()}
 function cQ2(id,d){cubes.forEach(function(c){if(c.id===id)c.q=Math.max(0,c.q+d)});save();render()}
 function cD2(id){cubes=cubes.filter(function(c){return c.id!==id});save();render()}
-/*==== 메뉴 ====*/
-function vMenu(){return '<div class="tt"><button class="'+(mTab==='s'?'on':'')+'" onclick="mTab=\'s\';render()">📚 단계별</button><button class="'+(mTab==='m'?'on':'')+'" onclick="mTab=\'m\';render()">⭐ 나의 메뉴 ('+myR.length+')</button></div>'+(mTab==='s'?vStage():vMy())}
+/*======= 메뉴 =======*/
+function menuHead(){return '<div class="tt"><button class="'+(mTab==='s'?'on':'')+'" onclick="mTab=\'s\';render()">📚 단계별</button><button class="'+(mTab==='f'?'on':'')+'" onclick="mTab=\'f\';render()">⭐ 즐겨찾기</button><button class="'+(mTab==='m'?'on':'')+'" onclick="mTab=\'m\';render()">✏️ 나의 메뉴 ('+myR.length+')</button></div>'
++'<div class="cd" style="padding:9px"><input value="'+esc(srch)+'" oninput="srch=this.value;reSearch()" id="sq" placeholder="🔎 메뉴·재료 검색 (예: 소고기, 토핑)" style="width:100%;padding:10px;border:1.5px solid var(--ln);border-radius:11px;outline:none"></div>'}
+function vMenu(){return menuHead()+(srch?vSearch():mTab==='s'?vStage():mTab==='f'?vFav():vMy())}
+function reSearch(){srch=document.getElementById('sq').value;document.getElementById('vw').innerHTML=vMenu();
+var s2=document.getElementById('sq');if(s2){s2.focus();s2.setSelectionRange(s2.value.length,s2.value.length)}}
+function vSearch(){var q=srch.toLowerCase(),L=RCP().filter(function(r){
+if(r.n.toLowerCase().indexOf(q)>=0)return 1;if(TY[r.y].indexOf(q)>=0)return 1;
+return (r.g||[]).filter(function(x){return (x[0]+' '+(x[3]||'')).toLowerCase().indexOf(q)>=0}).length});
+return '<div class="st">검색 결과 '+L.length+'개</div>'+(L.length?L.map(function(r){return rcard(r,' · '+STG[r.s].n+' '+TY[r.y])}).join(''):'<div class="cd mu">결과가 없어요.</div>')}
+function vFav(){var L=RCP().filter(function(r){return fav[r.i]});
+return '<div class="cd" style="background:#FFF6EC;font-size:12px">즐겨찾기한 메뉴는 <b>추천에서 우선 선택</b>됩니다. 메뉴 상세에서 ☆를 눌러 등록하세요.</div>'
++(L.length?L.map(function(r){return rcard(r,' · '+STG[r.s].n)}).join(''):'<div class="cd mu">아직 즐겨찾기가 없어요.</div>')}
 function vStage(){var si=IDS.indexOf(selS),st=STG[si],cur=curS().id;
 var ty=[['p',TY.p],['t',TY.t]];if(selS==='late')ty.push(['f',TY.f]);if(selS==='final')ty=[['m',TY.m]];
 if(!ty.filter(function(x){return x[0]===selT}).length)selT=ty[0][0];
@@ -416,17 +588,18 @@ var list=RCP().filter(function(r){return r.s===si&&r.y===selT});
 return '<div class="tab">'+STG.slice(1).map(function(s){return '<button class="'+(s.id===selS?'on':'')+'" style="'+(s.id===selS?'background:'+s.c:'')+'" onclick="selS=\''+s.id+'\';render()">'+s.n+(s.id===cur?' ·':'')+'</button>'}).join('')+'</div>'
 +'<div class="cd" style="border-left:4px solid '+st.c+'"><b style="font-size:16px">'+st.n+' <span class="mu" style="font-weight:600">'+st.lb+'</span></b>'+(st.id===cur?' <span class="tg p">지금 여기</span>':'')+'<p class="mu" style="margin:7px 0 10px">'+st.ds+'</p><div class="g2">'+cell('농도',st.ra)+cell('횟수',st.ct)+cell('1회 양',st.am)+cell('입자',st.tx)+'</div><div style="margin-top:9px">'+sT('ppibbo')+sT('bboon')+'</div></div>'
 +'<div class="tt">'+ty.map(function(t){return '<button class="'+(t[0]===selT?'on':'')+'" onclick="selT=\''+t[0]+'\';render()">'+t[1]+'</button>'}).join('')+'</div>'
-+(selT==='t'?'<div class="cd" style="background:#F3FAF7;font-size:12px"><b>토핑이유식</b> — 기본 죽(밥)에 재료별 큐브를 따로 올려 주는 방식. 재료별 반응 확인이 쉽고 미리 만들어 두기 편합니다. '+sT('topping')+'</div>':'')
-+(selT==='p'?'<div class="cd" style="background:#FFF6EC;font-size:12px"><b>죽 이유식</b> — 배죽 비율(10→7→5배죽→진밥)에 따라 재료를 함께 끓이는 방식. 한 그릇에 골고루 먹이기 좋습니다. '+sT('bboon')+'</div>':'')
++(selT==='t'?'<div class="cd" style="background:#F3FAF7;font-size:12px"><b>🧊 토핑이유식</b> — 기본 죽(밥)에 재료별 큐브를 올려 주는 방식. 먼저 <b>[준비] 큐브 만들기</b>로 큐브를 만들고 아래 조합을 돌려 쓰세요. '+sT('topping')+'</div>':'')
++(selT==='p'?'<div class="cd" style="background:#FFF6EC;font-size:12px"><b>🍲 죽 이유식</b> — 배죽 비율(10→7→5배죽→진밥)에 따라 재료를 함께 끓이는 방식. '+sT('bboon')+'</div>':'')
 +(list.length?list.map(function(r){return rcard(r)}).join(''):'<div class="cd mu">메뉴가 없습니다.</div>')}
-function vMy(){return '<div class="cd"><b>⭐ 나의 메뉴</b><p class="mu" style="margin:5px 0 10px">재료와 중량을 입력하면 필수 영양소와 권장량 대비 %가 자동 계산됩니다. 추천·주간식단에도 함께 반영돼요.</p><button class="btn" onclick="openEd()">＋ 새 메뉴 만들기</button></div>'
-+(myR.length?myR.slice().reverse().map(function(r){return rcard(r)}).join(''):'<div class="cd mu">아직 등록한 메뉴가 없어요.</div>')}
-/*==== 레시피 상세 ====*/
+function vMy(){return '<div class="cd"><b>✏️ 나의 메뉴</b><p class="mu" style="margin:5px 0 10px">재료와 중량을 입력하면 영양소·권장량 %·<b>철분 흡수 추정</b>까지 자동 계산됩니다. <b>기본 메뉴도 메뉴명까지 수정</b> 가능해요.</p><button class="btn" onclick="openEd()">＋ 새 메뉴 만들기</button></div>'
++(myR.length?myR.slice().reverse().map(function(r){return rcard(r,' · '+STG[r.s].n)}).join(''):'<div class="cd mu">아직 등록한 메뉴가 없어요.</div>')}
+/*======= 레시피 상세 =======*/
 function openR(id){curR=getR(id);qty=1;document.getElementById('mb').innerHTML=rBody();document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
 function rBody(){var r=curR,st=STG[r.s],nu=nutOf(r,qty);
-return '<div class="mt" style="text-align:center;margin-bottom:4px">'+esc(r.n)+'</div><div style="text-align:center;margin-bottom:12px"><span class="tg" style="background:'+st.c+'22;color:'+(st.c==='#FFC861'?'#B07C13':st.c)+'">'+st.n+'</span><span class="tg">⏱ '+(r.tm||'-')+'</span>'+(r.tag?'<span class="tg p">'+r.tag+'</span>':'')+(r.sv>1?'<span class="tg">'+r.sv+'회분</span>':'')+(r.ed?'<span class="tg p">내가 수정</span>':'')+'</div>'
+return '<div class="rw" style="justify-content:space-between;align-items:center"><span></span><button style="font-size:20px" onclick="toggleFav(\''+r.i+'\');document.getElementById(\'mb\').innerHTML=rBody()">'+(fav[r.i]?'⭐':'☆')+'</button></div>'
++'<div class="mt2" style="text-align:center;margin-bottom:4px">'+esc(r.n)+'</div><div style="text-align:center;margin-bottom:12px"><span class="tg" style="background:'+st.c+'22;color:'+(st.c==='#FFC861'?'#B07C13':st.c)+'">'+st.n+'</span><span class="tg">'+TY[r.y]+'</span><span class="tg">⏱ '+(r.tm||'-')+'</span>'+(r.tag?'<span class="tg p">'+r.tag+'</span>':'')+(r.sv>1?'<span class="tg">'+r.sv+'회분</span>':'')+(r.ed?'<span class="tg p">내가 수정</span>':'')+'</div>'
 +'<div class="qb"><b style="flex:1;font-size:13.5px">분량 ×'+qty+'</b><button onclick="setQ(-1)">−</button><b style="width:22px;text-align:center">'+qty+'</b><button onclick="setQ(1)">＋</button></div>'
-+'<div class="cd"><div class="rw" style="justify-content:space-between"><b style="font-size:13.5px">🧾 재료</b><button class="mu" style="font-weight:700;color:var(--pd)" onclick="openEd(\''+r.i+'\')">✏️ 재료·중량 수정</button></div><div style="margin-top:6px">'
++'<div class="cd"><div class="rw" style="justify-content:space-between"><b style="font-size:13.5px">🧾 재료</b><button class="mu" style="font-weight:700;color:var(--pd)" onclick="openEd(\''+r.i+'\')">✏️ 이름·재료·중량 수정</button></div><div style="margin-top:6px">'
 +r.g.map(function(x){return '<div class="ir"><span>'+esc(x[0])+'</span><b>'+rnd((+x[1]||0)*qty)+x[2]+'</b></div>'}).join('')+'</div><div class="mu" style="font-size:10.5px;margin-top:6px">기준: '+st.ra+' · 1회 '+st.am+'</div></div>'
 +nutBlock(nu,qty)
 +'<div class="cd"><b style="font-size:13.5px">👩‍🍳 만드는 순서</b><div class="mu" style="font-size:10.5px;margin:2px 0 8px">기본 그림이 표시됩니다. 📷로 직접 찍은 사진으로 바꿀 수 있어요.</div><ul class="sl">'
@@ -436,16 +609,16 @@ return '<li><div class="no">'+(x+1)+'</div><div class="ar2"><div class="bx">'+(p
 +(r.tip?'<div class="tp" style="margin-bottom:9px">💡 <b>TIP</b> '+esc(r.tip)+'</div>':'')
 +(r.wn?'<div class="wn" style="margin-bottom:9px">⚠️ <b>주의</b> '+esc(r.wn)+'</div>':'')
 +'<div class="sb" style="margin-bottom:11px"><b>📎 참고 출처</b><ul style="margin:6px 0 0;padding-left:16px">'+(r.sr||['ppibbo']).map(function(k){return '<li><a href="'+SRC[k].u+'" target="_blank" rel="noopener">'+SRC[k].n+'</a></li>'}).join('')
-+'<li><a href="'+SRC.rda.u+'" target="_blank" rel="noopener">'+SRC.rda.n+'</a> (영양 수치)</li><li><a href="'+SRC.kdri.u+'" target="_blank" rel="noopener">'+SRC.kdri.n+'</a> (권장량)</li></ul><div class="mu" style="font-size:10.5px;margin-top:6px">위 자료의 원칙·방식을 참고해 재구성했으며 원문을 그대로 옮긴 것이 아닙니다.</div></div>'
++'<li><a href="'+SRC.rda.u+'" target="_blank" rel="noopener">'+SRC.rda.n+'</a> (영양)</li><li><a href="'+SRC.kdri.u+'" target="_blank" rel="noopener">'+SRC.kdri.n+'</a> (권장량)</li></ul><div class="mu" style="font-size:10.5px;margin-top:6px">위 자료의 원칙·방식을 참고해 재구성했으며 원문을 그대로 옮긴 것이 아닙니다.</div></div>'
 +'<button class="btn" onclick="qLog(\''+r.i+'\')">📝 오늘 먹은 기록에 추가</button>'
 +'<button class="btn g" style="margin-top:8px" onclick="openEd(\''+r.i+'\')">✏️ 이 레시피 수정</button>'
 +(ov[r.i]?'<button class="btn y" style="margin-top:8px" onclick="resetOv(\''+r.i+'\')">↩️ 기본값 복원</button>':'')
 +'<button class="btn y" style="margin-top:8px" onclick="closeM()">닫기</button>'}
 function setQ(d){qty=Math.max(1,Math.min(10,qty+d));document.getElementById('mb').innerHTML=rBody()}
 function closeM(){document.getElementById('md').classList.remove('on');document.body.style.overflow=''}
-function openSrc(k){var s=SRC[k];document.getElementById('mb').innerHTML='<div class="mt">📎 출처</div><div class="cd" style="margin-top:10px"><span class="tg v">'+s.t+'</span><b style="display:block;margin:6px 0">'+s.n+'</b><p class="mu" style="margin:0">'+s.d+'</p><div class="hr"></div><a href="'+s.u+'" target="_blank" rel="noopener">'+s.u+'</a></div><button class="btn y" onclick="closeM()">닫기</button>';
+function openSrc(k){var s=SRC[k];document.getElementById('mb').innerHTML='<div class="mt2">📎 출처</div><div class="cd" style="margin-top:10px"><span class="tg v">'+s.t+'</span><b style="display:block;margin:6px 0">'+s.n+'</b><p class="mu" style="margin:0">'+s.d+'</p><div class="hr"></div><a href="'+s.u+'" target="_blank" rel="noopener">'+s.u+'</a></div><button class="btn y" onclick="closeM()">닫기</button>';
 document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
-/*==== 사진 ====*/
+/*======= 사진 =======*/
 function pickPh(k){phT=k;document.getElementById('fi').click()}
 document.getElementById('fi').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();
 rd.onload=function(ev){var im=new Image();im.onload=function(){var W=340,sc=W/im.width,cv=document.createElement('canvas');
@@ -453,27 +626,30 @@ cv.width=W;cv.height=Math.round(im.height*sc);cv.getContext('2d').drawImage(im,0
 ph[phT]=cv.toDataURL('image/jpeg',.6);save();if(curR)document.getElementById('mb').innerHTML=rBody();render()};im.src=ev.target.result};
 rd.readAsDataURL(f);e.target.value=''});
 function delPh(k){delete ph[k];save();document.getElementById('mb').innerHTML=rBody();render()}
-/*==== 편집 ====*/
+/*======= 편집 =======*/
 function openEd(id){var r=id?getR(id):null;
 ME=r?JSON.parse(JSON.stringify(r)):{i:'my'+Date.now(),my:1,e:'🍲',n:'',s:IDS.indexOf(curS().id==='ready'?'early':curS().id),y:'p',tm:'',g:[],st:[''],tip:'',sv:1,sr:['ppibbo']};
 ME.orig=(id&&r&&!r.my)?id:null;drawEd();document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
-function drawEd(){var nu=nutOf(ME),tg=target(),ks=Object.keys(NUT);
-document.getElementById('mb').innerHTML='<div class="mt" style="margin-bottom:4px">'+(ME.orig?'✏️ 레시피 수정':(ME.n?'✏️ 내 메뉴 수정':'⭐ 나의 메뉴 만들기'))+'</div>'
-+(ME.orig?'<p class="mu" style="margin:0 0 10px">수정 내용은 이 기기에만 저장되고 원본은 보존됩니다. 언제든 복원 가능해요.</p>':'')
+function drawEd(){var nu=nutOf(ME),T=TG(),ks=Object.keys(NUT);
+document.getElementById('mb').innerHTML='<div class="mt2" style="margin-bottom:4px">'+(ME.orig?'✏️ 레시피 수정':(ME.n?'✏️ 내 메뉴 수정':'＋ 나의 메뉴 만들기'))+'</div>'
++(ME.orig?'<p class="mu" style="margin:0 0 10px">메뉴명·재료·중량 모두 수정 가능. 이 기기에만 저장되고 원본은 보존됩니다.</p>':'')
 +'<div class="cd"><div class="fd"><label>메뉴 이름</label><input value="'+esc(ME.n)+'" oninput="ME.n=this.value"></div>'
 +'<div class="rw"><div class="fd" style="flex:1"><label>단계</label><select onchange="ME.s=+this.value">'+STG.slice(1).map(function(s,i){return '<option value="'+(i+1)+'" '+(ME.s===i+1?'selected':'')+'>'+s.n+'</option>'}).join('')+'</select></div>'
 +'<div class="fd" style="flex:1"><label>분류</label><select onchange="ME.y=this.value">'+[['p','죽'],['t','토핑'],['f','핑거푸드'],['m','유아식']].map(function(x){return '<option value="'+x[0]+'" '+(ME.y===x[0]?'selected':'')+'>'+x[1]+'</option>'}).join('')+'</select></div></div>'
 +'<div class="rw"><div class="fd" style="flex:1;margin:0"><label>조리시간</label><input value="'+esc(ME.tm||'')+'" oninput="ME.tm=this.value" placeholder="25분"></div><div class="fd" style="flex:1;margin:0"><label>몇 회분?</label><input type="number" min="1" value="'+(ME.sv||1)+'" oninput="ME.sv=Math.max(1,+this.value||1);drawEd()"></div></div></div>'
-+'<div class="st">재료 · 중량 (숫자를 바꾸면 영양이 바로 재계산됩니다)</div><div class="cd">'
-+(ME.g.length?ME.g.map(function(x,i){return '<div class="ei"><input style="flex:1.4" value="'+esc(x[0])+'" oninput="ME.g['+i+'][0]=this.value"><input style="flex:.65" type="number" step="0.1" value="'+x[1]+'" oninput="ME.g['+i+'][1]=+this.value;drawEd()"><select style="flex:.55" onchange="ME.g['+i+'][2]=this.value;drawEd()">'+['g','ml','개','방울'].map(function(u){return '<option '+(x[2]===u?'selected':'')+'>'+u+'</option>'}).join('')+'</select><select style="flex:1" onchange="ME.g['+i+'][3]=this.value;drawEd()"><option value="">영양 미반영</option>'+ks.map(function(k){return '<option '+(x[3]===k?'selected':'')+'>'+k+'</option>'}).join('')+'</select><button style="color:var(--sub)" onclick="ME.g.splice('+i+',1);drawEd()">✕</button></div>'}).join(''):'<div class="mu">재료를 추가해 주세요.</div>')
++'<div class="st">재료 · 중량 (숫자를 바꾸면 아래 영양이 즉시 재계산)</div><div class="cd">'
++(ME.g.length?ME.g.map(function(x,i){return '<div class="ei"><input style="flex:1.4" value="'+esc(x[0])+'" oninput="ME.g['+i+'][0]=this.value"><input style="flex:.62" type="number" step="0.1" value="'+x[1]+'" oninput="ME.g['+i+'][1]=+this.value;drawEd()"><select style="flex:.52" onchange="ME.g['+i+'][2]=this.value;drawEd()">'+['g','ml','개','방울'].map(function(u){return '<option '+(x[2]===u?'selected':'')+'>'+u+'</option>'}).join('')+'</select><select style="flex:1" onchange="ME.g['+i+'][3]=this.value;drawEd()"><option value="">영양 미반영</option>'+ks.map(function(k){return '<option '+(x[3]===k?'selected':'')+'>'+k+'</option>'}).join('')+'</select><button style="color:var(--sub)" onclick="ME.g.splice('+i+',1);drawEd()">✕</button></div>'}).join(''):'<div class="mu">재료를 추가해 주세요.</div>')
 +'<div class="hr"></div><div class="fd" style="margin-bottom:8px"><label>기본 재료 선택 (영양 자동 계산)</label><select id="eK" onchange="document.getElementById(\'eN\').value=this.value"><option value="">— 직접 입력 —</option>'+ks.map(function(k){return '<option>'+k+'</option>'}).join('')+'</select></div>'
-+'<div class="ei"><input id="eN" style="flex:1.4" placeholder="재료명"><input id="eQ" style="flex:.65" type="number" placeholder="20"><select id="eU" style="flex:.55"><option>g</option><option>ml</option><option>개</option><option>방울</option></select></div>'
++'<div class="ei"><input id="eN" style="flex:1.4" placeholder="재료명"><input id="eQ" style="flex:.62" type="number" placeholder="20"><select id="eU" style="flex:.52"><option>g</option><option>ml</option><option>개</option><option>방울</option></select></div>'
 +'<button class="btn g s" onclick="addIng()">＋ 재료 추가</button></div>'
-+'<div class="cd"><b style="font-size:13px">🍀 자동 계산 영양 (1회분)</b><div class="mu" style="font-size:10.5px;margin:3px 0 8px">1끼 목표 = 하루 권장 × 이유식 '+Math.round(tg.sf*100)+'% ÷ '+MEALS()+'끼</div>'
-+NK.map(function(k){var per=tg[k]/MEALS(),pc=nu.t[k]/per*100;
-return '<div style="margin-bottom:7px"><div class="rw" style="justify-content:space-between;font-size:12px"><span style="font-weight:700">'+NL[k][0]+'</span><span>'+rnd(nu.t[k])+NL[k][1]+' <b style="color:'+NL[k][2]+'">1끼 '+Math.round(pc)+'%</b> · 하루 '+Math.round(nu.t[k]/tg.dri[k]*100)+'%</span></div><div class="nb"><i style="width:'+Math.min(100,pc)+'%;background:'+NL[k][2]+'"></i></div></div>'}).join('')+'</div>'
-+'<div class="st">만드는 순서 (그림이 자동 매칭됩니다)</div><div class="cd">'
-+ME.st.map(function(s,i){return '<div class="rw" style="margin-bottom:6px;align-items:center"><div style="flex:0 0 42px;height:32px;border-radius:8px;overflow:hidden;border:1px solid var(--ln)">'+ART(kOf(s))+'</div><input value="'+esc(s)+'" oninput="ME.st['+i+']=this.value" onblur="drawEd()" placeholder="'+(i+1)+'단계" style="flex:1;padding:10px;border:1.5px solid var(--ln);border-radius:11px"><button style="color:var(--sub);padding:0 4px" onclick="ME.st.splice('+i+',1);drawEd()">✕</button></div>'}).join('')
++'<div class="cd"><b style="font-size:13px">🍀 자동 계산 영양 (1회분)</b><div class="mu" style="font-size:10.5px;margin:3px 0 8px">1끼 목표 = '+(T.use?'체중 '+T.w+'kg':'표준')+' 하루 목표 × 이유식 '+Math.round(T.sf*100)+'% ÷ '+MEALS()+'끼</div>'
++NK.map(function(k){var pc=nu.t[k]/T.meal[k]*100;
+return '<div style="margin-bottom:8px"><div class="rw" style="justify-content:space-between;font-size:12px"><span style="font-weight:700">'+NL[k][0]+'</span><span>'+rnd(nu.t[k])+NL[k][1]+' <b style="color:'+NL[k][2]+'">1끼 '+Math.round(pc)+'%</b> · 하루 '+Math.round(nu.t[k]/T.day[k]*100)+'%</span></div><div class="sb2" style="height:9px"><i style="width:'+Math.min(100,pc)+'%;background:'+NL[k][2]+'"></i></div></div>'}).join('')
++'<div class="rw" style="justify-content:space-between;font-size:12px"><span style="font-weight:800;color:var(--rd)">🩸 흡수 추정 철분</span><span>'+rnd2(nu.t.feAb)+'mg · 하루 흡수목표의 '+Math.round(nu.t.feAb/T.feAb*100)+'%</span></div><div class="sb2" style="height:9px"><i style="width:'+Math.min(100,nu.t.feAb/T.feAb*100)+'%;background:var(--rd)"></i></div>'
++'<div class="mu" style="font-size:10px;margin-top:4px">헴철 '+rnd2(nu.hm)+' · 비헴철 '+rnd2(nu.nh)+' · 비타민C '+rnd(nu.t.vc)+'mg</div></div>'
++feCoach(nu)
++'<div class="st">만드는 순서 (그림 자동 매칭)</div><div class="cd">'
++ME.st.map(function(s,i){return '<div class="rw" style="margin-bottom:6px;align-items:center"><div style="flex:0 0 40px;height:31px;border-radius:8px;overflow:hidden;border:1px solid var(--ln)">'+ART(kOf(s))+'</div><input value="'+esc(s)+'" oninput="ME.st['+i+']=this.value" onblur="drawEd()" placeholder="'+(i+1)+'단계" style="flex:1;padding:10px;border:1.5px solid var(--ln);border-radius:11px"><button style="color:var(--sub);padding:0 4px" onclick="ME.st.splice('+i+',1);drawEd()">✕</button></div>'}).join('')
 +'<button class="btn g s" onclick="ME.st.push(\'\');drawEd()">＋ 단계 추가</button></div>'
 +'<div class="cd"><div class="fd" style="margin:0"><label>메모 / TIP</label><textarea rows="3" oninput="ME.tip=this.value">'+esc(ME.tip||'')+'</textarea></div></div>'
 +'<button class="btn" onclick="saveEd()">저장하기</button>'
@@ -485,47 +661,46 @@ function saveEd(){if(!(ME.n||'').trim())return alert('메뉴 이름을 입력해
 ME.st=ME.st.filter(function(x){return x.trim()});if(!ME.st.length)ME.st=['—'];
 if(ME.orig){var id=ME.orig;ov[id]={n:ME.n,g:ME.g,st:ME.st,tm:ME.tm,sv:ME.sv,tip:ME.tip,s:ME.s,y:ME.y};save();closeM();curR=getR(id);openR(id);render();return}
 ME.my=1;ME.tag='내 레시피';delete ME.orig;var i=-1;myR.forEach(function(r,x){if(r.i===ME.i)i=x});if(i>=0)myR[i]=ME;else myR.push(ME);
-save();closeM();mTab='m';tab='menu';render()}
+save();closeM();mTab='m';tab='menu';srch='';render()}
 function resetOv(id){if(!confirm('기본 레시피로 되돌릴까요?'))return;delete ov[id];save();curR=getR(id);document.getElementById('mb').innerHTML=rBody();render()}
 function delMy(id){if(!confirm('삭제할까요?'))return;myR=myR.filter(function(r){return r.i!==id});save();closeM();render()}
-/*==== 재료 + 알레르기 타이머 ====*/
+/*======= 재료 · 관찰 =======*/
 function dObs(o){return Math.floor((TD()-d0(o.dt))/864e5)+1}
 function vFood(){var m=ageM(),cats=['전체','곡류','육류','어패류','채소','과일','콩·유제품','기타'];
 var list=FD.filter(function(f){return fCat==='전체'||f[2]===fCat}).sort(function(a,b){return a[3]-b[3]});
 var act=obs.filter(function(o){return !o.done});
-return '<div class="cd" style="background:#FFF6EC"><b>🔔 알레르기 3일 관찰 타이머</b><p class="mu" style="margin:5px 0 8px">새 재료는 <b>오전에 소량</b>으로 먹이고 3일간 지켜봅니다. 등록하면 매일 관찰 알림을 띄워드려요.</p>'
+return '<div class="cd" style="background:#FFF6EC"><b>🔔 알레르기 3일 관찰 타이머</b><p class="mu" style="margin:5px 0 8px">새 재료는 <b>오전에 소량</b>으로 먹이고 3일간 지켜봅니다.</p>'
 +'<div class="rw"><div class="fd" style="flex:1.4;margin:0"><label>새 재료</label><input id="oN" list="oL" placeholder="예: 달걀 노른자"><datalist id="oL">'+FD.map(function(f){return '<option>'+f[0]+'</option>'}).join('')+'</datalist></div><div class="fd" style="flex:1;margin:0"><label>시작일</label><input id="oD" type="date" value="'+ymd(TD())+'"></div></div>'
-+'<button class="btn" style="margin-top:9px" onclick="addObs()">＋ 관찰 시작</button>'
-+'<button class="btn y s" style="margin-top:7px" onclick="askNoti()">🔔 브라우저 알림 허용하기</button></div>'
++'<button class="btn" style="margin-top:9px" onclick="addObs()">＋ 관찰 시작</button><button class="btn y s" style="margin-top:7px" onclick="askNoti()">🔔 브라우저 알림 허용</button></div>'
 +(act.length?act.map(function(o,i){var d=dObs(o);
-return '<div class="cd" style="border-left:4px solid '+(d<=3?'var(--sn)':'var(--mt)')+'"><div class="rw" style="justify-content:space-between"><b>'+esc(o.n)+'</b><span class="mu">'+o.dt+' 시작 · '+d+'일차</span></div>'
-+'<div class="ch" style="margin-top:8px">'+[0,1,2].map(function(x){return '<button class="'+(o.c[x]?'on':'')+'" onclick="obsChk('+i+','+x+')">D+'+x+' '+(o.c[x]?'✓ 이상없음':'확인')+'</button>'}).join('')+'</div>'
+return '<div class="cd" style="border-left:4px solid '+(d<=3?'var(--sn)':'var(--mt)')+'"><div class="rw" style="justify-content:space-between"><b>'+esc(o.n)+'</b><span class="mu">'+o.dt+' · '+d+'일차</span></div>'
++'<div class="ch" style="margin-top:8px">'+[0,1,2].map(function(x){return '<button class="'+(o.c[x]?'on':'')+'" onclick="obsChk('+i+','+x+')">D+'+x+' '+(o.c[x]?'✓':'확인')+'</button>'}).join('')+'</div>'
 +'<div class="fd" style="margin:9px 0 0"><label>증상 메모</label><input value="'+esc(o.m||'')+'" oninput="obsMemo('+i+',this.value)" placeholder="발진·설사·보챔 등"></div>'
-+'<div class="rw" style="margin-top:9px"><button class="btn g s" onclick="obsDone('+i+',1)">😊 안전 확인 완료</button><button class="btn y s" onclick="obsDone('+i+',0)">😖 반응 있었음</button></div>'
-+(d>=3&&o.c[0]&&o.c[1]&&o.c[2]?'<div class="tp" style="margin-top:8px">3일 관찰이 끝났어요. 이상이 없으면 안전 확인 완료를 눌러주세요.</div>':'')
-+'</div>'}).join(''):'<div class="cd mu">관찰 중인 재료가 없어요.</div>')
++'<div class="rw" style="margin-top:9px"><button class="btn g s" onclick="obsDone('+i+',1)">😊 안전 확인</button><button class="btn y s" onclick="obsDone('+i+',0)">😖 반응 있었음</button></div>'
++(d>=3&&o.c[0]&&o.c[1]&&o.c[2]?'<div class="tp" style="margin-top:8px">3일 관찰이 끝났어요. 이상이 없으면 안전 확인을 눌러주세요.</div>':'')+'</div>'}).join(''):'<div class="cd mu">관찰 중인 재료가 없어요.</div>')
 +'<div class="st">🥕 재료 도감 (만 '+Math.floor(m)+'개월 기준)</div>'
-+'<div class="cd" style="font-size:12px"><p class="mu" style="margin:0">흐린 재료는 아직 이른 시기예요. 시기는 일반적 기준이며 아기마다 다를 수 있습니다. '+sT('ppibbo')+sT('niaid')+'</p></div>'
++'<div class="cd" style="font-size:12px"><p class="mu" style="margin:0">흐린 재료는 아직 이른 시기. 시기는 일반적 기준이며 아기마다 다릅니다. '+sT('ppibbo')+sT('niaid')+'</p></div>'
 +'<div class="tab">'+cats.map(function(c){return '<button class="'+(c===fCat?'on':'')+'" onclick="fCat=\''+c+'\';render()">'+c+'</button>'}).join('')+'</div>'
-+'<div class="g4">'+list.map(function(f){var lk=m<f[3],t=tried[f[0]];
-return '<button class="ig '+(lk?'lk':'')+'" onclick="openF(\''+f[0]+'\')"><div class="e">'+f[1]+'</div><div class="n">'+f[0]+'</div><div class="m">'+f[3]+'개월+</div>'+(t==='ok'?'<div class="ok">✓ 확인</div>':'')+(t==='bad'?'<div class="ok" style="color:#E0563C">⚠ 반응</div>':'')+(f[6]===1?'<div class="m" style="color:#C99">알레르기</div>':'')+(f[6]===2?'<div class="m" style="color:#E0563C">주의</div>':'')+'</button>'}).join('')+'</div>'}
++'<div class="g4">'+list.map(function(f){var lk=m<f[3],t=tried[f[0]],nv=NUT[f[4]];
+return '<button class="ig '+(lk?'lk':'')+'" onclick="openF(\''+f[0]+'\')"><div class="e">'+f[1]+'</div><div class="n">'+f[0]+'</div><div class="m">'+f[3]+'개월+</div>'+(nv&&nv[6]==='h'?'<div class="ok" style="color:var(--rd)">헴철</div>':nv&&nv[5]>=30?'<div class="ok" style="color:#B07C13">비타민C</div>':'')+(t==='ok'?'<div class="ok">✓ 확인</div>':'')+(t==='bad'?'<div class="ok" style="color:#E0563C">⚠ 반응</div>':'')+'</button>'}).join('')+'</div>'}
 function addObs(){var n=document.getElementById('oN').value.trim(),dt=document.getElementById('oD').value;
 if(!n)return alert('재료명을 입력해 주세요');obs.push({id:'o'+Date.now(),n:n,dt:dt,c:[0,0,0],m:'',done:0});save();askNoti();render()}
 function obsChk(i,x){var a=obs.filter(function(o){return !o.done})[i];a.c[x]=a.c[x]?0:1;save();render()}
 function obsMemo(i,v){var a=obs.filter(function(o){return !o.done})[i];a.m=v;save()}
 function obsDone(i,ok){var a=obs.filter(function(o){return !o.done})[i];a.done=1;a.ok=ok;tried[a.n]=ok?'ok':'bad';save();
 alert(ok?a.n+' — 안전 재료로 기록했어요!':a.n+' — 반응으로 기록했어요. 증상이 심하면 소아과에 문의하세요.');render()}
-function askNoti(){if(!('Notification' in window))return alert('이 브라우저는 알림을 지원하지 않아요. 앱을 열면 홈 화면에 배너로 안내됩니다.');
+function askNoti(){if(!('Notification' in window))return alert('이 브라우저는 알림을 지원하지 않아요.');
 Notification.requestPermission().then(function(p){if(p==='granted')new Notification('알림이 설정되었어요',{body:'관찰 기간 동안 앱을 열면 알려드립니다.'})})}
 function notiCheck(){var due=obs.filter(function(o){return !o.done&&dObs(o)<=3&&!o.c[dObs(o)-1]});
-if(due.length&&'Notification' in window&&Notification.permission==='granted'){
-new Notification('🔔 알레르기 관찰 '+due.length+'건',{body:due.map(function(o){return o.n+' '+dObs(o)+'일차'}).join(', ')+' — 오늘 상태를 확인해 주세요.'})}}
-function openF(n){var f=null;FD.forEach(function(x){if(x[0]===n)f=x});var m=ageM(),t=tried[n],nv=NUT[f[4]],tg=target();
+if(due.length&&'Notification' in window&&Notification.permission==='granted')
+new Notification('🔔 알레르기 관찰 '+due.length+'건',{body:due.map(function(o){return o.n+' '+dObs(o)+'일차'}).join(', ')})}
+function openF(n){var f=null;FD.forEach(function(x){if(x[0]===n)f=x});var m=ageM(),t=tried[n],nv=NUT[f[4]],T=TG();
 var rs=RCP().filter(function(r){return (r.g||[]).filter(function(x){return x[3]===f[4]}).length});
-document.getElementById('mb').innerHTML='<div style="font-size:40px;text-align:center">'+f[1]+'</div><div class="mt" style="text-align:center">'+f[0]+'</div>'
-+'<div style="text-align:center;margin:6px 0 12px"><span class="tg m">'+f[2]+'</span><span class="tg '+(m>=f[3]?'p':'')+'">'+f[3]+'개월부터</span>'+(f[6]===1?'<span class="tg v">알레르기 주의</span>':'')+(f[6]===2?'<span class="tg r">특별 주의</span>':'')+'</div>'
+document.getElementById('mb').innerHTML='<div style="font-size:40px;text-align:center">'+f[1]+'</div><div class="mt2" style="text-align:center">'+f[0]+'</div>'
++'<div style="text-align:center;margin:6px 0 12px"><span class="tg m">'+f[2]+'</span><span class="tg '+(m>=f[3]?'p':'')+'">'+f[3]+'개월부터</span>'+(nv&&nv[6]==='h'?'<span class="tg r">헴철(흡수율 높음)</span>':'')+(nv&&nv[5]>=30?'<span class="tg" style="background:#FFF6EC;color:#B07C13">비타민C 풍부</span>':'')+(f[6]===1?'<span class="tg v">알레르기 주의</span>':'')+(f[6]===2?'<span class="tg r">특별 주의</span>':'')+'</div>'
 +'<div class="cd">'+f[5]+'</div>'
-+(nv?'<div class="cd"><b style="font-size:13px">100g당 영양 · 하루 권장 대비</b><table class="tb" style="margin-top:5px"><tr><th></th><th>열량</th><th>단백질</th><th>철분</th><th>칼슘</th><th>아연</th></tr><tr><td>100g</td><td>'+nv[0]+'</td><td>'+nv[1]+'</td><td>'+nv[2]+'</td><td>'+nv[3]+'</td><td>'+nv[4]+'</td></tr><tr><td>하루권장%</td>'+NK.map(function(k,i){return '<td><b style="color:'+NL[k][2]+'">'+Math.round(nv[i]/tg.dri[k]*100)+'%</b></td>'}).join('')+'</tr></table><div class="mu" style="font-size:10px;margin-top:5px">출처: 농촌진흥청 성분표 / 2020 섭취기준</div></div>':'')
++(nv?'<div class="cd"><b style="font-size:13px">100g당 영양 · 하루 목표 대비</b><table class="tb" style="margin-top:5px"><tr><th></th><th>열량</th><th>단백질</th><th>철분</th><th>칼슘</th><th>아연</th><th>비타민C</th></tr><tr><td>100g</td><td>'+nv[0]+'</td><td>'+nv[1]+'</td><td>'+nv[2]+'</td><td>'+nv[3]+'</td><td>'+nv[4]+'</td><td>'+nv[5]+'</td></tr><tr><td>하루%</td>'+NK.map(function(k,i){return '<td><b style="color:'+NL[k][2]+'">'+Math.round(nv[i]/T.day[k]*100)+'%</b></td>'}).join('')+'<td>-</td></tr></table>'
++'<div class="mu" style="font-size:10.5px;margin-top:5px">철분 종류: <b>'+(nv[6]==='h'?'헴철 — 흡수율 약 20~25%':'비헴철 — 흡수율 약 5%, 비타민C와 함께 먹으면 2~3배 상승')+'</b></div></div>':'')
 +(m<f[3]?'<div class="wn">아직 이른 재료예요. <b>'+fmt(addM(d0(baby.birth),f[3]))+'</b>(만 '+f[3]+'개월) 이후에 시도해 보세요.</div>':'')
 +'<div class="st">관찰 · 반응</div><div class="cd"><button class="btn g s" onclick="startObs(\''+n+'\')">🔔 이 재료로 3일 관찰 시작</button><div class="ch" style="margin-top:9px">'+[['ok','😊 잘 먹었어요'],['watch','😐 관찰 중'],['bad','😖 반응 있었어요']].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="setF(\''+n+'\',\''+x[0]+'\')">'+x[1]+'</button>'}).join('')+'</div>'
 +(t==='bad'?'<div class="wn" style="margin-top:9px">호흡 곤란·얼굴 부기·심한 구토가 있으면 즉시 병원에 가세요.</div>':'')+'</div>'
@@ -534,45 +709,66 @@ document.getElementById('mb').innerHTML='<div style="font-size:40px;text-align:c
 document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
 function startObs(n){obs.push({id:'o'+Date.now(),n:n,dt:ymd(TD()),c:[0,0,0],m:'',done:0});save();askNoti();closeM();tab='food';render()}
 function setF(n,s){tried[n]=tried[n]===s?null:s;if(!tried[n])delete tried[n];save();openF(n);render()}
-/*==== 기록 ====*/
+/*======= 기록 =======*/
 function vLog(){var by={};logs.slice().reverse().forEach(function(l){(by[l.d]=by[l.d]||[]).push(l)});
-var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),op=RCP().filter(function(r){return r.s===si});
-return '<div class="cd"><b style="font-size:15px">📝 먹은 기록</b>'
+var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),op=RCP().filter(function(r){return r.s===si}),D=todaySum(),T=TG();
+return '<div class="cd" style="background:#FBF6F2"><b>오늘 요약</b><div class="rw" style="margin-top:6px"><div style="flex:1;text-align:center"><div class="mu" style="font-size:10px">이유식</div><b>'+D.cnt+'끼</b></div><div style="flex:1;text-align:center"><div class="mu" style="font-size:10px">수유</div><b>'+D.ml+'ml</b></div><div style="flex:1;text-align:center"><div class="mu" style="font-size:10px">열량</div><b>'+Math.round(D.f.kcal+D.m.kcal)+'</b></div><div style="flex:1;text-align:center"><div class="mu" style="font-size:10px">흡수철</div><b>'+rnd2(D.f.feAb+D.m.feAb)+'mg</b></div></div></div>'
++'<div class="cd"><b style="font-size:15px">📝 이유식 기록</b>'
 +'<div class="fd" style="margin:12px 0 10px"><label>메뉴</label><input id="gN" list="gL" placeholder="메뉴명 입력 또는 선택"><datalist id="gL">'+op.map(function(r){return '<option>'+esc(r.n)+'</option>'}).join('')+'</datalist></div>'
 +'<div class="rw"><div class="fd" style="flex:1;margin:0"><label>먹은 양(g)</label><input id="gA" type="number" placeholder="80"></div><div class="fd" style="flex:1;margin:0"><label>시간</label><select id="gT">'+SLOTS().concat(['간식']).map(function(s){return '<option>'+s+'</option>'}).join('')+'</select></div></div>'
 +'<div class="fd" style="margin:12px 0 10px"><label>반응</label><div class="ch">'+['😋','😐','😖'].map(function(x){return '<button class="'+(lRx===x?'on':'')+'" onclick="lRx=\''+x+'\';render()">'+x+'</button>'}).join('')+'</div></div>'
-+'<button class="btn" onclick="addLog()">기록 저장</button></div>'
++'<button class="btn" onclick="addLog()">이유식 기록 저장</button>'
++'<div class="hr"></div><div class="rw"><div class="fd" style="flex:1;margin:0"><label>🍼 수유(ml)</label><input id="mV" type="number" value="'+(baby.vol||180)+'"></div><div class="fd" style="flex:1;margin:0"><label>종류</label><select id="mT"><option value="f" '+(MTYPE()==='f'?'selected':'')+'>분유</option><option value="b" '+(MTYPE()==='b'?'selected':'')+'>모유</option></select></div></div>'
++'<button class="btn g s" style="margin-top:9px" onclick="addMilk2()">＋ 수유 기록 추가</button></div>'
 +'<div class="st">지난 기록 '+(logs.length?'('+logs.length+')':'')+'</div>'
-+(logs.length?Object.keys(by).map(function(d){var s={kcal:0,p:0,fe:0,ca:0,zn:0};by[d].forEach(function(l){NK.forEach(function(k){s[k]+=(l.nu&&l.nu[k])||0})});
-return '<div class="cd"><div class="rw" style="justify-content:space-between"><b style="font-size:13px;color:var(--pd)">'+d+'</b><span class="mu" style="font-size:10.5px">'+Math.round(s.kcal)+'kcal · 철 '+rnd(s.fe)+'mg</span></div>'+by[d].map(function(l){
-return '<div class="lg"><div style="font-size:19px">'+l.rx+'</div><div style="flex:1"><b style="font-size:13.5px">'+esc(l.n)+'</b><div class="mu" style="font-size:10.5px">'+l.t+(l.a?' · '+l.a+'g':'')+(l.nu?' · 철 '+rnd(l.nu.fe)+'mg':'')+'</div></div><button class="mu" style="font-size:16px;padding:2px 6px" onclick="delLog(\''+l.id+'\')">✕</button></div>'}).join('')+'</div>'}).join('')
++(logs.length?Object.keys(by).map(function(d){var s={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0},ml=0;
+by[d].forEach(function(l){if(l.k==='milk'){ml+=+l.ml||0;var n=milkNut(+l.ml||0,l.mt||MTYPE());NK.forEach(function(k){s[k]+=n[k]});s.feAb+=n.feAb}else{NK.forEach(function(k){s[k]+=(l.nu&&l.nu[k])||0});s.feAb+=(l.nu&&l.nu.feAb)||0}});
+return '<div class="cd"><div class="rw" style="justify-content:space-between"><b style="font-size:13px;color:var(--pd)">'+d+'</b><span class="mu" style="font-size:10px">'+Math.round(s.kcal)+'kcal('+Math.round(s.kcal/T.day.kcal*100)+'%) · 흡수철 '+rnd2(s.feAb)+'mg · 수유 '+ml+'ml</span></div>'+by[d].map(function(l){
+return '<div class="lg2"><div style="font-size:19px">'+(l.k==='milk'?'🍼':l.rx||'🍲')+'</div><div style="flex:1"><b style="font-size:13.5px">'+esc(l.n)+'</b><div class="mu" style="font-size:10px">'+(l.t||'')+(l.a?' · '+l.a+'g':'')+(l.nu?' · 흡수철 '+rnd2(l.nu.feAb||0)+'mg':'')+'</div></div><button class="mu" style="font-size:16px;padding:2px 6px" onclick="delLog(\''+l.id+'\')">✕</button></div>'}).join('')+'</div>'}).join('')
 :'<div class="cd mu">아직 기록이 없어요.</div>')
 +(logs.length?'<button class="btn y s" onclick="csv()">CSV로 내보내기</button>':'')}
+function addMilk2(){var v=+document.getElementById('mV').value,t=document.getElementById('mT').value;if(!v)return alert('수유량을 입력해 주세요');
+logs.push({id:''+Date.now(),d:fmt(TD()),k:'milk',ml:v,mt:t,n:MILK[t].n+' '+v+'ml',t:'수유'});save();render()}
 function addLog(){var n=document.getElementById('gN').value.trim();if(!n)return alert('메뉴명을 입력해 주세요');
-var r=null;RCP().forEach(function(x){if(x.n===n)r=x});var amt=document.getElementById('gA').value;
-var nu=r?nutOf(r).t:null;
-if(nu&&amt){var base=0;(r.g||[]).forEach(function(x){base+=gOf(x)});base=base/(r.sv||1);if(base>0){var f=amt/base;var n2={};NK.forEach(function(k){n2[k]=nu[k]*f});nu=n2}}
+var r=null;RCP().forEach(function(x){if(x.n===n)r=x});var amt=document.getElementById('gA').value,nu=r?nutOf(r).t:null;
+if(nu&&amt){var base=0;(r.g||[]).forEach(function(x){base+=gOf(x)});base=base/(r.sv||1);
+if(base>0){var f=amt/base,n2={};NK.forEach(function(k){n2[k]=nu[k]*f});n2.feAb=nu.feAb*f;n2.vc=nu.vc*f;nu=n2}}
 logs.push({id:''+Date.now(),d:fmt(TD()),n:n,a:amt,t:document.getElementById('gT').value,rx:lRx,nu:nu});save();render()}
-function qLog(id){var r=getR(id);logs.push({id:''+Date.now(),d:fmt(TD()),n:r.n,a:'',t:'식사',rx:'😋',nu:nutOf(r).t});save();closeM();tab='log';render()}
+function qLog(id){var r=getR(id);logs.push({id:''+Date.now(),d:fmt(TD()),n:r.n,a:'',t:'식사',rx:'😋',nu:nutOf(r).t});save();closeM();tab='home';render()}
 function delLog(id){logs=logs.filter(function(l){return l.id!==id});save();render()}
-function csv(){var s='날짜,시간,메뉴,양(g),반응,열량,단백질,철,칼슘,아연\n'+logs.map(function(l){var n=l.nu||{};
-return [l.d,l.t,'"'+l.n+'"',l.a||'',l.rx,rnd(n.kcal||0),rnd(n.p||0),rnd(n.fe||0),rnd(n.ca||0),rnd(n.zn||0)].join(',')}).join('\n');
-dl(new Blob(['\ufeff'+s],{type:'text/csv'}),baby.name+'_이유식기록.csv')}
+function csv(){var s='날짜,구분,시간,메뉴,양,반응,열량,단백질,철,흡수철,칼슘,아연\n'+logs.map(function(l){var n=l.nu||(l.k==='milk'?milkNut(+l.ml||0,l.mt||'f'):{});
+return [l.d,(l.k==='milk'?'수유':'이유식'),l.t||'','"'+l.n+'"',(l.k==='milk'?l.ml+'ml':(l.a||'')+'g'),l.rx||'',rnd(n.kcal||0),rnd(n.p||0),rnd(n.fe||0),rnd2(n.feAb||0),rnd(n.ca||0),rnd(n.zn||0)].join(',')}).join('\n');
+var g='\n\n날짜,몸무게kg,키cm,머리둘레cm\n'+grow.map(function(x){return [x.d,x.w||'',x.h||'',x.c||''].join(',')}).join('\n');
+dl(new Blob(['\ufeff'+s+g],{type:'text/csv'}),baby.name+'_이유식_성장기록.csv')}
 function dl(b,fn){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;a.click()}
-/*==== 정보 ====*/
-function vInfo(){return '<div class="cd"><b>⚙️ 식사 설정</b><div class="fd" style="margin:10px 0 0"><label>하루 이유식 끼니 수</label><select onchange="baby.meals=+this.value;todaySel=null;plan=null;save();render()">'+[1,2,3].map(function(n){return '<option value="'+n+'" '+(MEALS()===n?'selected':'')+'>'+n+'끼</option>'}).join('')+'</select></div><p class="mu" style="margin:8px 0 0">끼니 수를 바꾸면 오늘 추천과 주간 식단이 다시 편성됩니다. 현재 '+curS().n+'는 <b>'+curS().ct+'</b>가 일반적입니다.</p></div>'
+/*======= 정보 =======*/
+function vInfo(){var T=TG(),dri=T.dri;
+return '<div class="cd"><b>⚙️ 식사·수유 설정</b>'
++'<div class="fd" style="margin:10px 0 0"><label>하루 이유식 끼니 수</label><select onchange="baby.meals=+this.value;todaySel=null;plan=null;save();render()">'+[1,2,3].map(function(n){return '<option value="'+n+'" '+(MEALS()===n?'selected':'')+'>'+n+'끼</option>'}).join('')+'</select></div>'
++'<div class="fd" style="margin:10px 0 0"><label>수유 방식 (영양 계산 기준)</label><select onchange="baby.feed=this.value;save();render()">'+[['f','분유 위주'],['b','모유 위주'],['m','혼합']].map(function(x){return '<option value="'+x[0]+'" '+(baby.feed===x[0]?'selected':'')+'>'+x[1]+'</option>'}).join('')+'</select></div>'
++'<div class="fd" style="margin:10px 0 0"><label>성별 (성장곡선)</label><select onchange="baby.sex=this.value;save();render()">'+[['f','여아'],['m','남아']].map(function(x){return '<option value="'+x[0]+'" '+(baby.sex===x[0]?'selected':'')+'>'+x[1]+'</option>'}).join('')+'</select></div>'
++'<div class="fd" style="margin:10px 0 0"><label>기본 1회 수유량 (ml)</label><input type="number" value="'+(baby.vol||180)+'" oninput="baby.vol=+this.value;save()"></div>'
++'<div class="fd" style="margin:10px 0 0"><label>영양 목표 기준</label><select onchange="baby.useW=+this.value;save();render()"><option value="1" '+(baby.useW!==0?'selected':'')+'>우리 아기 체중 기준(권장)</option><option value="0" '+(baby.useW===0?'selected':'')+'>표준 기준</option></select></div></div>'
++'<div class="cd" style="background:#F3F6FA"><b>🧮 지금 적용 중인 영양 계산 기준</b>'
++'<table class="tb" style="margin-top:7px"><tr><th></th><th>열량</th><th>단백질</th><th>철</th><th>칼슘</th><th>아연</th></tr>'
++'<tr><td>표준('+dri.lb+')</td><td>'+dri.kcal+'</td><td>'+dri.p+'</td><td>'+dri.fe+'</td><td>'+dri.ca+'</td><td>'+dri.zn+'</td></tr>'
++'<tr><td>적용 목표</td><td><b>'+Math.round(T.day.kcal)+'</b></td><td><b>'+rnd(T.day.p)+'</b></td><td><b>'+T.day.fe+'</b></td><td><b>'+T.day.ca+'</b></td><td><b>'+T.day.zn+'</b></td></tr>'
++'<tr><td>이유식 담당('+Math.round(T.sf*100)+'%)</td><td>'+Math.round(T.solid.kcal)+'</td><td>'+rnd(T.solid.p)+'</td><td>'+rnd(T.solid.fe)+'</td><td>'+Math.round(T.solid.ca)+'</td><td>'+rnd(T.solid.zn)+'</td></tr></table>'
++'<div class="mu" style="font-size:11px;margin-top:7px">'+(T.use?'몸무게 <b>'+T.w+'kg × '+dri.ekg+'kcal/kg</b>으로 열량, <b>× '+dri.pkg+'g/kg</b>으로 단백질을 계산했습니다.':'몸무게 미입력 또는 표준 기준 선택 상태입니다.')+' 철·칼슘·아연은 체중과 무관하게 표준값을 사용합니다.</div>'
++'<div class="mu" style="font-size:11px;margin-top:5px"><b>철분 흡수 목표 '+rnd2(T.feAb)+'mg</b> — 권장량 '+T.day.fe+'mg은 흡수율 약 10%를 가정한 값이므로, 실제 흡수되어야 하는 양은 그 10%입니다.</div>'
++'<div style="margin-top:7px">'+sT('kdri')+sT('fe')+'</div></div>'
 +'<div class="cd" style="background:#FFF6EC"><b>📖 이유식 기본 원칙</b><p class="mu" style="margin:6px 0 0;font-size:11px">널리 알려진 소아과적 원칙과 공공 지침을 정리한 내용입니다. 책 문장을 그대로 옮긴 것이 아니므로 원서와 담당 소아과에서 확인해 주세요.</p></div>'
 +RL.map(function(r,i){return '<div class="cd"><b style="font-size:14px">'+(i+1)+'. '+r[0]+'</b><p class="mu" style="margin:5px 0 7px">'+r[2]+'</p>'+r[1].map(sT).join('')+'</div>'}).join('')
-+'<div class="st">단계별 요약 · 영양 목표 비중</div><div class="cd" style="font-size:12.5px">'+STG.slice(1).map(function(s){return '<div style="padding:8px 0;border-bottom:1px solid var(--ln)"><b style="color:'+(s.c==='#FFC861'?'#B07C13':s.c)+'">'+s.n+' · '+s.lb+'</b><div class="mu" style="font-size:11.5px">'+s.ra+' · '+s.ct+' · '+s.am+' · 이유식이 하루 영양의 약 '+Math.round(s.sf*100)+'% 담당</div></div>'}).join('')+'<div class="mu" style="font-size:10.5px;margin-top:6px">※ 담당 비중은 일반적 수유량을 감안한 앱의 계산 기준입니다.</div></div>'
++'<div class="st">단계별 요약</div><div class="cd" style="font-size:12.5px">'+STG.slice(1).map(function(s){return '<div style="padding:8px 0;border-bottom:1px solid var(--ln)"><b style="color:'+(s.c==='#FFC861'?'#B07C13':s.c)+'">'+s.n+' · '+s.lb+'</b><div class="mu" style="font-size:11.5px">'+s.ra+' · '+s.ct+' · '+s.am+' · 이유식이 하루 영양의 약 '+Math.round(s.sf*100)+'% 담당</div></div>'}).join('')+'<div class="mu" style="font-size:10.5px;margin-top:6px">※ 담당 비중은 일반적 수유량을 감안한 앱의 계산 기준입니다.</div></div>'
 +'<div class="st">전체 출처</div><div class="cd">'+Object.keys(SRC).map(function(k){return '<div style="padding:8px 0;border-bottom:1px solid var(--ln)"><span class="tg v">'+SRC[k].t+'</span><b style="display:block;font-size:13px;margin:3px 0">'+SRC[k].n+'</b><div class="mu" style="font-size:11.5px">'+SRC[k].d+'</div><a style="font-size:11px" href="'+SRC[k].u+'" target="_blank" rel="noopener">'+SRC[k].u+'</a></div>'}).join('')+'</div>'
-+'<div class="st">백업 · 아빠 폰 공유</div><div class="cd"><p class="mu" style="margin:0 0 10px">백업 파일을 카톡으로 보내고 상대 폰에서 불러오면 아기 정보·기록·나의 메뉴·큐브·사진·식단이 그대로 옮겨집니다.</p><button class="btn g s" onclick="expJ()">⬇ 백업 내보내기 (.json)</button><button class="btn g s" style="margin-top:8px" onclick="document.getElementById(\'fj\').click()">⬆ 백업 불러오기</button></div>'
-+'<div class="st">아기 정보</div><div class="cd"><div class="ir"><span>이름</span><b>'+esc(baby.name)+'</b></div><div class="ir"><span>생일</span><b>'+fmt(d0(baby.birth))+'</b></div><div class="ir"><span>나이</span><b>'+ageT()+'</b></div><div class="ir"><span>수유</span><b>'+({b:'모유 위주',f:'분유 위주',m:'혼합'}[baby.feed]||'-')+'</b></div><div class="ir"><span>하루 끼니</span><b>'+MEALS()+'끼</b></div>'
++'<div class="st">백업 · 아빠 폰 공유</div><div class="cd"><p class="mu" style="margin:0 0 10px">백업 파일을 카톡으로 보내고 상대 폰에서 불러오면 모든 데이터(성장기록 포함)가 옮겨집니다.</p><button class="btn g s" onclick="expJ()">⬇ 백업 내보내기 (.json)</button><button class="btn g s" style="margin-top:8px" onclick="document.getElementById(\'fj\').click()">⬆ 백업 불러오기</button></div>'
++'<div class="st">아기 정보</div><div class="cd"><div class="ir"><span>이름</span><b>'+esc(baby.name)+'</b></div><div class="ir"><span>생일</span><b>'+fmt(d0(baby.birth))+'</b></div><div class="ir"><span>나이</span><b>'+ageT()+'</b></div><div class="ir"><span>최근 체중</span><b>'+(T.w?T.w+'kg':'미입력')+'</b></div>'
 +'<button class="btn g s" style="margin-top:12px" onclick="editBaby()">아기 정보 수정</button><button class="btn y s" style="margin-top:8px" onclick="resetAll()">전체 초기화</button></div>'
-+'<p class="mu" style="text-align:center;font-size:10.5px;margin:14px 6px 0">본 앱은 의료 행위를 대체하지 않습니다. 알레르기·성장에 관한 판단은 담당 소아과와 상의하세요.</p>'}
-function expJ(){dl(new Blob([JSON.stringify({v:4,baby:baby,logs:logs,tried:tried,my:myR,cubes:cubes,ov:ov,ph:ph,plan:plan,obs:obs})],{type:'application/json'}),baby.name+'_이유식노트_백업.json')}
++'<p class="mu" style="text-align:center;font-size:10.5px;margin:14px 6px 0">본 앱은 의료 행위를 대체하지 않습니다. 영양·알레르기·성장 판단은 담당 소아과와 상의하세요.</p>'}
+function expJ(){dl(new Blob([JSON.stringify({v:6,baby:baby,logs:logs,tried:tried,my:myR,cubes:cubes,ov:ov,ph:ph,plan:plan,obs:obs,fav:fav,grow:grow})],{type:'application/json'}),baby.name+'_이유식노트_백업.json')}
 document.getElementById('fj').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();
 r.onload=function(ev){try{var d=JSON.parse(ev.target.result);if(!confirm('현재 데이터를 덮어씁니다. 계속할까요?'))return;
-baby=d.baby||baby;logs=d.logs||[];tried=d.tried||{};myR=d.my||[];cubes=d.cubes||[];ov=d.ov||{};ph=d.ph||{};plan=d.plan||null;obs=d.obs||[];
+baby=d.baby||baby;logs=d.logs||[];tried=d.tried||{};myR=d.my||[];cubes=d.cubes||[];ov=d.ov||{};ph=d.ph||{};plan=d.plan||null;obs=d.obs||[];fav=d.fav||{};grow=d.grow||[];
 save();alert('불러오기 완료!');boot()}catch(err){alert('파일을 읽을 수 없습니다.')}};r.readAsText(f);e.target.value=''});
 function editBaby(){var n=prompt('아기 이름',baby.name);if(n===null)return;var b=prompt('생년월일 (YYYY-MM-DD)',baby.birth);if(b===null)return;
 if(isNaN(d0(b)))return alert('날짜 형식 오류');baby.name=n.trim()||baby.name;baby.birth=b;todaySel=null;plan=null;save();render()}
