@@ -105,10 +105,10 @@ return {day:day,solid:solid,meal:meal,dri:dri,sf:avg,sfk:sf,w:w,use:!!use,
 feAb:day.fe*.10,feAbSolid:day.fe*.10*sf.fe,lb:dri.lb,bm:bm}}
 
 /*========== 등급 · 진단 데이터 ==========*/
-function lvl(pc){return pc>=85?'ok':pc>=60?'mid':'bad'}
-function lvIco(pc){return pc>=85?'✅':pc>=60?'⚠️':'🚨'}
-function lvTxt(pc){return pc>=85?'충분':pc>=60?'조금 부족':'많이 부족'}
-function lvCol(pc){return pc>=85?'var(--ok)':pc>=60?'var(--warn)':'var(--rd)'}
+function lvl(pc){return pc>170?'bad':pc>140?'mid':pc>=85?'ok':pc>=60?'mid':'bad'}
+function lvIco(pc){return pc>140?'⚠️':pc>=85?'✅':pc>=60?'⚠️':'🚨'}
+function lvTxt(pc){return pc>170?'많이 과다':pc>140?'조금 과다':pc>=85?'충분':pc>=60?'조금 부족':'많이 부족'}
+function lvCol(pc){return pc>140?'var(--warn)':pc>=85?'var(--ok)':pc>=60?'var(--warn)':'var(--rd)'}
 var FIX={
 kcal:{f:['고구마','단호박','아보카도','참기름','밥'],t:'열량은 <b>수유가 대부분 담당</b>합니다. 이유식만으로 낮게 나오는 것은 정상이며, 수유량을 기록하면 합산됩니다. 이유식 열량을 올리려면 고구마·단호박·아보카도·참기름을 활용하세요.'},
 p:{f:['소고기','닭고기','두부','흰살생선','달걀노른자'],t:'고기·생선·두부·달걀 양을 <b>5~10g 늘리면</b> 빠르게 채워집니다.'},
@@ -117,9 +117,13 @@ ca:{f:['두부','아기치즈','미역','멸치가루','청경채','요거트'],
 zn:{f:['소고기','달걀노른자','표고버섯','두부'],t:'<b>소고기·달걀노른자·표고버섯</b>이 아연이 많습니다.'}};
 function tipFor(n){var m={'열량':'kcal','단백질':'p','철분':'fe','칼슘':'ca','아연':'zn'};
 return FIX[m[n]]?FIX[m[n]].t:''}
-function mealScore(r){var T=TG(),n=nutOf(r).t,W={kcal:1.2,p:1.3,fe:1.3,ca:.6,zn:.6},s=0,tw=0;
-NK.forEach(function(k){var pc=Math.min(130,n[k]/Math.max(.01,T.meal[k])*100);s+=pc*W[k];tw+=W[k]});
-var fp=Math.min(130,n.feAb/Math.max(.001,T.feAbSolid/MEALS())*100);s+=fp*1.0;tw+=1.0;
+function mealScore(r){var T=TG(),n=nutOf(r).t,W={kcal:1.2,p:1.3,fe:1.3,ca:.8,zn:.7},s=0,tw=0;
+NK.forEach(function(k){var pc=n[k]/Math.max(.01,T.meal[k])*100;
+if(pc>140)pc=140-Math.min(40,(pc-140)*.3);
+s+=Math.min(140,pc)*W[k];tw+=W[k]});
+var fp=n.feAb/Math.max(.001,T.feAbSolid/MEALS())*100;
+if(fp>140)fp=140-Math.min(40,(fp-140)*.3);
+s+=Math.min(140,fp)*1.1;tw+=1.1;
 return Math.round(s/tw)}
 function diagOf(r){var T=TG(),n=nutOf(r).t,out=[];
 NK.forEach(function(k){out.push({k:k,nm:NL[k][0],u:NL[k][1],pc:n[k]/Math.max(.01,T.meal[k])*100,v:n[k],goal:T.meal[k],col:NL[k][2]})});
@@ -216,20 +220,24 @@ if(l.k==='milk'){ml+=+l.ml||0;var n=milkNut(+l.ml||0,l.mt||MTYPE());
 NK.forEach(function(k){m[k]+=n[k]});m.feAb+=n.feAb}
 else{cnt++;NK.forEach(function(k){f[k]+=(l.nu&&l.nu[k])||0});f.feAb+=(l.nu&&l.nu.feAb)||0}});
 return {f:f,m:m,ml:ml,cnt:cnt}}
-function stackBars(f,m,day){
+function stackBars(f,m,day){var T=TG();
 var rows=NK.map(function(k){var L=NL[k],fp=f[k]/day[k]*100,mp=m[k]/day[k]*100,tot=fp+mp;
 var w1=Math.min(100,fp),w2=Math.max(0,Math.min(100-w1,mp)),lv=lvl(tot);
+var sp=f[k]/Math.max(.01,T.solid[k])*100;
 return '<div class="nrow" style="cursor:pointer" onclick="diagDay(\''+k+'\')"><div class="nhd"><div class="nnm"><i class="ndot" style="background:'+L[2]+'"></i>'+L[0]+' <span class="badge '+lv+'">'+lvIco(tot)+' '+lvTxt(tot)+'</span></div>'
 +'<div><div class="npc" style="color:'+lvCol(tot)+'">'+Math.round(tot)+'%</div><div class="nval">'+rnd(f[k]+m[k])+' / '+rnd(day[k])+L[1]+'</div></div></div>'
 +'<div class="bar"><i class="solid" style="width:'+w1+'%;background:'+L[2]+'"></i><i class="milk" style="width:'+w2+'%;background:'+L[2]+';opacity:.62"></i><span class="goal" style="left:calc(100% - 3px)"></span>'+(tot<70?'<span class="txt">목표까지 '+Math.round(100-tot)+'%</span>':'')+'</div>'
-+'<div class="sub2"><span><b style="background:'+L[2]+'"></b>🍲 이유식 '+Math.round(fp)+'%</span><span><b class="milk" style="background:'+L[2]+';opacity:.62"></b>🍼 수유 '+Math.round(mp)+'%</span><span style="color:var(--bl);margin-left:auto;font-weight:800">진단 ›</span></div></div>'}).join('');
-var bad=[],mid=[];
-NK.forEach(function(k){var t=(f[k]+m[k])/day[k]*100;if(t<60)bad.push(k);else if(t<85)mid.push(k)});
++'<div class="sub2"><span><b style="background:'+L[2]+'"></b>🍲 '+rnd(f[k])+L[1]+' ('+Math.round(fp)+'%)</span><span><b class="milk" style="background:'+L[2]+';opacity:.62"></b>🍼 '+rnd(m[k])+L[1]+' ('+Math.round(mp)+'%)</span><span style="color:var(--bl);margin-left:auto;font-weight:800">진단 ›</span></div>'
++'<div class="mu" style="font-size:9.5px;margin-top:2px">이유식 담당목표('+rnd(T.solid[k])+L[1]+') 대비 <b style="color:'+lvCol(sp)+'">'+Math.round(sp)+'%</b></div></div>'}).join('');
+var bad=[],mid=[],over=[];
+NK.forEach(function(k){var t=(f[k]+m[k])/day[k]*100;
+if(t<60)bad.push(k);else if(t<85)mid.push(k);else if(t>140)over.push(k)});
 var al='';
-if(bad.length)al='<div class="alert bad" style="cursor:pointer" onclick="diagDay(\''+bad[0]+'\')"><span class="ic">🚨</span><div><b>'+bad.map(function(k){return NL[k][0]}).join(' · ')+'</b>이(가) 60% 미만입니다.<br><u>눌러서 원인·해결책 보기 ›</u></div></div>';
+if(bad.length)al='<div class="alert bad" style="cursor:pointer" onclick="diagDay(\''+bad[0]+'\')"><span class="ic">🚨</span><div><b>'+bad.map(function(k){return NL[k][0]}).join(' · ')+'</b>이(가) 하루 목표의 60% 미만입니다.<br><u>눌러서 원인·해결책 보기 ›</u></div></div>';
 else if(mid.length)al='<div class="alert mid" style="cursor:pointer" onclick="diagDay(\''+mid[0]+'\')"><span class="ic">⚠️</span><div><b>'+mid.map(function(k){return NL[k][0]}).join(' · ')+'</b>이(가) 조금 부족해요.<br><u>눌러서 해결책 보기 ›</u></div></div>';
-else al='<div class="alert ok"><span class="ic">✅</span><div>주요 영양소가 <b>모두 85% 이상</b> 채워졌어요. 잘하고 있습니다!</div></div>';
-return al+rows}
+else if(over.length)al='<div class="alert mid" style="cursor:pointer" onclick="diagDay(\''+over[0]+'\')"><span class="ic">⚠️</span><div><b>'+over.map(function(k){return NL[k][0]}).join(' · ')+'</b>이(가) 하루 목표의 140%를 넘습니다. 성장에 큰 문제는 아니지만 다른 영양소와 균형을 확인해 보세요.<br><u>눌러서 상세 보기 ›</u></div></div>';
+else al='<div class="alert ok"><span class="ic">✅</span><div>주요 영양소가 <b>모두 적정 범위(85~140%)</b>에 있어요. 잘하고 있습니다!</div></div>';
+return '<div class="mu" style="font-size:11px;margin-bottom:8px;padding:8px 10px;background:#F3F6FA;border-radius:9px">📌 이 카드는 <b>🍲이유식 + 🍼수유</b>를 합친 <b>하루 전체</b> 기준입니다. 메뉴 카드의 점수는 <b>이유식 목표만</b> 따로 평가한 값이에요.</div>'+al+rows}
 function feCoach(n){var msg=[];
 if(n.meat<=0&&n.t.fe>0.3)msg.push('고기·생선이 없어 <b>비헴철</b>만 들어 있습니다(흡수율 낮음). 소고기 10~20g을 더하면 흡수 철분이 크게 늘어요.');
 if(n.t.vc<10&&n.nh>0.3)msg.push('비타민C 재료가 적습니다. <b>브로콜리·파프리카·토마토·양배추</b>를 곁들이면 비헴철 흡수가 2~3배 올라갑니다.');
