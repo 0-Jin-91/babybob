@@ -105,10 +105,10 @@ return {day:day,solid:solid,meal:meal,dri:dri,sf:avg,sfk:sf,w:w,use:!!use,
 feAb:day.fe*.10,feAbSolid:day.fe*.10*sf.fe,lb:dri.lb,bm:bm}}
 
 /*========== 등급 · 진단 데이터 ==========*/
-function lvl(pc){return pc>170?'bad':pc>140?'mid':pc>=85?'ok':pc>=60?'mid':'bad'}
-function lvIco(pc){return pc>140?'⚠️':pc>=85?'✅':pc>=60?'⚠️':'🚨'}
-function lvTxt(pc){return pc>170?'많이 과다':pc>140?'조금 과다':pc>=85?'충분':pc>=60?'조금 부족':'많이 부족'}
-function lvCol(pc){return pc>140?'var(--warn)':pc>=85?'var(--ok)':pc>=60?'var(--warn)':'var(--rd)'}
+function lvl(pc){return pc>180?'bad':pc>150?'mid':pc>=70?'ok':pc>=45?'mid':'bad'}
+function lvIco(pc){return pc>150?'⚠️':pc>=70?'✅':pc>=45?'⚠️':'🚨'}
+function lvTxt(pc){return pc>180?'많이 과다':pc>150?'조금 과다':pc>=70?'적정':pc>=45?'조금 부족':'많이 부족'}
+function lvCol(pc){return pc>150?'var(--warn)':pc>=70?'var(--ok)':pc>=45?'var(--warn)':'var(--rd)'}
 var FIX={
 kcal:{f:['고구마','단호박','아보카도','참기름','밥'],t:'열량은 <b>수유가 대부분 담당</b>합니다. 이유식만으로 낮게 나오는 것은 정상이며, 수유량을 기록하면 합산됩니다. 이유식 열량을 올리려면 고구마·단호박·아보카도·참기름을 활용하세요.'},
 p:{f:['소고기','닭고기','두부','흰살생선','달걀노른자'],t:'고기·생선·두부·달걀 양을 <b>5~10g 늘리면</b> 빠르게 채워집니다.'},
@@ -146,13 +146,24 @@ var acc={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0},used={},out=[];
 (pre||[]).forEach(function(k){used[k]=1});
 for(var s=0;s<mealN;s++){var best=null,bs=-999;
 P.forEach(function(r,idx){if(out.filter(function(o){return o.i===r.i}).length)return;
-var v=score(r,acc,tgt,used)+mealScore(r)/100*1.5+((idx+seed*7+s*13)%5)*.01+(fav[r.i]?.2:0);
+var v=score(r,acc,tgt,used)*2.2+mealScore(r)/100*.5+((idx+seed*7+s*13)%5)*.008+(fav[r.i]?.2:0);
 if(v>bs){bs=v;best=r}});
 if(!best)break;
 out.push(best);var nu=nutOf(best).t;
 NK.forEach(function(k){acc[k]+=nu[k]});acc.feAb+=nu.feAb;
 mainKeys(best).forEach(function(k){used[k]=1})}
 return out}
+function dayScore(list){var T=TG(),acc={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0};
+list.forEach(function(r){if(!r)return;var n=nutOf(r).t;NK.forEach(function(k){acc[k]+=n[k]});acc.feAb+=n.feAb});
+var W={kcal:1.2,p:1.3,fe:1.3,ca:.8,zn:.7},s=0,tw=0,low=[];
+NK.forEach(function(k){var pc=acc[k]/Math.max(.01,T.solid[k])*100;
+if(pc<70)low.push({k:k,nm:NL[k][0],pc:pc,lack:T.solid[k]-acc[k],u:NL[k][1]});
+if(pc>150)pc=150-Math.min(50,(pc-150)*.3);
+s+=Math.min(150,pc)*W[k];tw+=W[k]});
+var fp=acc.feAb/Math.max(.001,T.feAbSolid)*100;
+if(fp>150)fp=150-Math.min(50,(fp-150)*.3);
+s+=Math.min(150,fp)*1.1;tw+=1.1;
+return {sc:Math.round(s/tw),low:low.sort(function(a,b){return a.pc-b.pc}),acc:acc}}
 function altList(si,ex){var P=pool(si);
 return P.filter(function(r){return ex.indexOf(r.i)<0}).sort(function(a,b){return mealScore(b)-mealScore(a)})}
 function todayRec(){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),sl=SLOTS(),key=fmt(TD())+'|'+MEALS();
@@ -353,11 +364,37 @@ return (s.id==='ready'?'<div class="cd" style="background:#FFF6EC"><b>🕒 아�
 +'<div class="mu" style="font-size:10px;margin-top:4px">철 권장량 '+dri.fe+'mg은 흡수율 10% 가정값이므로 실제 흡수 목표는 <b>'+rnd2(T.feAb)+'mg</b>입니다.</div></div></div>'
 +'<div class="cd" style="background:#FBF6F2"><b style="font-size:12.5px">추천 '+MEALS()+'끼를 모두 먹으면 (이유식만)</b><div class="g5" style="margin-top:8px">'+NK.map(function(k){var p=Math.round(pAcc[k]/T.solid[k]*100);
 return '<div style="text-align:center;background:#fff;border-radius:9px;padding:7px 2px"><div class="mu" style="font-size:9.5px">'+NL[k][0]+'</div><b style="color:'+lvCol(p)+';font-size:15px">'+p+'%</b></div>'}).join('')+'</div><div class="mu" style="font-size:10px;margin-top:6px">이유식 담당 목표 대비 · 흡수철 '+rnd2(pAcc.feAb)+'mg</div></div>'
-+'<div class="st">🍽 오늘 '+MEALS()+'끼 추천</div>'
+
+function boostDay(k){var rec=todayRec(),T=TG();
+var target=null,best=-1;
+rec.forEach(function(r){if(!r)return;var pc=nutOf(r).t[k]/Math.max(.01,T.meal[k])*100;
+if(target===null||pc<best){target=r;best=pc}});
+if(!target)return;
+var fn=FIX[k].f[0];
+for(var i=0;i<FIX[k].f.length;i++){if(NUT[FIX[k].f[i]]){fn=FIX[k].f[i];break}}
+addQuickSilent(target.i,fn);
+alert('「'+target.n+'」에 '+fn+' '+(QG[fn]||10)+qUnit(fn)+'을 추가했어요.');
+render()}
+function addQuickSilent(id,fn){var r=getR(id),isBase=BASE.filter(function(b){return b.i===id}).length>0;
+var g=JSON.parse(JSON.stringify(r.g||[]));
+var q=QG[fn]||10,u=qUnit(fn),hit=-1;
+g.forEach(function(x,i){if(x[3]===fn)hit=i});
+if(hit>=0)g[hit][1]=Math.round((+g[hit][1]+q)*10)/10;else g.push([fn,q,u,fn]);
+if(isBase){ov[id]={n:r.n,g:g,st:r.st,tm:r.tm,sv:r.sv,tip:r.tip,s:r.s,y:r.y}}
+else{myR.forEach(function(x){if(x.i===id)x.g=g})}
+save()}  
++(function(){var DS=dayScore(rec);
+return '<div class="st">🍽 오늘 '+MEALS()+'끼 추천 <span style="color:'+lvCol(DS.sc)+'">· 하루 합계 '+DS.sc+'%</span></div>'
++(DS.low.length?'<div class="alert '+(DS.low[0].pc<45?'bad':'mid')+'"><span class="ic">'+(DS.low[0].pc<45?'🚨':'⚠️')+'</span><div><b>추천 '+MEALS()+'끼를 다 먹어도 '+DS.low.map(function(x){return x.nm+' '+Math.round(x.pc)+'%'}).join(' · ')+'</b>가 부족합니다.<br>'
++DS.low.slice(0,2).map(function(x){var kk=x.k;
+return '· <b>'+x.nm+'</b> '+rnd2(x.lack)+x.u+' 더 필요 — '+FIX[kk].f.slice(0,3).join('·')+' 추가<br>'}).join('')
++'<div class="ch" style="margin-top:7px">'+DS.low.slice(0,2).map(function(x){
+return '<button style="background:#E7F1FB;color:#3A6FA8" onclick="boostDay(\''+x.k+'\')">🔧 '+x.nm+' 보충하기</button>'}).join('')
++'<button style="background:#F5EFEA;color:var(--sub)" onclick="reRec()">🎲 다시 편성</button></div></div>':'<div class="alert ok"><span class="ic">✅</span><div>추천 '+MEALS()+'끼로 <b>이유식 담당 영양이 충분히 채워집니다.</b> 나머지는 수유가 보충해요.</div></div>')}())
 +rec.map(function(r,i){if(!r)return '';var sc=mealScore(r);
 return '<div class="cd" style="padding:10px"><div class="rw" style="justify-content:space-between;align-items:center;margin-bottom:6px"><b style="font-size:12.5px;color:var(--pd)">'+sl[i]+'</b><span><button class="mu" style="font-weight:700;color:var(--bl)" onclick="openAlt('+i+')">🔄 대안</button> <button class="mu" style="font-weight:700;color:var(--pd);margin-left:8px" onclick="openEd(\''+r.i+'\')">✏️ 수정</button></span></div>'
 +rcard(r)
-+((sc<85||sc>140)?'<div class="alert '+lvl(sc)+'" style="margin:6px 0 8px;cursor:pointer" onclick="diagMeal(\''+r.i+'\')"><span class="ic">'+lvIco(sc)+'</span><div>1끼 목표의 <b>'+sc+'%</b> ('+lvTxt(sc)+') — <u>눌러서 원인·개선안 보기 ›</u></div></div>':'')
++((sc<45||sc>150)?'<div class="alert '+lvl(sc)+'" style="margin:6px 0 8px;cursor:pointer" onclick="diagMeal(\''+r.i+'\')"><span class="ic">'+lvIco(sc)+'</span><div>1끼 목표의 <b>'+sc+'%</b> ('+lvTxt(sc)+') — <u>눌러서 개선안 보기 ›</u></div></div>':'')
 +'<div class="rw"><button class="btn g s" onclick="qLog(\''+r.i+'\')">📝 먹었어요</button><button class="btn y s" onclick="toggleFav(\''+r.i+'\')">'+(fav[r.i]?'⭐ 해제':'☆ 즐겨찾기')+'</button></div></div>'}).join('')
 +'<button class="btn y s" onclick="reRec()">🎲 추천 다시 받기</button>'
 +'<div class="st">'+s.n+' 기준</div><div class="cd"><div class="g2">'+cell('농도',s.ra)+cell('횟수',s.ct)+cell('1회 양',s.am)+cell('입자',s.tx)+'</div><p class="mu" style="margin:10px 0 0">'+s.ds+'</p><div class="hr"></div><ul style="margin:0;padding-left:17px;font-size:13px">'+s.td.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul><div style="margin-top:8px">'+sT('ppibbo')+'</div></div>'
