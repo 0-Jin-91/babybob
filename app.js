@@ -244,10 +244,11 @@ if(n.t.vc<10&&n.nh>0.3)msg.push('비타민C 재료가 적습니다. <b>브로콜
 if(n.meat>15&&n.t.vc>=20)msg.push('고기(헴철) + 비타민C 조합으로 <b>철분 흡수 조건이 좋습니다</b> 👍');
 return msg.length?'<div class="fe">🩸 <b>철분 흡수 코칭</b><br>'+msg.join('<br>')+'<div class="mu" style="font-size:10px;margin-top:5px">계산 모델: 헴철 25% / 비헴철 5%(비타민C·육류인자로 최대 18%) '+sT('fe')+'</div></div>':''}
 function nutBlock(nu,ml){var T=TG(),D=diagOf(curR||{g:[]}),sc=curR?mealScore(curR):0;
-var bad=D.filter(function(x){return x.pc<60}),mid=D.filter(function(x){return x.pc>=60&&x.pc<85});
+var bad=D.filter(function(x){return x.pc<60}),mid=D.filter(function(x){return x.pc>=60&&x.pc<85}),ovr=D.filter(function(x){return x.pc>140});
 var al=bad.length?'<div class="alert bad" style="cursor:pointer" onclick="diagMeal(\''+(curR?curR.i:'')+'\')"><span class="ic">🚨</span><div><b>'+bad.map(function(x){return x.nm}).join(' · ')+'</b>이 1끼 목표의 60% 미만입니다.<br><u>눌러서 개선안 보기 ›</u></div></div>'
 :mid.length?'<div class="alert mid" style="cursor:pointer" onclick="diagMeal(\''+(curR?curR.i:'')+'\')"><span class="ic">⚠️</span><div><b>'+mid.map(function(x){return x.nm}).join(' · ')+'</b>이 조금 부족합니다.<br><u>눌러서 개선안 보기 ›</u></div></div>'
-:'<div class="alert ok"><span class="ic">✅</span><div>이 한 끼로 주요 영양소가 <b>1끼 목표의 85% 이상</b> 채워집니다.</div></div>';
+:ovr.length?'<div class="alert mid" style="cursor:pointer" onclick="diagMeal(\''+(curR?curR.i:'')+'\')"><span class="ic">⚠️</span><div><b>'+ovr.map(function(x){return x.nm}).join(' · ')+'</b>이 1끼 목표의 140%를 넘습니다. 재료를 조금 줄여도 좋아요.<br><u>눌러서 상세 보기 ›</u></div></div>'
+:'<div class="alert ok"><span class="ic">✅</span><div>이 한 끼로 주요 영양소가 <b>적정 범위(85~140%)</b>에 있습니다.</div></div>';
 return '<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center;margin-bottom:4px"><b style="font-size:14px">🍀 1회 분량 영양'+(ml>1?' ×'+ml:'')+'</b><span class="badge '+lvl(sc)+'" style="font-size:12px;padding:5px 10px">'+lvIco(sc)+' 종합 '+sc+'%</span></div>'
 +'<div class="mu" style="font-size:10.5px;margin-bottom:9px">1끼 목표 = '+(T.use?'체중 '+T.w+'kg 기준':'표준('+T.lb+')')+' 하루 목표 × 영양소별 이유식 담당비율 ÷ '+MEALS()+'끼</div>'+al
 +D.map(function(x){var lv=lvl(x.pc);
@@ -285,6 +286,7 @@ function qUnit(fn){return fn==='달걀노른자'?'개':(fn==='참기름'?'방울
 function diagMeal(id){var r=getR(id);if(!r)return;
 var D=diagOf(r),sc=mealScore(r);
 var low=D.filter(function(x){return x.pc<85}).sort(function(a,b){return a.pc-b.pc});
+var hi=D.filter(function(x){return x.pc>140}).sort(function(a,b){return b.pc-a.pc});
 document.getElementById('mb').innerHTML='<div class="mt2">'+lvIco(sc)+' '+esc(r.n)+'</div>'
 +'<div class="alert '+lvl(sc)+'" style="margin-top:10px"><span class="ic">'+lvIco(sc)+'</span><div><b>1끼 종합 영양 '+sc+'%</b><br>'+(sc<60?'이 한 끼만으로는 부족합니다. 아래 개선안을 참고하세요.':sc<85?'조금 부족합니다. 다른 끼니나 수유로 보충됩니다.':'이 한 끼로 충분합니다.')+'</div></div>'
 +'<div class="cd"><b style="font-size:13px">📊 항목별 1끼 목표 달성</b>'
@@ -295,9 +297,18 @@ document.getElementById('mb').innerHTML='<div class="mt2">'+lvIco(sc)+' '+esc(r.
 return '<div class="cd"><b style="font-size:13.5px;color:'+lvCol(x.pc)+'">'+lvIco(x.pc)+' '+x.nm+' '+Math.round(x.pc)+'%</b><p class="mu" style="margin:5px 0 8px">'+FIX[kk].t+'</p><div class="ch">'+FIX[kk].f.map(function(fn){return '<button style="background:#E7F1FB;color:#3A6FA8" onclick="addQuick(\''+r.i+'\',\''+fn+'\')">＋ '+fn+' '+(QG[fn]||10)+qUnit(fn)+'</button>'}).join('')+'</div></div>'}).join('')
 +'<div class="cd" style="background:#FFF6EC;font-size:12px">위 <b>＋재료</b>를 누르면 이 레시피에 적정량이 추가되고 영양이 즉시 재계산됩니다. 기본 레시피는 원본이 보존되어 언제든 복원할 수 있어요.</div>'
 +'<div class="st">🔄 더 좋은 메뉴로 교체</div>'+altBetter(r,3):'')
++(hi.length?'<div class="st">📉 과다한 영양소</div><div class="cd">'+hi.map(function(x){var kk=x.k==='fe2'?'fe':x.k;
+return '<div style="margin-bottom:8px"><b style="font-size:13px;color:var(--warn)">⚠️ '+x.nm+' '+Math.round(x.pc)+'%</b><p class="mu" style="margin:4px 0 0">1끼 목표('+rnd2(x.goal)+x.u+')보다 많습니다. '+(kk==='p'?'고기·생선·두부 양을 5~10g 줄여보세요. 단백질 과다는 신장에 부담이 될 수 있습니다.':kk==='kcal'?'양이 많을 수 있어요. 아기가 남기면 줄여도 됩니다.':'해당 재료를 조금 줄이거나 다른 재료로 나눠 담아보세요.')+'</p><div class="ch" style="margin-top:6px">'+(r.g||[]).filter(function(gg){return gg[3]&&NUT[gg[3]]&&NUT[gg[3]][NK.indexOf(kk)]>0}).slice(0,4).map(function(gg){return '<button style="background:#FFF1CC;color:#8A5D00" onclick="cutQuick(\''+r.i+'\',\''+gg[3]+'\')">− '+gg[0]+'</button>'}).join('')+'</div></div>'}).join('')
++'<div class="mu" style="font-size:11px">− 버튼을 누르면 해당 재료가 20% 줄어듭니다.</div></div>':'')
 +'<button class="btn g" onclick="closeM();openEd(\''+r.i+'\')">✏️ 직접 수정하기</button>'
 +'<button class="btn y" style="margin-top:8px" onclick="closeM()">닫기</button>';
 document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
+function cutQuick(id,fn){var r=getR(id),isBase=BASE.filter(function(b){return b.i===id}).length>0;
+var g=JSON.parse(JSON.stringify(r.g||[]));
+g.forEach(function(x){if(x[3]===fn)x[1]=Math.max(1,Math.round(+x[1]*.8*10)/10)});
+if(isBase){ov[id]={n:r.n,g:g,st:r.st,tm:r.tm,sv:r.sv,tip:r.tip,s:r.s,y:r.y}}
+else{myR.forEach(function(x){if(x.i===id)x.g=g})}
+save();diagMeal(id)}
 function addQuick(id,fn){var r=getR(id),isBase=BASE.filter(function(b){return b.i===id}).length>0;
 var g=JSON.parse(JSON.stringify(r.g||[]));
 var q=QG[fn]||10,u=qUnit(fn),hit=-1;
