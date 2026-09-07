@@ -1,6 +1,6 @@
 /*========== 상수 ==========*/
 var NK=['kcal','p','fe','ca','zn'];
-var NL={kcal:['열량','kcal','#FFC861'],p:['단백질','g','#7ED0B8'],fe:['철분','mg','#EF6A4C'],ca:['칼슘','mg','#7FA8D9'],zn:['아연','mg','#A9A0E0']};
+var NL={kcal:['열량','kcal','#F0A93C'],p:['단백질','g','#3FAE8E'],fe:['철분','mg','#E85536'],ca:['칼슘','mg','#5B8FCC'],zn:['아연','mg','#8B7FD4']};
 var MILK={f:{n:'분유',v:[67,1.4,.8,55,.5],vc:9,ab:.10},b:{n:'모유',v:[65,1.0,.03,32,.15],vc:4,ab:.50}};
 var PCG={'달걀':50,'달걀노른자':17};
 var IDS=['ready','early','mid','late','final'];
@@ -89,7 +89,7 @@ function rnd(n){return Math.round(n*10)/10}
 function rnd2(n){return Math.round(n*100)/100}
 function wkStart(){var d=TD(),w=d.getDay();return addD(d,-((w+6)%7))}
 
-/*========== 목표 · 추천 ==========*/
+/*========== 목표 · 등급 ==========*/
 function MEALS(){return (baby&&baby.meals)||2}
 function SLOTS(){var n=MEALS();return n===1?['아침']:n===2?['아침','저녁']:['아침','점심','저녁']}
 function MTYPE(){return baby.feed==='b'?'b':'f'}
@@ -101,6 +101,21 @@ if(use){day.kcal=Math.round(w*dri.ekg);day.p=rnd(w*dri.pkg)}
 var sf=curS().sf,solid={},meal={};
 NK.forEach(function(k){solid[k]=day[k]*sf;meal[k]=solid[k]/MEALS()});
 return {day:day,solid:solid,meal:meal,dri:dri,sf:sf,w:w,use:!!use,feAb:day.fe*.10,lb:dri.lb}}
+function lvl(pc){return pc>=85?'ok':pc>=60?'mid':'bad'}
+function lvIco(pc){return pc>=85?'✅':pc>=60?'⚠️':'🚨'}
+function lvTxt(pc){return pc>=85?'충분':pc>=60?'조금 부족':'많이 부족'}
+function lvCol(pc){return pc>=85?'var(--ok)':pc>=60?'var(--warn)':'var(--rd)'}
+function tipFor(n){return n==='철분'?'소고기·달걀노른자를 넣고 <b>파프리카·브로콜리·토마토</b>를 곁들이면 흡수가 2~3배 올라갑니다.'
+:n==='칼슘'?'<b>두부·아기치즈·미역·플레인요거트</b>가 도움이 됩니다.'
+:n==='단백질'?'<b>고기·생선·두부·달걀</b> 양을 5~10g 늘려보세요.'
+:n==='아연'?'<b>소고기·달걀노른자·표고버섯</b>이 아연이 많습니다.'
+:'수유량을 늘리거나 <b>고구마·단호박·아보카도</b> 등 열량이 높은 재료를 활용해 보세요.'}
+function mealScore(r){var T=TG(),n=nutOf(r).t,s=0,c=0;
+NK.forEach(function(k){s+=Math.min(150,n[k]/Math.max(.01,T.meal[k])*100);c++});
+var fp=Math.min(150,n.feAb/Math.max(.001,T.feAb/MEALS())*100);
+return Math.round((s+fp*1.6)/(c+1.6))}
+
+/*========== 추천 ==========*/
 function mainKeys(r){var s={};(r.g||[]).forEach(function(x){if(x[3]&&['소고기','닭고기','돼지고기','흰살생선','연어','새우','두부','달걀','달걀노른자'].indexOf(x[3])>=0)s['P'+x[3]]=1;else if(x[3])s[x[3]]=1});return Object.keys(s)}
 function score(r,acc,tg,used){var n=nutOf(r),nu=n.t,sc=0,W={kcal:1,p:1.4,fe:1.4,ca:1.2,zn:1.3};
 NK.forEach(function(k){var need=Math.max(0,tg[k]-(acc[k]||0));sc+=Math.min(nu[k],need)/Math.max(.01,tg[k])*W[k]});
@@ -116,7 +131,7 @@ var v=score(r,acc,tgt,used)+((idx+seed*7+s*13)%5)*.012+(fav[r.i]?.15:0);if(v>bs)
 if(!best)break;out.push(best);var nu=nutOf(best).t;NK.forEach(function(k){acc[k]+=nu[k]});acc.feAb+=nu.feAb;mainKeys(best).forEach(function(k){used[k]=1})}
 return out}
 function altList(si,ex){var P=pool(si),T=TG(),tgt={};NK.forEach(function(k){tgt[k]=T.solid[k]});tgt.feAb=T.feAb*T.sf;
-return P.filter(function(r){return ex.indexOf(r.i)<0}).sort(function(a,b){return score(b,{},tgt,{})-score(a,{},tgt,{})})}
+return P.filter(function(r){return ex.indexOf(r.i)<0}).sort(function(a,b){return mealScore(b)-mealScore(a)})}
 function todayRec(){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),sl=SLOTS(),key=fmt(TD())+'|'+MEALS();
 if(todaySel&&todaySel.k===key&&todaySel.ids.length===sl.length){var a=todaySel.ids.map(getR);if(a.indexOf(null)<0)return a}
 var rs=recommend(si,dOld(),sl.length);todaySel={k:key,ids:rs.map(function(r){return r.i})};save();return rs}
@@ -141,64 +156,84 @@ var bs=document.querySelectorAll('nav button');for(var i=0;i<bs.length;i++)bs[i]
 /*========== 공통 UI ==========*/
 function cell(k,v){return '<div style="background:#FBF6F2;border-radius:11px;padding:8px 10px"><div class="mu" style="font-size:10.5px;font-weight:700">'+k+'</div><div style="font-size:13px;font-weight:700">'+v+'</div></div>'}
 function thumb(r){var p=ph[r.i+'_0'];return p?'<img src="'+p+'">':ART(kOf((r.st&&r.st[0])||''))}
-function rcard(r,x){var n=nutOf(r).t;return '<button class="rc" onclick="openR(\''+r.i+'\')"><div class="th">'+thumb(r)+'</div><div style="flex:1"><div class="nm">'+(fav[r.i]?'⭐ ':'')+esc(r.n)+(r.my?' <span class="tg m">내 메뉴</span>':'')+(r.ed?' <span class="tg p">수정</span>':'')+'</div><div class="ds">⏱ '+(r.tm||'-')+' · 철 '+rnd(n.fe)+'mg(흡수 '+rnd2(n.feAb)+') · 단백 '+rnd(n.p)+'g'+(x||'')+'</div></div><div class="ar">›</div></button>'}
+function rcard(r,x){var n=nutOf(r).t,sc=mealScore(r),lv=lvl(sc);
+return '<button class="rc '+lv+'" onclick="openR(\''+r.i+'\')"><div class="th">'+thumb(r)+'</div><div style="flex:1"><div class="nm">'+(fav[r.i]?'⭐ ':'')+esc(r.n)+(r.my?' <span class="tg m">내 메뉴</span>':'')+(r.ed?' <span class="tg p">수정</span>':'')+'</div>'
++'<div class="ds"><span class="badge '+lv+'">'+lvIco(sc)+' 1끼 영양 '+sc+'%</span> ⏱ '+(r.tm||'-')+' · 철 '+rnd(n.fe)+'mg(흡수 '+rnd2(n.feAb)+') · 단백 '+rnd(n.p)+'g'+(x||'')+'</div></div><div class="ar">›</div></button>'}
 function todayLogs(){return logs.filter(function(l){return l.d===fmt(TD())})}
 function todaySum(){var f={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0},m={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0},ml=0,cnt=0;
 todayLogs().forEach(function(l){if(l.k==='milk'){ml+=+l.ml||0;var n=milkNut(+l.ml||0,l.mt||MTYPE());NK.forEach(function(k){m[k]+=n[k]});m.feAb+=n.feAb}
 else{cnt++;NK.forEach(function(k){f[k]+=(l.nu&&l.nu[k])||0});f.feAb+=(l.nu&&l.nu.feAb)||0}});
 return {f:f,m:m,ml:ml,cnt:cnt}}
-function stackBars(f,m,day){return NK.map(function(k){var L=NL[k],fp=f[k]/day[k]*100,mp=m[k]/day[k]*100,tot=fp+mp;
-var w1=Math.min(100,fp),w2=Math.max(0,Math.min(100-w1,mp));
-return '<div style="margin-bottom:11px"><div class="rw" style="justify-content:space-between;font-size:13px"><span style="font-weight:800">'+L[0]+'</span><span>'+rnd(f[k]+m[k])+' / '+rnd(day[k])+L[1]+' <b style="color:'+(tot>=95?'#2E9C7D':tot>=70?L[2]:'var(--rd)')+'">'+Math.round(tot)+'%</b></span></div>'
-+'<div class="sb2"><i style="width:'+w1+'%;background:'+L[2]+'"></i><i style="width:'+w2+'%;background:'+L[2]+';opacity:.34"></i><u style="left:100%"></u></div>'
-+'<div class="mu" style="font-size:10px;margin-top:2px">🍲 이유식 '+Math.round(fp)+'% + 🍼 수유 '+Math.round(mp)+'%</div></div>'}).join('')
-+'<div class="lgd"><span><b style="background:var(--pd)"></b>이유식</span><span><b style="background:var(--pd);opacity:.34"></b>수유</span><span>┃ 검은 선 = 하루 목표 100%</span></div>'}
+function stackBars(f,m,day){
+var rows=NK.map(function(k){var L=NL[k],fp=f[k]/day[k]*100,mp=m[k]/day[k]*100,tot=fp+mp;
+var w1=Math.min(100,fp),w2=Math.max(0,Math.min(100-w1,mp)),lv=lvl(tot);
+return '<div class="nrow"><div class="nhd"><div class="nnm"><i class="ndot" style="background:'+L[2]+'"></i>'+L[0]
++' <span class="badge '+lv+'">'+lvIco(tot)+' '+lvTxt(tot)+'</span></div>'
++'<div><div class="npc" style="color:'+lvCol(tot)+'">'+Math.round(tot)+'%</div><div class="nval">'+rnd(f[k]+m[k])+' / '+rnd(day[k])+L[1]+'</div></div></div>'
++'<div class="bar"><i class="solid" style="width:'+w1+'%;background:'+L[2]+'"></i><i class="milk" style="width:'+w2+'%;background:'+L[2]+';opacity:.62"></i>'
++'<span class="goal" style="left:calc(100% - 3px)"></span>'+(tot<70?'<span class="txt">목표까지 '+Math.round(100-tot)+'%</span>':'')+'</div>'
++'<div class="sub2"><span><b style="background:'+L[2]+'"></b>🍲 이유식 '+Math.round(fp)+'%</span><span><b class="milk" style="background:'+L[2]+';opacity:.62"></b>🍼 수유 '+Math.round(mp)+'%</span></div></div>'}).join('');
+var bad=[],mid=[];NK.forEach(function(k){var t=(f[k]+m[k])/day[k]*100;if(t<60)bad.push(NL[k][0]);else if(t<85)mid.push(NL[k][0])});
+var al='';
+if(bad.length)al='<div class="alert bad"><span class="ic">🚨</span><div><b>'+bad.join(' · ')+'</b>이(가) 60% 미만입니다.<br>'+tipFor(bad[0])+'</div></div>';
+else if(mid.length)al='<div class="alert mid"><span class="ic">⚠️</span><div><b>'+mid.join(' · ')+'</b>이(가) 조금 부족해요.<br>'+tipFor(mid[0])+'</div></div>';
+else al='<div class="alert ok"><span class="ic">✅</span><div>주요 영양소가 <b>모두 85% 이상</b> 채워졌어요. 잘하고 있습니다!</div></div>';
+return al+rows}
 function feCoach(n){var msg=[];
 if(n.meat<=0&&n.t.fe>0.3)msg.push('고기·생선이 없어 <b>비헴철</b>만 들어 있습니다(흡수율 낮음). 소고기 10~20g을 더하면 흡수 철분이 크게 늘어요.');
 if(n.t.vc<10&&n.nh>0.3)msg.push('비타민C 재료가 적습니다. <b>브로콜리·파프리카·토마토·양배추</b>를 곁들이면 비헴철 흡수가 2~3배 올라갑니다.');
 if(n.meat>15&&n.t.vc>=20)msg.push('고기(헴철) + 비타민C 조합으로 <b>철분 흡수 조건이 좋습니다</b> 👍');
 return msg.length?'<div class="fe">🩸 <b>철분 흡수 코칭</b><br>'+msg.join('<br>')+'<div class="mu" style="font-size:10px;margin-top:5px">계산 모델: 헴철 25% / 비헴철 5%(비타민C·육류인자로 최대 18%) '+sT('fe')+'</div></div>':''}
-function nutBlock(nu,ml){var T=TG();
-return '<div class="cd"><b style="font-size:13.5px">🍀 영양 (1회 분량'+(ml>1?' ×'+ml:'')+')</b><div class="mu" style="font-size:10.5px;margin:3px 0 9px">1끼 목표 = '+(T.use?'체중 '+T.w+'kg 기준':'표준('+T.lb+')')+' 하루 목표 × 이유식 '+Math.round(T.sf*100)+'% ÷ '+MEALS()+'끼</div>'
-+NK.map(function(k){var per=T.meal[k],pc=nu.t[k]/per*100,L=NL[k];
-return '<div style="margin-bottom:9px"><div class="rw" style="justify-content:space-between;font-size:12.5px"><span style="font-weight:700">'+L[0]+'</span><span>'+rnd(nu.t[k])+L[1]+' <b style="color:'+L[2]+'">1끼 목표의 '+Math.round(pc)+'%</b></span></div><div class="sb2" style="height:9px"><i style="width:'+Math.min(100,pc)+'%;background:'+L[2]+'"></i></div><div class="mu" style="font-size:10px">하루 목표 '+rnd(T.day[k])+L[1]+' 대비 '+Math.round(nu.t[k]/T.day[k]*100)+'%</div></div>'}).join('')
-+'<div class="hr"></div><div class="rw" style="justify-content:space-between;font-size:12.5px"><span style="font-weight:800;color:var(--rd)">🩸 흡수 추정 철분</span><span><b>'+rnd2(nu.t.feAb)+'mg</b> / 하루 흡수 목표 '+rnd2(T.feAb)+'mg <b style="color:var(--rd)">'+Math.round(nu.t.feAb/T.feAb*100)+'%</b></span></div>'
-+'<div class="sb2" style="height:9px"><i style="width:'+Math.min(100,nu.t.feAb/T.feAb*100)+'%;background:var(--rd)"></i></div>'
-+'<div class="mu" style="font-size:10px;margin-top:3px">헴철 '+rnd2(nu.hm)+'mg · 비헴철 '+rnd2(nu.nh)+'mg · 비타민C '+rnd(nu.t.vc)+'mg · 고기 '+Math.round(nu.meat)+'g</div>'
+function nutBlock(nu,ml){var T=TG(),sc=0,c=0;
+NK.forEach(function(k){sc+=Math.min(150,nu.t[k]/Math.max(.01,T.meal[k])*100);c++});
+var fp=Math.min(150,nu.t.feAb/Math.max(.001,T.feAb/MEALS())*100);sc=Math.round((sc+fp*1.6)/(c+1.6));
+var bad=[],mid=[];NK.forEach(function(k){var t=nu.t[k]/T.meal[k]*100;if(t<60)bad.push(NL[k][0]);else if(t<85)mid.push(NL[k][0])});
+var al=bad.length?'<div class="alert bad"><span class="ic">🚨</span><div>이 한 끼는 <b>'+bad.join(' · ')+'</b>이 1끼 목표의 60% 미만입니다.<br>'+tipFor(bad[0])+'</div></div>'
+:mid.length?'<div class="alert mid"><span class="ic">⚠️</span><div><b>'+mid.join(' · ')+'</b>이 조금 부족합니다. 다른 끼니에서 보충해 주세요.</div></div>'
+:'<div class="alert ok"><span class="ic">✅</span><div>이 한 끼로 주요 영양소가 <b>1끼 목표의 85% 이상</b> 채워집니다.</div></div>';
+return '<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center;margin-bottom:4px"><b style="font-size:14px">🍀 1회 분량 영양'+(ml>1?' ×'+ml:'')+'</b><span class="badge '+lvl(sc)+'" style="font-size:12px;padding:5px 10px">'+lvIco(sc)+' 종합 '+sc+'%</span></div>'
++'<div class="mu" style="font-size:10.5px;margin-bottom:9px">1끼 목표 = '+(T.use?'체중 '+T.w+'kg 기준':'표준('+T.lb+')')+' 하루 목표 × 이유식 '+Math.round(T.sf*100)+'% ÷ '+MEALS()+'끼</div>'+al
++NK.map(function(k){var per=T.meal[k],pc=nu.t[k]/per*100,L=NL[k],lv=lvl(pc);
+return '<div class="nrow"><div class="nhd"><div class="nnm"><i class="ndot" style="background:'+L[2]+'"></i>'+L[0]+' <span class="badge '+lv+'">'+lvIco(pc)+'</span></div><div><div class="npc" style="color:'+lvCol(pc)+';font-size:16px">'+Math.round(pc)+'%</div><div class="nval">'+rnd(nu.t[k])+L[1]+' / 1끼 '+rnd(per)+L[1]+'</div></div></div>'
++'<div class="bar" style="height:17px"><i class="solid" style="width:'+Math.min(100,pc)+'%;background:'+L[2]+'"></i><span class="goal" style="left:calc(100% - 3px)"></span></div>'
++'<div class="mu" style="font-size:10px;margin-top:3px">하루 목표 '+rnd(T.day[k])+L[1]+' 대비 '+Math.round(nu.t[k]/T.day[k]*100)+'%</div></div>'}).join('')
++'<div class="nrow"><div class="nhd"><div class="nnm">🩸 흡수 추정 철분 <span class="badge '+lvl(nu.t.feAb/(T.feAb/MEALS())*100)+'">'+lvIco(nu.t.feAb/(T.feAb/MEALS())*100)+'</span></div><div><div class="npc" style="color:var(--rd);font-size:16px">'+Math.round(nu.t.feAb/(T.feAb/MEALS())*100)+'%</div><div class="nval">'+rnd2(nu.t.feAb)+'mg / 1끼 '+rnd2(T.feAb/MEALS())+'mg</div></div></div>'
++'<div class="bar" style="height:17px"><i class="solid" style="width:'+Math.min(100,nu.t.feAb/(T.feAb/MEALS())*100)+'%;background:var(--rd)"></i><span class="goal" style="left:calc(100% - 3px)"></span></div>'
++'<div class="mu" style="font-size:10px;margin-top:3px">헴철 '+rnd2(nu.hm)+'mg · 비헴철 '+rnd2(nu.nh)+'mg · 비타민C '+rnd(nu.t.vc)+'mg · 고기 '+Math.round(nu.meat)+'g</div></div>'
 +'<div class="hr"></div><b style="font-size:12.5px">재료별 기여도</b><table class="tb" style="margin-top:5px"><tr><th>재료</th><th>g</th><th>kcal</th><th>단백</th><th>철</th><th>칼슘</th><th>비타민C</th></tr>'
 +nu.d.map(function(o){return '<tr><td>'+esc(o.n)+(o.ty==='h'?' <span class="tg r" style="padding:0 4px">헴</span>':'')+'</td><td>'+rnd(o.g)+'</td><td>'+Math.round(o.kcal)+'</td><td>'+rnd(o.p)+'</td><td>'+rnd2(o.fe)+'</td><td>'+Math.round(o.ca)+'</td><td>'+rnd(o.vc)+'</td></tr>'}).join('')+'</table>'
 +(nu.ms.length?'<div class="mu" style="font-size:10.5px;margin-top:6px">※ 영양 미반영: '+nu.ms.join(', ')+'</div>':'')
 +'<div class="mu" style="font-size:10.5px;margin-top:6px">※ 원물 기준 추정치(조리 손실 미반영). '+sT('rda')+sT('kdri')+'</div></div>'+feCoach(nu)}
-
 /*========== 홈 ==========*/
 function vHome(){var s=curS(),T=TG(),rec=todayRec(),sl=SLOTS(),D=todaySum();
 var pAcc={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0};rec.forEach(function(r){if(!r)return;var n=nutOf(r).t;NK.forEach(function(k){pAcc[k]+=n[k]});pAcc.feAb+=n.feAb});
 var due=obs.filter(function(o){return !o.done&&dObs(o)<=3});
 var exp=cubes.filter(function(c){return c.q>0&&dLeft(c)<=2});
 var ns=nextStage(),nd=ns?Math.ceil((addM(d0(baby.birth),ns.f)-TD())/864e5):999;
-var low=[];NK.forEach(function(k){if((D.f[k]+D.m[k])/T.day[k]<.7)low.push(NL[k][0])});
 var feTot=D.f.feAb+D.m.feAb,fePc=feTot/T.feAb*100,dri=T.dri,w=T.w;
 return (s.id==='ready'?'<div class="cd" style="background:#FFF6EC"><b>🕒 아직 이유식 시작 전</b><p class="mu" style="margin:5px 0 0">시작 예정일 <b style="color:var(--pd)">'+fmt(addM(d0(baby.birth),6))+'</b> · <b>'+Math.max(0,Math.ceil((addM(d0(baby.birth),6)-TD())/864e5))+'일</b> 남음</p></div>':'')
 +(ns&&nd>0&&nd<=14?'<div class="cd" style="background:#F3FAF7"><b>🎉 '+nd+'일 후 '+ns.n+'로 넘어가요</b><p class="mu" style="margin:4px 0 0">'+fmt(addM(d0(baby.birth),ns.f))+'부터 <b>'+ns.ra+'</b> · '+ns.ct+'</p></div>':'')
-+(due.length?'<div class="cd" style="background:#FFF6EC"><b>🔔 알레르기 관찰 중 '+due.length+'건</b>'+due.map(function(o){return '<div class="mu" style="margin-top:3px">· '+esc(o.n)+' — '+dObs(o)+'일차</div>'}).join('')+'<button class="btn g s" style="margin-top:8px" onclick="tab=\'food\';render()">관찰 기록</button></div>':'')
-+(exp.length?'<div class="cd wn">🧊 유효기간 임박: <b>'+exp.map(function(c){return c.n}).join(', ')+'</b><button class="btn g s" style="margin-top:8px" onclick="tab=\'plan\';pTab=\'c\';render()">큐브 보기</button></div>':'')
++(due.length?'<div class="alert mid"><span class="ic">🔔</span><div><b>알레르기 관찰 중 '+due.length+'건</b>'+due.map(function(o){return '<br>· '+esc(o.n)+' — '+dObs(o)+'일차'}).join('')+'<button class="btn g s" style="margin-top:8px" onclick="tab=\'food\';render()">관찰 기록하기</button></div></div>':'')
++(exp.length?'<div class="alert bad"><span class="ic">🧊</span><div>유효기간 임박 큐브: <b>'+exp.map(function(c){return c.n}).join(', ')+'</b><button class="btn g s" style="margin-top:8px" onclick="tab=\'plan\';pTab=\'c\';render()">큐브 보기</button></div></div>':'')
 +'<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><b style="font-size:13.5px">🎯 오늘의 하루 목표 기준</b><button class="mu" style="color:var(--bl);font-weight:700" onclick="tab=\'grow\';render()">📈 성장기록</button></div>'
 +'<div class="g2" style="margin-top:8px">'
 +'<div style="background:'+(T.use?'#fff':'#FFEDE4')+';border:1.5px solid '+(T.use?'var(--ln)':'var(--pc)')+';border-radius:11px;padding:9px;cursor:pointer" onclick="baby.useW=0;save();render()"><div class="mu" style="font-size:10px;font-weight:800">표준 기준 ('+T.lb+')</div><b style="font-size:13px">'+dri.kcal+'kcal · 단백 '+dri.p+'g</b><div class="mu" style="font-size:10px">2020 섭취기준</div></div>'
 +'<div style="background:'+(T.use?'#FFEDE4':'#fff')+';border:1.5px solid '+(T.use?'var(--pc)':'var(--ln)')+';border-radius:11px;padding:9px;cursor:pointer" onclick="if(!'+(w?1:0)+'){alert(\'성장 탭에서 몸무게를 먼저 기록해 주세요\');return}baby.useW=1;save();render()"><div class="mu" style="font-size:10px;font-weight:800">우리 아기 체중 기준</div><b style="font-size:13px">'+(w?Math.round(w*dri.ekg)+'kcal · 단백 '+rnd(w*dri.pkg)+'g':'몸무게 미입력')+'</b><div class="mu" style="font-size:10px">'+(w?w+'kg × '+dri.ekg+'kcal/kg':'성장 탭에서 입력')+'</div></div></div>'
-+'<div class="mu" style="font-size:10.5px;margin-top:7px">눌러서 기준을 바꿀 수 있어요. 현재 적용: <b style="color:var(--pd)">'+(T.use?'체중 기준':'표준 기준')+'</b> · 철·칼슘·아연은 체중과 무관하게 표준값을 사용합니다. '+sT('kdri')+'</div></div>'
-+'<div class="st">🍼 오늘 수유 입력</div><div class="cd"><div class="rw" style="justify-content:space-between;align-items:baseline;margin-bottom:8px"><b style="font-size:15px">'+D.ml+' ml</b><span class="mu">'+MILK[MTYPE()].n+' · '+todayLogs().filter(function(l){return l.k==='milk'}).length+'회</span></div>'
++'<div class="mu" style="font-size:10.5px;margin-top:7px">눌러서 기준 변경. 현재 적용: <b style="color:var(--pd)">'+(T.use?'체중 기준':'표준 기준')+'</b> · 철·칼슘·아연은 표준값 사용 '+sT('kdri')+'</div></div>'
++'<div class="st">🍼 오늘 수유 입력</div><div class="cd"><div class="rw" style="justify-content:space-between;align-items:baseline;margin-bottom:8px"><b style="font-size:17px">'+D.ml+' ml</b><span class="mu">'+MILK[MTYPE()].n+' · '+todayLogs().filter(function(l){return l.k==='milk'}).length+'회</span></div>'
 +'<div class="mlk">'+[100,120,150,180,200,220].map(function(v){return '<button onclick="addMilk('+v+')">+'+v+'</button>'}).join('')
 +'<button onclick="addMilkP()" style="background:#F5EFEA;color:var(--sub)">직접</button><button onclick="undoMilk()" style="background:#FDEAE5;color:var(--rd)">↩︎</button></div>'
-+'<div class="mu" style="font-size:10.5px;margin-top:8px">'+(MTYPE()==='f'?'분유 100ml당 67kcal·철 0.8mg(흡수율 약 10%)':'모유 100ml당 65kcal·철 0.03mg(흡수율 약 50%)')+' 기준 합산. '+sT('milk')+'</div></div>'
++'<div class="mu" style="font-size:10.5px;margin-top:8px">'+(MTYPE()==='f'?'분유 100ml당 67kcal·철 0.8mg(흡수율 약 10%)':'모유 100ml당 65kcal·철 0.03mg(흡수율 약 50%)')+' 기준 합산 '+sT('milk')+'</div></div>'
 +'<div class="st">📊 오늘의 하루 영양 달성 (이유식 '+D.cnt+'끼 + 수유 '+D.ml+'ml)</div><div class="cd">'+stackBars(D.f,D.m,T.day)
-+'<div class="hr"></div><div class="rw" style="justify-content:space-between;font-size:13px"><span style="font-weight:800;color:var(--rd)">🩸 흡수 추정 철분</span><span>'+rnd2(feTot)+' / '+rnd2(T.feAb)+'mg <b style="color:'+(fePc>=95?'#2E9C7D':fePc>=70?'var(--sn)':'var(--rd)')+'">'+Math.round(fePc)+'%</b></span></div>'
-+'<div class="sb2"><i style="width:'+Math.min(100,D.f.feAb/T.feAb*100)+'%;background:var(--rd)"></i><i style="width:'+Math.max(0,Math.min(100-D.f.feAb/T.feAb*100,D.m.feAb/T.feAb*100))+'%;background:var(--rd);opacity:.34"></i><u style="left:100%"></u></div>'
-+'<div class="mu" style="font-size:10px;margin-top:3px">철 권장량 '+dri.fe+'mg은 흡수율 약 10%를 가정한 값이라, 실제 몸에 흡수되는 목표는 <b>'+rnd2(T.feAb)+'mg</b>입니다. 총 섭취 '+rnd(D.f.fe+D.m.fe)+'mg 중 흡수 추정 '+rnd2(feTot)+'mg</div>'
-+'<div class="hr"></div><div class="mu" style="font-size:11.5px">'+(low.length?'<b style="color:var(--rd)">부족: '+low.join(', ')+'</b> — '+(low.indexOf('철분')>=0?'소고기·달걀노른자 + 비타민C 채소(파프리카·브로콜리) 조합을 넣어보세요.':low.indexOf('칼슘')>=0?'두부·아기치즈·미역·요거트가 도움이 됩니다.':'고기·생선·두부를 늘려보세요.'):'<b style="color:#2E9C7D">주요 영양소가 잘 채워졌어요 👍</b>')+'</div></div>'
-+'<div class="cd" style="background:#FBF6F2"><b style="font-size:12.5px">추천 '+MEALS()+'끼를 모두 먹으면 (이유식만)</b><div class="g3" style="margin-top:7px">'+NK.map(function(k){return '<div style="text-align:center"><div class="mu" style="font-size:10px">'+NL[k][0]+'</div><b style="color:'+NL[k][2]+';font-size:14px">'+Math.round(pAcc[k]/T.solid[k]*100)+'%</b></div>'}).join('')+'</div><div class="mu" style="font-size:10px;margin-top:5px">이유식 담당 목표 대비 · 흡수철 '+rnd2(pAcc.feAb)+'mg</div></div>'
++'<div class="nrow"><div class="nhd"><div class="nnm">🩸 흡수 추정 철분 <span class="badge '+lvl(fePc)+'">'+lvIco(fePc)+' '+lvTxt(fePc)+'</span></div><div><div class="npc" style="color:'+lvCol(fePc)+'">'+Math.round(fePc)+'%</div><div class="nval">'+rnd2(feTot)+' / '+rnd2(T.feAb)+'mg</div></div></div>'
++'<div class="bar"><i class="solid" style="width:'+Math.min(100,D.f.feAb/T.feAb*100)+'%;background:var(--rd)"></i><i class="milk" style="width:'+Math.max(0,Math.min(100-D.f.feAb/T.feAb*100,D.m.feAb/T.feAb*100))+'%;background:var(--rd);opacity:.62"></i><span class="goal" style="left:calc(100% - 3px)"></span></div>'
++'<div class="mu" style="font-size:10px;margin-top:4px">철 권장량 '+dri.fe+'mg은 흡수율 10%를 가정한 값이므로, 실제 흡수 목표는 <b>'+rnd2(T.feAb)+'mg</b>입니다. 총 섭취 '+rnd(D.f.fe+D.m.fe)+'mg 중 흡수 추정 '+rnd2(feTot)+'mg</div></div></div>'
++'<div class="cd" style="background:#FBF6F2"><b style="font-size:12.5px">추천 '+MEALS()+'끼를 모두 먹으면 (이유식만)</b><div class="g5" style="margin-top:8px">'+NK.map(function(k){var p=Math.round(pAcc[k]/T.solid[k]*100);return '<div style="text-align:center;background:#fff;border-radius:9px;padding:7px 2px"><div class="mu" style="font-size:9.5px">'+NL[k][0]+'</div><b style="color:'+lvCol(p)+';font-size:15px">'+p+'%</b></div>'}).join('')+'</div><div class="mu" style="font-size:10px;margin-top:6px">이유식 담당 목표 대비 · 흡수철 '+rnd2(pAcc.feAb)+'mg</div></div>'
 +'<div class="st">🍽 오늘 '+MEALS()+'끼 추천</div>'
-+rec.map(function(r,i){if(!r)return '';return '<div class="cd" style="padding:10px"><div class="rw" style="justify-content:space-between;align-items:center;margin-bottom:6px"><b style="font-size:12.5px;color:var(--pd)">'+sl[i]+'</b><span><button class="mu" style="font-weight:700;color:var(--bl)" onclick="openAlt('+i+')">🔄 대안</button> <button class="mu" style="font-weight:700;color:var(--pd);margin-left:8px" onclick="openEd(\''+r.i+'\')">✏️ 수정</button></span></div>'+rcard(r)+'<div class="rw"><button class="btn g s" onclick="qLog(\''+r.i+'\')">📝 먹었어요</button><button class="btn y s" onclick="toggleFav(\''+r.i+'\')">'+(fav[r.i]?'⭐ 해제':'☆ 즐겨찾기')+'</button></div></div>'}).join('')
++rec.map(function(r,i){if(!r)return '';var sc=mealScore(r);
+return '<div class="cd" style="padding:10px"><div class="rw" style="justify-content:space-between;align-items:center;margin-bottom:6px"><b style="font-size:12.5px;color:var(--pd)">'+sl[i]+'</b><span><button class="mu" style="font-weight:700;color:var(--bl)" onclick="openAlt('+i+')">🔄 대안</button> <button class="mu" style="font-weight:700;color:var(--pd);margin-left:8px" onclick="openEd(\''+r.i+'\')">✏️ 수정</button></span></div>'
++rcard(r)+(sc<60?'<div class="alert bad" style="margin:6px 0 8px"><span class="ic">🚨</span><div>이 메뉴만으로는 <b>1끼 목표의 '+sc+'%</b>입니다. 🔄대안에서 다른 메뉴를 고르거나 재료를 늘려보세요.</div></div>':sc<85?'<div class="alert mid" style="margin:6px 0 8px"><span class="ic">⚠️</span><div>1끼 목표의 <b>'+sc+'%</b> — 다른 끼니에서 보충해 주세요.</div></div>':'')
++'<div class="rw"><button class="btn g s" onclick="qLog(\''+r.i+'\')">📝 먹었어요</button><button class="btn y s" onclick="toggleFav(\''+r.i+'\')">'+(fav[r.i]?'⭐ 해제':'☆ 즐겨찾기')+'</button></div></div>'}).join('')
 +'<button class="btn y s" onclick="reRec()">🎲 추천 다시 받기</button>'
 +'<div class="st">'+s.n+' 기준</div><div class="cd"><div class="g2">'+cell('농도',s.ra)+cell('횟수',s.ct)+cell('1회 양',s.am)+cell('입자',s.tx)+'</div><p class="mu" style="margin:10px 0 0">'+s.ds+'</p><div class="hr"></div><ul style="margin:0;padding-left:17px;font-size:13px">'+s.td.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul><div style="margin-top:8px">'+sT('ppibbo')+'</div></div>'
 +'<div class="st">'+esc(baby.name)+'의 로드맵</div><div class="cd"><div class="rm">'+roadmap()+'</div></div>'
@@ -209,9 +244,9 @@ function undoMilk(){for(var i=logs.length-1;i>=0;i--)if(logs[i].k==='milk'&&logs
 function toggleFav(id){fav[id]=fav[id]?0:1;if(!fav[id])delete fav[id];save();render()}
 function reRec(){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),rs=recommend(si,dOld()+Math.floor(Math.random()*97),SLOTS().length);
 todaySel={k:fmt(TD())+'|'+MEALS(),ids:rs.map(function(r){return r.i})};save();render()}
-function openAlt(idx){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),L=altList(si,todaySel.ids),T=TG();
-document.getElementById('mb').innerHTML='<div class="mt2">🔄 '+SLOTS()[idx]+' 메뉴 바꾸기</div><p class="mu" style="margin:6px 0 10px">영양 기여가 높은 순 · 1끼 목표 대비 %</p>'
-+L.map(function(r){var n=nutOf(r).t;return '<button class="rc" onclick="pickAlt('+idx+',\''+r.i+'\')"><div class="th">'+thumb(r)+'</div><div style="flex:1"><div class="nm">'+esc(r.n)+'</div><div class="ds">흡수철 '+rnd2(n.feAb)+'mg · 단백 '+Math.round(n.p/T.meal.p*100)+'% · 칼슘 '+Math.round(n.ca/T.meal.ca*100)+'% · '+Math.round(n.kcal)+'kcal</div></div><div class="ar">＋</div></button>'}).join('')
+function openAlt(idx){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),L=altList(si,todaySel.ids);
+document.getElementById('mb').innerHTML='<div class="mt2">🔄 '+SLOTS()[idx]+' 메뉴 바꾸기</div><p class="mu" style="margin:6px 0 10px">1끼 영양 점수가 높은 순입니다. 🚨는 60% 미만, ⚠️는 85% 미만</p>'
++L.map(function(r){return '<div onclick="pickAlt('+idx+',\''+r.i+'\')">'+rcard(r)+'</div>'}).join('')
 +'<button class="btn y" onclick="closeM()">닫기</button>';document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
 function pickAlt(idx,id){todaySel.ids[idx]=id;save();closeM();render()}
 function miles(){var b=d0(baby.birth);return [[4,'이유식 준비 관찰',['목 가누기·앉은 자세 확인','어른 음식에 관심 보이는지 관찰']],
@@ -224,6 +259,7 @@ function miles(){var b=d0(baby.birth);return [[4,'이유식 준비 관찰',['목
 function roadmap(){var M=miles(),ni=-1;for(var i=0;i<M.length;i++)if(M[i].dd>0){ni=i;break}
 return M.map(function(x,i){var c=x.dd<=0?(i===(ni===-1?M.length-1:ni-1)?'nw2':'dn'):'';
 return '<div class="ri '+c+'"><div class="dt"></div><div class="wh">만 '+x.m+'개월 · '+fmt(x.dt)+(x.dd>0?' <span style="color:var(--pd)">D-'+x.dd+'</span>':'')+'</div><h4>'+x.t+'</h4><ul>'+x.td.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul></div>'}).join('')}
+
 /*========== 식단 · 장보기 · 큐브 ==========*/
 function genPlan(){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),ws=wkStart(),n=SLOTS().length,d=[],prev=[];
 for(var i=0;i<7;i++){var rs=recommend(si,dOld()+i*3,n,prev);d.push(rs.map(function(r){return r.i}));
@@ -231,23 +267,25 @@ prev=[];rs.forEach(function(r){mainKeys(r).forEach(function(k){if(k.charAt(0)===
 plan={ws:ymd(ws),n:n,d:d};shopChk={};save()}
 function vPlan(){return '<div class="tt"><button class="'+(pTab==='w'?'on':'')+'" onclick="pTab=\'w\';render()">🗓 주간</button><button class="'+(pTab==='s'?'on':'')+'" onclick="pTab=\'s\';render()">🛒 장보기</button><button class="'+(pTab==='c'?'on':'')+'" onclick="pTab=\'c\';render()">🧊 큐브</button></div>'+(pTab==='w'?vWeek():pTab==='s'?vShop():vCube())}
 function vWeek(){if(!plan||plan.ws!==ymd(wkStart())||plan.n!==SLOTS().length)genPlan();
-var ws=d0(plan.ws),sl=SLOTS(),DW=['월','화','수','목','금','토','일'],T=TG();
-var h='<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><b>🗓 '+fmt(ws)+' 주간 식단</b><button class="mu" style="color:var(--bl);font-weight:700" onclick="genPlan();render()">🎲 자동 편성</button></div><p class="mu" style="margin:5px 0 0">단백질 재료가 이어지지 않게 배치했습니다. 칸을 눌러 교체하세요.</p></div>';
-h+='<div class="cd" style="padding:8px"><table class="wk"><tr><th></th>'+sl.map(function(s){return '<th>'+s+'</th>'}).join('')+'</tr>';
+var ws=d0(plan.ws),sl=SLOTS(),DW=['월','화','수','목','금','토','일'],T=TG(),badN=0;
+var h='<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><b>🗓 '+fmt(ws)+' 주간 식단</b><button class="mu" style="color:var(--bl);font-weight:700" onclick="genPlan();render()">🎲 자동 편성</button></div><p class="mu" style="margin:5px 0 0">칸을 눌러 교체하세요. 🚨 60% 미만 · ⚠️ 85% 미만</p></div>';
+var tbl='<div class="cd" style="padding:8px"><table class="wk"><tr><th></th>'+sl.map(function(s){return '<th>'+s+'</th>'}).join('')+'</tr>';
 for(var i=0;i<7;i++){var dt=addD(ws,i),td=ymd(dt)===ymd(TD());
-h+='<tr><th>'+DW[i]+'<br><span style="font-weight:400">'+(dt.getMonth()+1)+'/'+dt.getDate()+'</span></th>';
-for(var j=0;j<sl.length;j++){var r=getR(plan.d[i][j]);
-h+='<td class="'+(td?'tdy':'')+'" onclick="swapPlan('+i+','+j+')">'+(r?'<span class="mn">'+esc(r.n.length>11?r.n.slice(0,11)+'…':r.n)+'</span><span class="mu" style="font-size:9px">흡수철 '+rnd2(nutOf(r).t.feAb)+'</span>':'-')+'</td>'}
-h+='</tr>'}h+='</table></div>';
+tbl+='<tr><th>'+DW[i]+'<br><span style="font-weight:400">'+(dt.getMonth()+1)+'/'+dt.getDate()+'</span></th>';
+for(var j=0;j<sl.length;j++){var r=getR(plan.d[i][j]),sc=r?mealScore(r):0,lv=r?lvl(sc):'';if(lv==='bad')badN++;
+tbl+='<td class="'+(td?'tdy ':'')+(lv==='ok'?'':lv)+'" onclick="swapPlan('+i+','+j+')">'+(r?'<span class="mn">'+(lv!=='ok'?lvIco(sc)+' ':'')+esc(r.n.length>10?r.n.slice(0,10)+'…':r.n)+'</span><span class="mu" style="font-size:9.5px;font-weight:800;color:'+lvCol(sc)+'">'+sc+'%</span>':'-')+'</td>'}
+tbl+='</tr>'}tbl+='</table></div>';
+if(badN)h+='<div class="alert bad"><span class="ic">🚨</span><div>영양이 <b>60% 미만인 끼니가 '+badN+'개</b> 있습니다. 붉은 칸을 눌러 다른 메뉴로 바꿔주세요.</div></div>';
+h+=tbl;
 var wk={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0},cnt=0;
 plan.d.forEach(function(day){day.forEach(function(id){var r=getR(id);if(r){var n=nutOf(r).t;NK.forEach(function(k){wk[k]+=n[k]});wk.feAb+=n.feAb;cnt++}})});
-h+='<div class="st">주간 평균 (1일 이유식 기준)</div><div class="cd">'+NK.map(function(k){var v=wk[k]/7,pc=v/T.solid[k]*100;
-return '<div style="margin-bottom:8px"><div class="rw" style="justify-content:space-between;font-size:12.5px"><span style="font-weight:700">'+NL[k][0]+'</span><span>'+rnd(v)+NL[k][1]+' <b style="color:'+NL[k][2]+'">'+Math.round(pc)+'%</b></span></div><div class="sb2" style="height:9px"><i style="width:'+Math.min(100,pc)+'%;background:'+NL[k][2]+'"></i></div></div>'}).join('')
-+'<div class="mu" style="font-size:10.5px;margin-top:5px">총 '+cnt+'끼 · 하루 흡수철 평균 '+rnd2(wk.feAb/7)+'mg (이유식 담당 목표 '+rnd2(T.feAb*T.sf)+'mg)</div></div>'
+h+='<div class="st">주간 평균 (1일 이유식 기준)</div><div class="cd">'+NK.map(function(k){var v=wk[k]/7,pc=v/T.solid[k]*100,lv=lvl(pc);
+return '<div class="nrow"><div class="nhd"><div class="nnm"><i class="ndot" style="background:'+NL[k][2]+'"></i>'+NL[k][0]+' <span class="badge '+lv+'">'+lvIco(pc)+'</span></div><div><div class="npc" style="color:'+lvCol(pc)+';font-size:16px">'+Math.round(pc)+'%</div><div class="nval">'+rnd(v)+' / '+rnd(T.solid[k])+NL[k][1]+'</div></div></div><div class="bar" style="height:17px"><i class="solid" style="width:'+Math.min(100,pc)+'%;background:'+NL[k][2]+'"></i><span class="goal" style="left:calc(100% - 3px)"></span></div></div>'}).join('')
++'<div class="mu" style="font-size:10.5px;margin-top:7px">총 '+cnt+'끼 · 하루 흡수철 평균 '+rnd2(wk.feAb/7)+'mg (이유식 담당 목표 '+rnd2(T.feAb*T.sf)+'mg)</div></div>'
 +'<button class="btn g s" onclick="pTab=\'s\';render()">🛒 장보기 리스트 만들기</button>';return h}
 function swapPlan(i,j){var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),L=altList(si,[plan.d[i][j]]);
-document.getElementById('mb').innerHTML='<div class="mt2">메뉴 교체</div><p class="mu" style="margin:6px 0 10px">'+['월','화','수','목','금','토','일'][i]+'요일 '+SLOTS()[j]+'</p>'
-+L.map(function(r){var n=nutOf(r).t;return '<button class="rc" onclick="doSwap('+i+','+j+',\''+r.i+'\')"><div class="th">'+thumb(r)+'</div><div style="flex:1"><div class="nm">'+esc(r.n)+'</div><div class="ds">흡수철 '+rnd2(n.feAb)+'mg · 단백 '+rnd(n.p)+'g · '+Math.round(n.kcal)+'kcal</div></div><div class="ar">＋</div></button>'}).join('')
+document.getElementById('mb').innerHTML='<div class="mt2">메뉴 교체</div><p class="mu" style="margin:6px 0 10px">'+['월','화','수','목','금','토','일'][i]+'요일 '+SLOTS()[j]+' · 영양 점수 높은 순</p>'
++L.map(function(r){return '<div onclick="doSwap('+i+','+j+',\''+r.i+'\')">'+rcard(r)+'</div>'}).join('')
 +'<button class="btn y" onclick="closeM()">닫기</button>';document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
 function doSwap(i,j,id){plan.d[i][j]=id;shopChk={};save();closeM();render()}
 function shopList(){if(!plan)genPlan();var need={};
@@ -331,8 +369,6 @@ function setQ(d){qty=Math.max(1,Math.min(10,qty+d));document.getElementById('mb'
 function closeM(){document.getElementById('md').classList.remove('on');document.body.style.overflow=''}
 function openSrc(k){var s=SRC[k];document.getElementById('mb').innerHTML='<div class="mt2">📎 출처</div><div class="cd" style="margin-top:10px"><span class="tg v">'+s.t+'</span><b style="display:block;margin:6px 0">'+s.n+'</b><p class="mu" style="margin:0">'+s.d+'</p><div class="hr"></div><a href="'+s.u+'" target="_blank" rel="noopener">'+s.u+'</a></div><button class="btn y" onclick="closeM()">닫기</button>';
 document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
-
-/*========== 사진 ==========*/
 function pickPh(k){phT=k;document.getElementById('fi').click()}
 function delPh(k){delete ph[k];save();document.getElementById('mb').innerHTML=rBody();render()}
 
@@ -340,7 +376,7 @@ function delPh(k){delete ph[k];save();document.getElementById('mb').innerHTML=rB
 function openEd(id){var r=id?getR(id):null;
 ME=r?JSON.parse(JSON.stringify(r)):{i:'my'+Date.now(),my:1,n:'',s:IDS.indexOf(curS().id==='ready'?'early':curS().id),y:'p',tm:'',g:[],st:[''],tip:'',sv:1,sr:['ppibbo']};
 ME.orig=(id&&r&&!r.my)?id:null;drawEd();document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
-function drawEd(){var nu=nutOf(ME),T=TG(),ks=Object.keys(NUT);
+function drawEd(){var nu=nutOf(ME),T=TG(),ks=Object.keys(NUT),sc=ME.g.length?mealScore(ME):0;
 document.getElementById('mb').innerHTML='<div class="mt2" style="margin-bottom:4px">'+(ME.orig?'✏️ 레시피 수정':(ME.n?'✏️ 내 메뉴 수정':'＋ 나의 메뉴 만들기'))+'</div>'
 +(ME.orig?'<p class="mu" style="margin:0 0 10px">메뉴명·재료·중량 모두 수정 가능. 이 기기에만 저장되고 원본은 보존됩니다.</p>':'')
 +'<div class="cd"><div class="fd"><label>메뉴 이름</label><input type="text" value="'+esc(ME.n)+'" oninput="ME.n=this.value"></div>'
@@ -352,11 +388,12 @@ document.getElementById('mb').innerHTML='<div class="mt2" style="margin-bottom:4
 +'<div class="hr"></div><div class="fd" style="margin-bottom:8px"><label>기본 재료 선택 (영양 자동 계산)</label><select id="eK" onchange="document.getElementById(\'eN\').value=this.value"><option value="">— 직접 입력 —</option>'+ks.map(function(k){return '<option>'+k+'</option>'}).join('')+'</select></div>'
 +'<div class="ei"><input id="eN" style="flex:1.4" placeholder="재료명"><input id="eQ" style="flex:.62" type="number" placeholder="20"><select id="eU" style="flex:.52"><option>g</option><option>ml</option><option>개</option><option>방울</option></select></div>'
 +'<button class="btn g s" onclick="addIng()">＋ 재료 추가</button></div>'
-+'<div class="cd"><b style="font-size:13px">🍀 자동 계산 영양 (1회분)</b><div class="mu" style="font-size:10.5px;margin:3px 0 8px">1끼 목표 = '+(T.use?'체중 '+T.w+'kg':'표준')+' 하루 목표 × 이유식 '+Math.round(T.sf*100)+'% ÷ '+MEALS()+'끼</div>'
-+NK.map(function(k){var pc=nu.t[k]/T.meal[k]*100;
-return '<div style="margin-bottom:8px"><div class="rw" style="justify-content:space-between;font-size:12px"><span style="font-weight:700">'+NL[k][0]+'</span><span>'+rnd(nu.t[k])+NL[k][1]+' <b style="color:'+NL[k][2]+'">1끼 '+Math.round(pc)+'%</b> · 하루 '+Math.round(nu.t[k]/T.day[k]*100)+'%</span></div><div class="sb2" style="height:9px"><i style="width:'+Math.min(100,pc)+'%;background:'+NL[k][2]+'"></i></div></div>'}).join('')
-+'<div class="rw" style="justify-content:space-between;font-size:12px"><span style="font-weight:800;color:var(--rd)">🩸 흡수 추정 철분</span><span>'+rnd2(nu.t.feAb)+'mg · 하루 흡수목표의 '+Math.round(nu.t.feAb/T.feAb*100)+'%</span></div><div class="sb2" style="height:9px"><i style="width:'+Math.min(100,nu.t.feAb/T.feAb*100)+'%;background:var(--rd)"></i></div>'
-+'<div class="mu" style="font-size:10px;margin-top:4px">헴철 '+rnd2(nu.hm)+' · 비헴철 '+rnd2(nu.nh)+' · 비타민C '+rnd(nu.t.vc)+'mg</div></div>'
++'<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><b style="font-size:13px">🍀 자동 계산 영양 (1회분)</b><span class="badge '+lvl(sc)+'" style="font-size:12px;padding:5px 10px">'+lvIco(sc)+' 종합 '+sc+'%</span></div>'
++'<div class="mu" style="font-size:10.5px;margin:4px 0 8px">1끼 목표 = '+(T.use?'체중 '+T.w+'kg':'표준')+' 하루 목표 × 이유식 '+Math.round(T.sf*100)+'% ÷ '+MEALS()+'끼</div>'
++NK.map(function(k){var pc=nu.t[k]/T.meal[k]*100,lv=lvl(pc);
+return '<div class="nrow"><div class="nhd"><div class="nnm" style="font-size:13px"><i class="ndot" style="background:'+NL[k][2]+'"></i>'+NL[k][0]+' <span class="badge '+lv+'">'+lvIco(pc)+'</span></div><div><div class="npc" style="color:'+lvCol(pc)+';font-size:15px">'+Math.round(pc)+'%</div><div class="nval">'+rnd(nu.t[k])+NL[k][1]+'</div></div></div><div class="bar" style="height:15px"><i class="solid" style="width:'+Math.min(100,pc)+'%;background:'+NL[k][2]+'"></i><span class="goal" style="left:calc(100% - 3px)"></span></div></div>'}).join('')
++'<div class="nrow"><div class="nhd"><div class="nnm" style="font-size:13px">🩸 흡수 철분 <span class="badge '+lvl(nu.t.feAb/(T.feAb/MEALS())*100)+'">'+lvIco(nu.t.feAb/(T.feAb/MEALS())*100)+'</span></div><div><div class="npc" style="color:var(--rd);font-size:15px">'+Math.round(nu.t.feAb/(T.feAb/MEALS())*100)+'%</div><div class="nval">'+rnd2(nu.t.feAb)+'mg</div></div></div><div class="bar" style="height:15px"><i class="solid" style="width:'+Math.min(100,nu.t.feAb/(T.feAb/MEALS())*100)+'%;background:var(--rd)"></i><span class="goal" style="left:calc(100% - 3px)"></span></div>'
++'<div class="mu" style="font-size:10px;margin-top:3px">헴철 '+rnd2(nu.hm)+' · 비헴철 '+rnd2(nu.nh)+' · 비타민C '+rnd(nu.t.vc)+'mg</div></div></div>'
 +feCoach(nu)
 +'<div class="st">만드는 순서 (그림 자동 매칭)</div><div class="cd">'
 +ME.st.map(function(s,i){return '<div class="rw" style="margin-bottom:6px;align-items:center"><div style="flex:0 0 40px;height:31px;border-radius:8px;overflow:hidden;border:1px solid var(--ln)">'+ART(kOf(s))+'</div><input value="'+esc(s)+'" oninput="ME.st['+i+']=this.value" onblur="drawEd()" placeholder="'+(i+1)+'단계" style="flex:1;padding:10px;border:1.5px solid var(--ln);border-radius:11px"><button style="color:var(--sub);padding:0 4px" onclick="ME.st.splice('+i+',1);drawEd()">✕</button></div>'}).join('')
@@ -408,13 +445,13 @@ new Notification('🔔 알레르기 관찰 '+due.length+'건',{body:due.map(func
 function openF(n){var f=null;FD.forEach(function(x){if(x[0]===n)f=x});var m=ageM(),t=tried[n],nv=NUT[f[4]],T=TG();
 var rs=RCP().filter(function(r){return (r.g||[]).filter(function(x){return x[3]===f[4]}).length});
 document.getElementById('mb').innerHTML='<div style="font-size:40px;text-align:center">'+f[1]+'</div><div class="mt2" style="text-align:center">'+f[0]+'</div>'
-+'<div style="text-align:center;margin:6px 0 12px"><span class="tg m">'+f[2]+'</span><span class="tg '+(m>=f[3]?'p':'')+'">'+f[3]+'개월부터</span>'+(nv&&nv[6]==='h'?'<span class="tg r">헴철(흡수율 높음)</span>':'')+(nv&&nv[5]>=30?'<span class="tg" style="background:#FFF6EC;color:#B07C13">비타민C 풍부</span>':'')+(f[6]===1?'<span class="tg v">알레르기 주의</span>':'')+(f[6]===2?'<span class="tg r">특별 주의</span>':'')+'</div>'
++'<div style="text-align:center;margin:6px 0 12px"><span class="tg m">'+f[2]+'</span><span class="tg '+(m>=f[3]?'p':'')+'">'+f[3]+'개월부터</span>'+(nv&&nv[6]==='h'?'<span class="tg r">헴철(흡수율 높음)</span>':'')+(nv&&nv[5]>=30?'<span class="tg w">비타민C 풍부</span>':'')+(f[6]===1?'<span class="tg v">알레르기 주의</span>':'')+(f[6]===2?'<span class="tg r">특별 주의</span>':'')+'</div>'
 +'<div class="cd">'+f[5]+'</div>'
 +(nv?'<div class="cd"><b style="font-size:13px">100g당 영양 · 하루 목표 대비</b><table class="tb" style="margin-top:5px"><tr><th></th><th>열량</th><th>단백질</th><th>철분</th><th>칼슘</th><th>아연</th><th>비타민C</th></tr><tr><td>100g</td><td>'+nv[0]+'</td><td>'+nv[1]+'</td><td>'+nv[2]+'</td><td>'+nv[3]+'</td><td>'+nv[4]+'</td><td>'+nv[5]+'</td></tr><tr><td>하루%</td>'+NK.map(function(k,i){return '<td><b style="color:'+NL[k][2]+'">'+Math.round(nv[i]/T.day[k]*100)+'%</b></td>'}).join('')+'<td>-</td></tr></table>'
 +'<div class="mu" style="font-size:10.5px;margin-top:5px">철분 종류: <b>'+(nv[6]==='h'?'헴철 — 흡수율 약 20~25%':'비헴철 — 흡수율 약 5%, 비타민C와 함께 먹으면 2~3배 상승')+'</b></div></div>':'')
-+(m<f[3]?'<div class="wn">아직 이른 재료예요. <b>'+fmt(addM(d0(baby.birth),f[3]))+'</b>(만 '+f[3]+'개월) 이후에 시도해 보세요.</div>':'')
++(m<f[3]?'<div class="alert bad"><span class="ic">⏳</span><div>아직 이른 재료예요. <b>'+fmt(addM(d0(baby.birth),f[3]))+'</b>(만 '+f[3]+'개월) 이후에 시도해 보세요.</div></div>':'')
 +'<div class="st">관찰 · 반응</div><div class="cd"><button class="btn g s" onclick="startObs(\''+n+'\')">🔔 이 재료로 3일 관찰 시작</button><div class="ch" style="margin-top:9px">'+[['ok','😊 잘 먹었어요'],['watch','😐 관찰 중'],['bad','😖 반응 있었어요']].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="setF(\''+n+'\',\''+x[0]+'\')">'+x[1]+'</button>'}).join('')+'</div>'
-+(t==='bad'?'<div class="wn" style="margin-top:9px">호흡 곤란·얼굴 부기·심한 구토가 있으면 즉시 병원에 가세요.</div>':'')+'</div>'
++(t==='bad'?'<div class="alert bad" style="margin-top:9px"><span class="ic">🚑</span><div>호흡 곤란·얼굴 부기·심한 구토가 있으면 즉시 병원에 가세요.</div></div>':'')+'</div>'
 +(rs.length?'<div class="st">이 재료로 만드는 메뉴</div>'+rs.map(function(r){return rcard(r)}).join(''):'')
 +'<button class="btn y" onclick="closeM()">닫기</button>';
 document.getElementById('md').classList.add('on');document.body.style.overflow='hidden'}
@@ -430,11 +467,13 @@ return '<div class="cd"><b>📈 성장 기록</b><p class="mu" style="margin:5px
 +'<div class="rw" style="margin-top:8px"><div class="fd" style="flex:1;margin:0"><label>몸무게 kg</label><input id="grW" type="number" step="0.01" placeholder="8.2"></div><div class="fd" style="flex:1;margin:0"><label>키 cm</label><input id="grH" type="number" step="0.1" placeholder="70.5"></div><div class="fd" style="flex:1;margin:0"><label>머리둘레</label><input id="grC" type="number" step="0.1" placeholder="44"></div></div>'
 +'<button class="btn" style="margin-top:10px" onclick="addGrow()">＋ 측정 기록 저장</button></div>'
 +'<div class="tt">'+['w','h','c'].map(function(k){return '<button class="'+(gK===k?'on':'')+'" onclick="gK=\''+k+'\';render()">'+GN[k][0]+'</button>'}).join('')+'</div>'
-+(last?'<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><div><b style="font-size:19px">'+last[gK]+GN[gK][1]+'</b> <span class="mu">'+last.d+'</span>'
-+(prev?'<div class="mu" style="font-size:11px">지난 기록('+prev.d+') 대비 <b style="color:'+(+last[gK]>=+prev[gK]?'#2E9C7D':'var(--rd)')+'">'+(+last[gK]-+prev[gK]>=0?'+':'')+rnd2(+last[gK]-+prev[gK])+GN[gK][1]+'</b></div>':'')+'</div>'
-+'<div style="text-align:right"><span class="pill2" style="background:'+(pc<3||pc>97?'#FDEAE5':pc<15||pc>85?'#FFF6EC':'#E4F6F0')+';color:'+(pc<3||pc>97?'var(--rd)':pc<15||pc>85?'#B07C13':'#2E9C7D')+'">추정 '+(pc<1?'<1':pc>99?'>99':Math.round(pc))+' 백분위</span><div class="mu" style="font-size:10px;margin-top:3px">만 '+Math.floor(ageMAt(last.d))+'개월 · '+(sx==='m'?'남아':'여아')+'</div></div></div>'
-+'<div class="mu" style="font-size:11px;margin-top:8px">'+(pc<3?'⚠️ 3 백분위 미만입니다. 성장 속도와 함께 소아과에서 확인해 보세요.':pc>97?'⚠️ 97 백분위를 넘습니다. 소아과에서 확인해 보세요.':pc<15?'하위 구간이지만 정상 범위입니다. 곡선을 따라 꾸준히 올라가는지가 더 중요해요.':pc>85?'상위 구간이지만 정상 범위입니다.':'정상 범위(3~97 백분위)에서 잘 자라고 있어요 👍')+'</div></div>':'<div class="cd mu">아직 '+GN[gK][0]+' 기록이 없어요.</div>')
-+'<div class="cd" style="padding:10px">'+gChart(gK,sx)+'<div class="lgd" style="justify-content:center"><span><b style="background:#DCE9F7"></b>3~97 백분위</span><span><b style="background:#6E9FD4"></b>50 백분위</span><span><b style="background:var(--pd)"></b>우리 아기</span></div></div>'
++(last?'<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><div><b style="font-size:21px">'+last[gK]+GN[gK][1]+'</b> <span class="mu">'+last.d+'</span>'
++(prev?'<div class="mu" style="font-size:11px">지난 기록('+prev.d+') 대비 <b style="color:'+(+last[gK]>=+prev[gK]?'var(--ok)':'var(--rd)')+'">'+(+last[gK]-+prev[gK]>=0?'+':'')+rnd2(+last[gK]-+prev[gK])+GN[gK][1]+'</b></div>':'')+'</div>'
++'<div style="text-align:right"><span class="pill2" style="background:'+(pc<3||pc>97?'#FFE3DC':pc<15||pc>85?'#FFF1CC':'#DFF4EC')+';color:'+(pc<3||pc>97?'#C0350F':pc<15||pc>85?'#8A5D00':'#1F7A5F')+'">'+(pc<3||pc>97?'🚨 ':pc<15||pc>85?'⚠️ ':'✅ ')+Math.round(pc)+' 백분위</span><div class="mu" style="font-size:10px;margin-top:3px">만 '+Math.floor(ageMAt(last.d))+'개월 · '+(sx==='m'?'남아':'여아')+'</div></div></div>'
++(pc<3||pc>97?'<div class="alert bad" style="margin-top:9px"><span class="ic">🚨</span><div>'+(pc<3?'3 백분위 미만입니다.':'97 백분위를 넘습니다.')+' 성장 속도와 함께 <b>소아과에서 확인</b>해 보세요.</div></div>'
+:pc<15||pc>85?'<div class="alert mid" style="margin-top:9px"><span class="ic">⚠️</span><div>'+(pc<15?'하위':'상위')+' 구간이지만 <b>정상 범위</b>입니다. 곡선을 따라 꾸준히 올라가는지가 더 중요해요.</div></div>'
+:'<div class="alert ok" style="margin-top:9px"><span class="ic">✅</span><div>정상 범위(3~97 백분위)에서 잘 자라고 있어요!</div></div>')+'</div>':'<div class="cd mu">아직 '+GN[gK][0]+' 기록이 없어요.</div>')
++'<div class="cd" style="padding:10px">'+gChart(gK,sx)+'<div class="sub2" style="justify-content:center;margin-top:6px"><span><b style="background:#DCE9F7"></b>3~97 백분위</span><span><b style="background:#6E9FD4"></b>50 백분위</span><span><b style="background:var(--pd)"></b>우리 아기</span></div></div>'
 +(recs.length?'<div class="st">측정 이력</div><div class="cd">'+recs.slice().reverse().map(function(g){var m2=Math.min(24,Math.max(0,ageMAt(g.d))),p=pctOf(+g[gK],ipol(A.p3,m2),ipol(A.p50,m2),ipol(A.p97,m2));
 return '<div class="cb"><div style="flex:1"><b style="font-size:13.5px">'+g[gK]+GN[gK][1]+'</b> <span class="mu">'+g.d+' · 만 '+Math.floor(m2)+'개월</span></div><span class="mu">'+Math.round(p)+'%ile</span><button class="mu" style="font-size:15px;padding:0 4px" onclick="delGrow(\''+g.id+'\')">✕</button></div>'}).join('')+'</div>':'')
 +'<div class="cd" style="background:#F3F6FA;font-size:11.5px"><b>성장곡선 읽는 법</b><ul style="margin:5px 0 0;padding-left:16px;color:var(--sub)"><li>한 시점의 백분위보다 <b>곡선을 따라 꾸준히 자라는지</b>가 중요합니다.</li><li>2개 이상의 백분위 구간을 급하게 벗어나면 소아과 상담을 권합니다.</li><li>모유수유아는 6개월 이후 체중 증가가 완만해지는 것이 자연스럽습니다.</li></ul><div style="margin-top:7px">'+sT('who')+sT('kdca')+'</div><div class="mu" style="font-size:10px;margin-top:5px">※ WHO 기준의 월별 근사값이며 머리둘레는 P50±2.6cm로 근사했습니다.</div></div>'}
@@ -450,8 +489,8 @@ for(var mm=0;mm<=24;mm+=6){g+='<line x1="'+X(mm)+'" y1="'+Tp+'" x2="'+X(mm)+'" y
 g+='<path d="'+band+'" fill="#DCE9F7" opacity=".55"/><path d="'+line(A.p50)+'" fill="none" stroke="#6E9FD4" stroke-width="1.8"/>';
 g+='<path d="'+line(A.p3)+'" fill="none" stroke="#A9C4E0" stroke-width="1" stroke-dasharray="3 2"/><path d="'+line(A.p97)+'" fill="none" stroke="#A9C4E0" stroke-width="1" stroke-dasharray="3 2"/>';
 var pts=recs.map(function(r){return {x:X(Math.min(24,Math.max(0,ageMAt(r.d)))),y:Y(+r[k])}}).sort(function(a,b){return a.x-b.x});
-if(pts.length>1)g+='<path d="'+pts.map(function(p,i){return (i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)}).join(' ')+'" fill="none" stroke="#F2734B" stroke-width="2"/>';
-pts.forEach(function(p){g+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="3.4" fill="#F2734B" stroke="#fff" stroke-width="1.4"/>'});
+if(pts.length>1)g+='<path d="'+pts.map(function(p,i){return (i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)}).join(' ')+'" fill="none" stroke="#F2734B" stroke-width="2.4"/>';
+pts.forEach(function(p){g+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="4" fill="#F2734B" stroke="#fff" stroke-width="1.6"/>'});
 g+='<text x="'+(L+2)+'" y="'+(Tp+9)+'" font-size="9" font-weight="bold" fill="#3E3A38">'+GN[k][0]+' ('+GN[k][1]+') · '+(sx==='m'?'남아':'여아')+'</text></svg>';return g}
 function addGrow(){var d=document.getElementById('grD').value,w=document.getElementById('grW').value,h=document.getElementById('grH').value,c=document.getElementById('grC').value;
 if(!d)return alert('날짜를 선택해 주세요');if(!w&&!h&&!c)return alert('측정값을 하나 이상 입력해 주세요');
@@ -461,7 +500,8 @@ function delGrow(id){if(!confirm('이 기록을 삭제할까요?'))return;grow=g
 /*========== 기록 ==========*/
 function vLog(){var by={};logs.slice().reverse().forEach(function(l){(by[l.d]=by[l.d]||[]).push(l)});
 var si=IDS.indexOf(curS().id==='ready'?'early':curS().id),op=RCP().filter(function(r){return r.s===si}),D=todaySum(),T=TG();
-return '<div class="cd" style="background:#FBF6F2"><b>오늘 요약</b><div class="rw" style="margin-top:6px"><div style="flex:1;text-align:center"><div class="mu" style="font-size:10px">이유식</div><b>'+D.cnt+'끼</b></div><div style="flex:1;text-align:center"><div class="mu" style="font-size:10px">수유</div><b>'+D.ml+'ml</b></div><div style="flex:1;text-align:center"><div class="mu" style="font-size:10px">열량</div><b>'+Math.round(D.f.kcal+D.m.kcal)+'</b></div><div style="flex:1;text-align:center"><div class="mu" style="font-size:10px">흡수철</div><b>'+rnd2(D.f.feAb+D.m.feAb)+'mg</b></div></div></div>'
+return '<div class="cd" style="background:#FBF6F2"><b>오늘 요약</b><div class="rw" style="margin-top:7px">'
++[['이유식',D.cnt+'끼'],['수유',D.ml+'ml'],['열량',Math.round(D.f.kcal+D.m.kcal)],['흡수철',rnd2(D.f.feAb+D.m.feAb)+'mg']].map(function(x){return '<div style="flex:1;text-align:center;background:#fff;border-radius:9px;padding:8px 2px"><div class="mu" style="font-size:10px">'+x[0]+'</div><b style="font-size:14px">'+x[1]+'</b></div>'}).join('')+'</div></div>'
 +'<div class="cd"><b style="font-size:15px">📝 이유식 기록</b>'
 +'<div class="fd" style="margin:12px 0 10px"><label>메뉴</label><input id="gN" list="gL" placeholder="메뉴명 입력 또는 선택"><datalist id="gL">'+op.map(function(r){return '<option>'+esc(r.n)+'</option>'}).join('')+'</datalist></div>'
 +'<div class="rw"><div class="fd" style="flex:1;margin:0"><label>먹은 양(g)</label><input id="gA" type="number" placeholder="80"></div><div class="fd" style="flex:1;margin:0"><label>시간</label><select id="gT">'+SLOTS().concat(['간식']).map(function(s){return '<option>'+s+'</option>'}).join('')+'</select></div></div>'
@@ -472,7 +512,8 @@ return '<div class="cd" style="background:#FBF6F2"><b>오늘 요약</b><div clas
 +'<div class="st">지난 기록 '+(logs.length?'('+logs.length+')':'')+'</div>'
 +(logs.length?Object.keys(by).map(function(d){var s={kcal:0,p:0,fe:0,ca:0,zn:0,feAb:0},ml=0;
 by[d].forEach(function(l){if(l.k==='milk'){ml+=+l.ml||0;var n=milkNut(+l.ml||0,l.mt||MTYPE());NK.forEach(function(k){s[k]+=n[k]});s.feAb+=n.feAb}else{NK.forEach(function(k){s[k]+=(l.nu&&l.nu[k])||0});s.feAb+=(l.nu&&l.nu.feAb)||0}});
-return '<div class="cd"><div class="rw" style="justify-content:space-between"><b style="font-size:13px;color:var(--pd)">'+d+'</b><span class="mu" style="font-size:10px">'+Math.round(s.kcal)+'kcal('+Math.round(s.kcal/T.day.kcal*100)+'%) · 흡수철 '+rnd2(s.feAb)+'mg · 수유 '+ml+'ml</span></div>'+by[d].map(function(l){
+var kp=Math.round(s.kcal/T.day.kcal*100);
+return '<div class="cd"><div class="rw" style="justify-content:space-between;align-items:center"><b style="font-size:13px;color:var(--pd)">'+d+'</b><span class="badge '+lvl(kp)+'">'+lvIco(kp)+' 열량 '+kp+'%</span></div><div class="mu" style="font-size:10px;margin:3px 0 4px">'+Math.round(s.kcal)+'kcal · 흡수철 '+rnd2(s.feAb)+'mg · 수유 '+ml+'ml</div>'+by[d].map(function(l){
 return '<div class="lg2"><div style="font-size:19px">'+(l.k==='milk'?'🍼':l.rx||'🍲')+'</div><div style="flex:1"><b style="font-size:13.5px">'+esc(l.n)+'</b><div class="mu" style="font-size:10px">'+(l.t||'')+(l.a?' · '+l.a+'g':'')+(l.nu?' · 흡수철 '+rnd2(l.nu.feAb||0)+'mg':'')+'</div></div><button class="mu" style="font-size:16px;padding:2px 6px" onclick="delLog(\''+l.id+'\')">✕</button></div>'}).join('')+'</div>'}).join('')
 :'<div class="cd mu">아직 기록이 없어요.</div>')
 +(logs.length?'<button class="btn y s" onclick="csv()">CSV로 내보내기</button>':'')}
@@ -506,6 +547,7 @@ return '<div class="cd"><b>⚙️ 식사·수유 설정</b>'
 +'<tr><td>이유식 담당('+Math.round(T.sf*100)+'%)</td><td>'+Math.round(T.solid.kcal)+'</td><td>'+rnd(T.solid.p)+'</td><td>'+rnd(T.solid.fe)+'</td><td>'+Math.round(T.solid.ca)+'</td><td>'+rnd(T.solid.zn)+'</td></tr></table>'
 +'<div class="mu" style="font-size:11px;margin-top:7px">'+(T.use?'몸무게 <b>'+T.w+'kg × '+dri.ekg+'kcal/kg</b>으로 열량, <b>× '+dri.pkg+'g/kg</b>으로 단백질을 계산했습니다.':'몸무게 미입력 또는 표준 기준 선택 상태입니다.')+' 철·칼슘·아연은 체중과 무관하게 표준값을 사용합니다.</div>'
 +'<div class="mu" style="font-size:11px;margin-top:5px"><b>철분 흡수 목표 '+rnd2(T.feAb)+'mg</b> — 권장량 '+T.day.fe+'mg은 흡수율 약 10%를 가정한 값이므로, 실제 흡수되어야 하는 양은 그 10%입니다.</div>'
++'<div class="mu" style="font-size:11px;margin-top:5px"><b>경고 기준</b> — 🚨 60% 미만 / ⚠️ 60~85% / ✅ 85% 이상</div>'
 +'<div style="margin-top:7px">'+sT('kdri')+sT('fe')+'</div></div>'
 +'<div class="cd" style="background:#FFF6EC"><b>📖 이유식 기본 원칙</b><p class="mu" style="margin:6px 0 0;font-size:11px">널리 알려진 소아과적 원칙과 공공 지침을 정리한 내용입니다. 책 문장을 그대로 옮긴 것이 아니므로 원서와 담당 소아과에서 확인해 주세요.</p></div>'
 +RL.map(function(r,i){return '<div class="cd"><b style="font-size:14px">'+(i+1)+'. '+r[0]+'</b><p class="mu" style="margin:5px 0 7px">'+r[2]+'</p>'+r[1].map(sT).join('')+'</div>'}).join('')
