@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#FFB6A3">
+<title>우리 아기 이유식 노트</title>
+<style>
+:root{
+  --bg:#FFF9F5; --card:#FFFFFF; --ink:#3E3A38; --sub:#8C8480;
+  --line:#F0E6DF; --peach:#FF9E7D; --peach-d:#F2734B;
+  --mint:#7ED0B8; --lav:#A9A0E0; --sun:#FFC861;
+  --early:#8FD3C7; --mid:#FFC861; --late:#FF9E7D; --final:#A9A0E0;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;padding-bottom:78px}
+#app{max-width:520px;margin:0 auto;min-height:100vh}
+h1,h2,h3,h4{margin:0;line-height:1.35}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input,select,textarea{font-family:inherit;font-size:16px}
+
+/* ── 온보딩 ── */
+#onboard{padding:52px 24px;text-align:center}
+#onboard .hero{font-size:64px;margin-bottom:8px}
+#onboard h1{font-size:24px;margin-bottom:6px}
+#onboard p.sub{color:var(--sub);font-size:14px;margin:0 0 32px}
+.field{text-align:left;margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:700;color:var(--sub);margin-bottom:7px}
+.field input,.field select{width:100%;padding:14px;border:1.5px solid var(--line);border-radius:14px;background:#fff;outline:none}
+.field input:focus{border-color:var(--peach)}
+.btn{display:block;width:100%;padding:15px;border-radius:14px;background:var(--peach);color:#fff;font-weight:800;font-size:16px}
+.btn:active{transform:scale(.99)}
+.btn.ghost{background:#fff;color:var(--peach-d);border:1.5px solid var(--peach)}
+.btn.sm{padding:10px;font-size:14px;border-radius:11px}
+
+/* ── 헤더 ── */
+header{padding:20px 18px 14px;background:linear-gradient(160deg,#FFE7DC,#FFF9F5)}
+.hgreet{font-size:12px;color:var(--peach-d);font-weight:800;letter-spacing:.4px}
+.hname{font-size:22px;font-weight:800;margin:2px 0 2px}
+.hage{font-size:13px;color:var(--sub)}
+.stagepill{display:inline-block;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:800;color:#fff;margin-top:9px}
+
+/* ── 공통 ── */
+main{padding:14px 14px 20px}
+.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 2px 10px rgba(180,150,130,.07)}
+.sect{font-size:12px;font-weight:800;color:var(--sub);letter-spacing:.6px;margin:20px 4px 9px}
+.sect:first-child{margin-top:4px}
+.row{display:flex;gap:9px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.tag{display:inline-block;padding:3px 9px;border-radius:8px;font-size:11px;font-weight:700;background:#F7F1EC;color:var(--sub)}
+.tag.p{background:#FFEDE4;color:var(--peach-d)}
+.tag.m{background:#E4F6F0;color:#2E9C7D}
+.tag.v{background:#EEEBFB;color:#6B5FC7}
+.muted{color:var(--sub);font-size:13px}
+.hr{height:1px;background:var(--line);margin:13px 0}
+
+/* 진행바 */
+.pbar{height:9px;border-radius:9px;background:#F1E7E0;overflow:hidden;margin:11px 0 5px}
+.pbar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--mint),var(--sun),var(--peach))}
+
+/* 로드맵 */
+.rm{position:relative;padding-left:26px}
+.rm:before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.rmi{position:relative;margin-bottom:15px}
+.rmi:last-child{margin-bottom:0}
+.rmi .dot{position:absolute;left:-24px;top:4px;width:14px;height:14px;border-radius:50%;background:#fff;border:2.5px solid var(--line)}
+.rmi.done .dot{background:var(--mint);border-color:var(--mint)}
+.rmi.now .dot{background:var(--peach);border-color:var(--peach);box-shadow:0 0 0 5px rgba(255,158,125,.22)}
+.rmi h4{font-size:14.5px}
+.rmi .when{font-size:11.5px;color:var(--sub);font-weight:700}
+.rmi.now h4{color:var(--peach-d)}
+.rmi ul{margin:5px 0 0;padding-left:16px;font-size:13px;color:var(--sub)}
+
+/* 단계 탭 */
+.stab{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding:2px}
+.stab button{flex:0 0 auto;padding:9px 14px;border-radius:12px;background:#fff;font-size:13px;font-weight:700;
+  color:var(--sub);border:1.5px solid var(--line)}
+.stab button.on{color:#fff;border-color:transparent}
+.ttab{display:flex;gap:6px;margin:0 0 12px}
+.ttab button{flex:1;padding:9px;border-radius:11px;background:#F5EFEA;font-size:13px;font-weight:700;color:var(--sub)}
+.ttab button.on{background:var(--ink);color:#fff}
+
+/* 레시피 카드 */
+.rc{display:flex;gap:12px;align-items:center;background:#fff;border-radius:16px;padding:13px;margin-bottom:9px;
+  box-shadow:0 2px 8px rgba(180,150,130,.07);width:100%;text-align:left}
+.rc .emo{font-size:30px;flex:0 0 42px;text-align:center}
+.rc .nm{font-weight:800;font-size:15px}
+.rc .ds{font-size:12px;color:var(--sub);margin-top:2px}
+.rc .ar{color:#DDD2CA;font-size:20px}
+
+/* 재료 도감 */
+.ing{background:#fff;border-radius:14px;padding:11px 8px;text-align:center;box-shadow:0 2px 8px rgba(180,150,130,.06)}
+.ing .e{font-size:26px}
+.ing .n{font-size:12.5px;font-weight:700;margin-top:3px}
+.ing .m{font-size:10.5px;color:var(--sub)}
+.ing.locked{opacity:.42}
+.ing .ok{font-size:10px;color:#2E9C7D;font-weight:800}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+
+/* 모달 */
+.modal{position:fixed;inset:0;background:rgba(50,40,35,.5);z-index:60;display:flex;align-items:flex-end;
+  opacity:0;pointer-events:none;transition:.22s}
+.modal.on{opacity:1;pointer-events:auto}
+.msheet{background:var(--bg);width:100%;max-width:520px;margin:0 auto;max-height:90vh;overflow-y:auto;
+  border-radius:24px 24px 0 0;padding:8px 16px 34px;transform:translateY(30px);transition:.22s}
+.modal.on .msheet{transform:none}
+.mgrab{width:42px;height:4px;border-radius:4px;background:#E2D6CE;margin:6px auto 14px}
+.mtitle{font-size:20px;font-weight:800}
+.stepl{counter-reset:s;padding:0;margin:0;list-style:none}
+.stepl li{counter-increment:s;position:relative;padding-left:32px;margin-bottom:11px;font-size:14px}
+.stepl li:before{content:counter(s);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;
+  background:var(--peach);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ingrow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.ingrow:last-child{border:none}
+.ingrow b{font-weight:800}
+.qbox{display:flex;align-items:center;gap:10px;background:#fff;border-radius:13px;padding:10px 13px;margin-bottom:11px}
+.qbox button{width:32px;height:32px;border-radius:9px;background:#F5EFEA;font-weight:800;color:var(--peach-d)}
+.tipbox{background:#FFF6EC;border-left:3px solid var(--sun);border-radius:10px;padding:11px 13px;font-size:13.5px}
+.warn{background:#FFEFEC;border-left:3px solid #FF7A5C;border-radius:10px;padding:11px 13px;font-size:13.5px}
+
+/* 기록 */
+.logi{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.logi:last-child{border:none}
+.logi .rx{font-size:22px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{padding:8px 12px;border-radius:20px;background:#F5EFEA;font-size:13px;font-weight:700;color:var(--sub)}
+.chips button.on{background:var(--peach);color:#fff}
+
+/* 하단 내비 */
+nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);display:flex;z-index:50;padding-bottom:env(safe-area-inset-bottom)}
+nav>div{max-width:520px;margin:0 auto;width:100%;display:flex}
+nav button{flex:1;padding:9px 0 8px;font-size:10.5px;font-weight:700;color:#C3B7AF}
+nav button i{display:block;font-size:21px;font-style:normal;margin-bottom:1px}
+nav button.on{color:var(--peach-d)}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- 온보딩 -->
+  <section id="onboard">
+    <div class="hero">🍼</div>
+    <h1>우리 아기 이유식 노트</h1>
+    <p class="sub">아기 정보를 입력하면 개월수에 맞는<br>이유식 경로와 메뉴를 추천해 드려요</p>
+    <div class="field"><label>아기 이름 (또는 태명)</label><input id="inName" placeholder="예: 하윤"></div>
+    <div class="field"><label>태어난 날</label><input id="inBirth" type="date"></div>
+    <div class="field"><label>수유 방식 <span style="font-weight:400">(시작 시기 안내용)</span></label>
+      <select id="inFeed"><option value="breast">모유 위주</option><option value="formula">분유 위주</option><option value="mix">혼합</option></select></div>
+    <button class="btn" onclick="saveBaby()">시작하기</button>
+    <p class="muted" style="margin-top:18px;font-size:11.5px">입력한 정보는 이 기기에만 저장되며 외부로 전송되지 않습니다.</p>
+  </section>
+
+  <!-- 메인 -->
+  <section id="main" class="hide">
+    <header id="hdr"></header>
+    <main id="view"></main>
+  </section>
+</div>
+
+<nav id="nav" class="hide"><div>
+  <button data-t="home" class="on"><i>🏠</i>홈</button>
+  <button data-t="stage"><i>🍲</i>단계별</button>
+  <button data-t="food"><i>🥕</i>재료</button>
+  <button data-t="log"><i>📝</i>기록</button>
+  <button data-t="rule"><i>📖</i>원칙</button>
+</div></nav>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeM()">
+  <div class="msheet"><div class="mgrab"></div><div id="mbody"></div></div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   1. 데이터
+══════════════════════════════════════════════ */
+const STAGES = [
+ {id:'ready', name:'준비기', label:'~ 만 6개월', from:0, to:6, color:'#B9AFA8',
+  ratio:'-', count:'수유만', amount:'-', texture:'-',
+  desc:'아직 이유식을 시작하지 않는 시기예요. 목을 잘 가누고, 앉혀두면 상체를 유지하고, 어른 음식에 관심을 보이면 준비가 된 신호입니다.',
+  todo:['만 4개월 이전 이유식 시작은 권하지 않아요','턱받이·아기 숟가락·이유식 그릇 미리 준비','생후 6개월부터 컵으로 물 연습 시작할 예정']},
+ {id:'early', name:'초기', label:'만 6 ~ 7개월', from:6, to:7, color:'#8FD3C7',
+  ratio:'10배죽 (불린쌀 1 : 물 10)', count:'하루 1회 → 2주 후 2회', amount:'1회 30~80g', texture:'곱게 갈아 체에 내린 미음',
+  desc:'쌀미음으로 시작해 고기·채소를 빠르게 더해가는 시기. "알레르기가 걱정돼서 늦춘다"보다 조금씩 다양하게 경험시키는 편이 좋습니다.',
+  todo:['첫날은 1~2 숟갈(5~10g)로 시작','오전 수유 전, 배고플 때 먹이기','새 재료는 한 가지씩 2~3일 관찰','철분 위해 소고기를 초기부터 매일 소량','간(소금·설탕) 절대 금지']},
+ {id:'mid', name:'중기', label:'만 7 ~ 9개월', from:7, to:9, color:'#FFC861',
+  ratio:'7배죽 (불린쌀 1 : 물 7)', count:'하루 2~3회', amount:'1회 80~120g', texture:'2~3mm로 잘게 다진 무른 죽',
+  desc:'입자를 키워 씹는 연습을 시작합니다. 미음 단계에 오래 머물면 씹기 발달이 늦어질 수 있어 과감히 진행하세요.',
+  todo:['체에 걸르지 않고 잘게 다져서 주기','달걀·생선·두부 등 단백질 확대','컵으로 물 마시기 연습','이유식 → 수유 순서로, 시간 정해서 먹이기','30분 넘으면 미련 없이 치우기']},
+ {id:'late', name:'후기', label:'만 9 ~ 12개월', from:9, to:12, color:'#FF9E7D',
+  ratio:'5배죽 → 진밥 (쌀 1 : 물 5~4)', count:'하루 3회 + 간식 1~2회', amount:'1회 120~180g', texture:'0.5cm 정도, 진밥 형태',
+  desc:'하루 세 끼 리듬이 자리 잡는 시기. 손으로 집어먹는 핑거푸드를 꼭 함께 주어 스스로 먹는 연습을 시켜주세요.',
+  todo:['핑거푸드 매일 한 가지 (지저분해도 허용!)','숟가락 스스로 쥐어보게 하기','젖병 대신 컵 비중 늘리기','간식은 과일·고구마 등, 정해진 시간에','우유(생우유)는 아직 → 돌 이후']},
+ {id:'final', name:'완료기', label:'만 12개월 ~', from:12, to:99, color:'#A9A0E0',
+  ratio:'밥 (진밥 → 된밥)', count:'하루 3회 식사 + 간식 2회', amount:'어른 1/3 정도', texture:'어른과 비슷하게, 작게 썰어',
+  desc:'밥과 반찬 중심의 유아식으로 넘어갑니다. 가족과 같은 상에서 함께 먹는 경험이 중요합니다.',
+  todo:['생우유 시작 (하루 400~500ml 이내)','젖병 떼기 완료 목표','꿀은 돌 이후부터 가능','간은 여전히 최소한으로','안 먹는다고 쫓아다니며 먹이지 않기']}
+];
+
+/* 레시피: q=수량(배수 계산용) */
+const RECIPES = [
+/* ─── 초기 · 죽 ─── */
+{id:'e1',s:'early',t:'porridge',n:'첫 쌀미음 (10배죽)',e:'🍚',time:'20분',bad:'첫 이유식',
+ ing:[{n:'불린 쌀',q:15,u:'g',note:'쌀가루 10g으로 대체 가능'},{n:'물',q:150,u:'ml'}],
+ st:['쌀을 30분 이상 불려 체에 건집니다.','불린 쌀과 물을 믹서에 넣고 아주 곱게 갈아줍니다.','냄비에 붓고 약불에서 계속 저으며 8~10분 끓입니다.','고운 체에 한 번 걸러 매끈하게 만듭니다.','체온 정도(미지근)로 식혀 숟가락으로 먹입니다.'],
+ tip:'첫날은 1~2숟갈(5~10g)만. 3~5일에 걸쳐 양을 늘려가세요. 3~4일 이상 쌀미음만 주다 지체하지 말고 바로 고기·채소를 추가하는 게 좋습니다.'},
+{id:'e2',s:'early',t:'porridge',n:'소고기미음',e:'🥩',time:'30분',bad:'철분 보충 필수 메뉴',
+ ing:[{n:'불린 쌀',q:15,u:'g'},{n:'소고기 (안심·우둔)',q:10,u:'g'},{n:'물',q:170,u:'ml'}],
+ st:['소고기는 찬물에 15분 담가 핏물을 빼줍니다.','끓는 물에 소고기를 삶고, 삶은 물(육수)은 따로 둡니다.','삶은 고기를 아주 곱게 갈거나 다집니다.','불린 쌀 + 육수 + 물을 갈아 냄비에 넣고 끓입니다.','고기를 넣고 5분 더 끓인 뒤 체에 걸러 마무리합니다.'],
+ tip:'생후 6개월 이후 모유·분유만으로는 철분이 부족해집니다. 고기는 초기부터 매일 조금씩 주는 것이 좋습니다.'},
+{id:'e3',s:'early',t:'porridge',n:'소고기애호박미음',e:'🥒',time:'30분',bad:'초기 인기 조합',
+ ing:[{n:'불린 쌀',q:15,u:'g'},{n:'소고기',q:10,u:'g'},{n:'애호박',q:10,u:'g',note:'껍질·씨 제거'},{n:'물',q:170,u:'ml'}],
+ st:['애호박은 껍질과 씨를 제거하고 속살만 사용합니다.','소고기는 핏물 빼고 삶아 곱게 갑니다.','애호박은 살짝 찐 후 곱게 갈아둡니다.','불린 쌀과 육수를 갈아 냄비에서 8분 끓입니다.','고기·애호박을 넣고 3~5분 더 끓인 뒤 체에 내립니다.'],
+ tip:'애호박은 초기에 소화가 잘 되고 거부가 적은 채소예요. 껍질은 꼭 벗겨주세요.'},
+{id:'e4',s:'early',t:'porridge',n:'소고기브로콜리미음',e:'🥦',time:'30분',bad:'',
+ ing:[{n:'불린 쌀',q:15,u:'g'},{n:'소고기',q:10,u:'g'},{n:'브로콜리 (꽃 부분)',q:8,u:'g'},{n:'물',q:170,u:'ml'}],
+ st:['브로콜리는 꽃 부분만 떼어 물에 담가 씻습니다.','끓는 물에 2~3분 데쳐 곱게 갈아줍니다.','소고기는 삶아 곱게 갈고 육수는 남겨둡니다.','불린 쌀+육수를 갈아 냄비에서 8분 끓입니다.','재료를 모두 넣고 3분 더 끓여 체에 내립니다.'],
+ tip:'줄기는 질겨서 초기에는 꽃 부분만 사용하세요.'},
+{id:'e5',s:'early',t:'porridge',n:'감자미음 / 단호박미음',e:'🥔',time:'25분',bad:'달아서 잘 먹어요',
+ ing:[{n:'불린 쌀',q:15,u:'g'},{n:'감자 또는 단호박',q:15,u:'g'},{n:'물',q:160,u:'ml'}],
+ st:['감자는 껍질을 벗겨 찬물에 담가 전분을 뺍니다. (단호박은 껍질·씨 제거)','부드러울 때까지 찌거나 삶습니다.','체에 곱게 내리거나 믹서에 갈아둡니다.','불린 쌀+물을 갈아 냄비에서 8분 끓입니다.','으깬 재료를 넣고 3분 더 끓입니다.'],
+ tip:'단호박은 단맛이 강해 아기가 잘 받지만, 이후 담백한 채소를 거부할 수 있어 채소와 번갈아 주세요.'},
+{id:'e6',s:'early',t:'porridge',n:'닭고기고구마미음',e:'🍠',time:'35분',bad:'',
+ ing:[{n:'불린 쌀',q:15,u:'g'},{n:'닭 안심',q:10,u:'g'},{n:'고구마',q:15,u:'g'},{n:'물',q:170,u:'ml'}],
+ st:['닭 안심은 힘줄을 제거하고 찬물에 10분 담가둡니다.','끓는 물에 완전히 익힌 후 곱게 갈아줍니다.','고구마는 껍질 벗겨 쪄서 으깨둡니다.','불린 쌀+육수를 갈아 8분 끓입니다.','닭고기·고구마를 넣고 3~5분 더 끓여 체에 내립니다.'],
+ tip:'닭고기는 소고기보다 부드럽고 담백해요. 반드시 완전히 익혀 사용하세요.'},
+{id:'e7',s:'early',t:'porridge',n:'오트밀(귀리)미음',e:'🌾',time:'15분',bad:'철분·식이섬유',
+ ing:[{n:'오트밀 (퀵오트)',q:10,u:'g'},{n:'물',q:120,u:'ml'}],
+ st:['오트밀을 가루가 될 정도로 곱게 갈아둡니다.','냄비에 물과 함께 넣고 약불에서 5분 저으며 끓입니다.','걸쭉해지면 불을 끄고 체에 한 번 걸러줍니다.'],
+ tip:'조리가 빨라 외출·바쁜 날 대체용으로 좋아요. 쌀미음이 익숙해진 뒤 시도하세요.'},
+/* ─── 초기 · 토핑 ─── */
+{id:'et1',s:'early',t:'topping',n:'[기본] 토핑용 큐브 만들기',e:'🧊',time:'60분',bad:'주 1회 준비',
+ ing:[{n:'소고기',q:70,u:'g',note:'약 7큐브'},{n:'애호박',q:70,u:'g'},{n:'브로콜리',q:50,u:'g'},{n:'단호박',q:70,u:'g'}],
+ st:['재료별로 손질 후 각각 삶거나 찝니다.','초기용은 각각 아주 곱게 갈아 퓨레로 만듭니다.','실리콘 큐브 트레이에 10g씩 나눠 담습니다.','완전히 식힌 후 뚜껑을 덮어 냉동합니다.','굳으면 지퍼백에 옮겨 담고 재료명·날짜를 적습니다.'],
+ tip:'냉동 큐브는 1주(최대 2주) 안에 사용하세요. 해동은 냉장 또는 중탕으로, 실온 방치나 재냉동은 금지입니다.',
+ warn:'토핑이유식은 재료별 반응 확인이 쉽고 준비가 편한 장점이 있습니다. 다만 아기가 특정 토핑만 골라 먹으려 할 수 있으니, 죽에 섞어주는 방식과 번갈아 활용해 보세요.'},
+{id:'et2',s:'early',t:'topping',n:'쌀죽 + 소고기 + 애호박',e:'🍚',time:'10분',bad:'토핑 2종',
+ ing:[{n:'10배죽 (기본죽)',q:60,u:'g'},{n:'소고기 큐브',q:1,u:'개'},{n:'애호박 큐브',q:1,u:'개'}],
+ st:['기본죽 60g을 냄비나 중탕으로 따뜻하게 데웁니다.','냉장 해동한 토핑 큐브를 함께 데웁니다.','그릇에 죽을 담고 토핑을 나란히 올립니다.','한 숟갈씩 죽+토핑을 섞어 떠서 먹입니다.'],
+ tip:'토핑을 각각 맛보게 한 뒤 섞어주면 재료별 맛을 익히는 데 도움이 됩니다.'},
+{id:'et3',s:'early',t:'topping',n:'쌀죽 + 소고기 + 브로콜리',e:'🥦',time:'10분',bad:'토핑 2종',
+ ing:[{n:'10배죽',q:60,u:'g'},{n:'소고기 큐브',q:1,u:'개'},{n:'브로콜리 큐브',q:1,u:'개'}],
+ st:['기본죽과 큐브를 데웁니다.','죽 위에 토핑을 올려 완성합니다.'],
+ tip:'브로콜리를 거부하면 단호박 큐브를 아주 조금 섞어 단맛을 더해보세요.'},
+{id:'et4',s:'early',t:'topping',n:'쌀죽 + 닭고기 + 단호박',e:'🍠',time:'10분',bad:'토핑 2종',
+ ing:[{n:'10배죽',q:60,u:'g'},{n:'닭고기 큐브',q:1,u:'개'},{n:'단호박 큐브',q:1,u:'개'}],
+ st:['기본죽과 큐브를 데웁니다.','죽 위에 토핑을 올려 완성합니다.'],
+ tip:'고기 토핑은 하루 한 번 이상 꼭 포함시켜 주세요.'},
+/* ─── 중기 · 죽 ─── */
+{id:'m1',s:'mid',t:'porridge',n:'소고기양배추죽',e:'🥬',time:'30분',bad:'소화 도움',
+ ing:[{n:'불린 쌀',q:30,u:'g'},{n:'소고기',q:15,u:'g'},{n:'양배추 (연한 잎)',q:15,u:'g'},{n:'물',q:210,u:'ml'}],
+ st:['소고기는 핏물 빼고 삶아 2~3mm로 잘게 다집니다.','양배추는 두꺼운 심을 빼고 데쳐 잘게 다집니다.','불린 쌀은 반만 으깨어 입자를 남깁니다.','냄비에 쌀+육수를 넣고 중약불에서 12분 끓입니다.','재료를 넣고 5분 더 끓여 걸쭉하게 마무리합니다.'],
+ tip:'중기부터는 체에 걸르지 않습니다. 씹는 연습을 위해 일부러 입자를 남겨주세요.'},
+{id:'m2',s:'mid',t:'porridge',n:'닭고기당근죽',e:'🥕',time:'30분',bad:'',
+ ing:[{n:'불린 쌀',q:30,u:'g'},{n:'닭 안심',q:15,u:'g'},{n:'당근',q:12,u:'g'},{n:'양파',q:8,u:'g'},{n:'물',q:210,u:'ml'}],
+ st:['닭 안심은 힘줄 제거 후 삶아 잘게 다집니다.','당근·양파는 아주 잘게 다져 살짝 볶거나 데칩니다.','쌀과 육수를 넣고 12분 끓입니다.','재료를 넣고 5분 더 끓입니다.'],
+ tip:'당근의 베타카로틴은 기름에 살짝 볶으면 흡수가 좋아집니다. 중기 후반부터 식용유 1~2방울 정도는 괜찮습니다.'},
+{id:'m3',s:'mid',t:'porridge',n:'소고기시금치죽',e:'🌿',time:'30분',bad:'철분+엽산',
+ ing:[{n:'불린 쌀',q:30,u:'g'},{n:'소고기',q:15,u:'g'},{n:'시금치 잎',q:12,u:'g'},{n:'물',q:210,u:'ml'}],
+ st:['시금치는 잎 부분만 사용하고 끓는 물에 30초 데칩니다.','물기를 꼭 짜고 잘게 다집니다.','소고기는 삶아 다지고 육수는 남겨둡니다.','쌀+육수를 12분 끓인 뒤 재료를 넣고 5분 더 끓입니다.'],
+ tip:'시금치·비트 등 질산염이 많은 채소는 생후 6개월 이후에 주고, 데친 물은 버리세요.'},
+{id:'m4',s:'mid',t:'porridge',n:'흰살생선 두부죽',e:'🐟',time:'30분',bad:'첫 생선',
+ ing:[{n:'불린 쌀',q:30,u:'g'},{n:'대구살(또는 광어)',q:15,u:'g'},{n:'두부',q:15,u:'g'},{n:'애호박',q:10,u:'g'},{n:'물',q:210,u:'ml'}],
+ st:['생선은 가시를 아주 꼼꼼히 제거하고 살만 발라냅니다.','끓는 물에 완전히 익혀 잘게 부숩니다.','두부는 데쳐서 곱게 으깹니다.','쌀+물을 12분 끓인 뒤 재료를 넣고 5분 더 끓입니다.'],
+ tip:'생선은 알레르기 유발 식품이지만 늦추는 것이 예방에 도움되지 않습니다. 오전에 소량부터 시도해 2~3일 관찰하세요.',
+ warn:'가시 제거를 반드시 두 번 확인하세요. 참치·황새치 등 큰 생선은 수은 우려로 피하고, 흰살생선부터 시작합니다.'},
+{id:'m5',s:'mid',t:'porridge',n:'달걀노른자 애호박죽',e:'🥚',time:'25분',bad:'',
+ ing:[{n:'불린 쌀',q:30,u:'g'},{n:'달걀 노른자',q:1,u:'개'},{n:'애호박',q:12,u:'g'},{n:'물',q:210,u:'ml'}],
+ st:['달걀은 12분 이상 완전히 삶아 노른자만 분리합니다.','노른자를 체에 내려 곱게 만듭니다.','애호박은 다져서 준비합니다.','쌀+물을 12분 끓이고 애호박을 넣어 4분 더 끓입니다.','불을 끈 뒤 노른자를 섞어 완성합니다.'],
+ tip:'노른자 1/4 → 1/2 → 1개 순으로 늘려보세요. 문제 없으면 흰자도 시도해 봅니다.'},
+{id:'m6',s:'mid',t:'porridge',n:'소고기표고버섯죽',e:'🍄',time:'30분',bad:'감칠맛',
+ ing:[{n:'불린 쌀',q:30,u:'g'},{n:'소고기',q:15,u:'g'},{n:'표고버섯',q:10,u:'g'},{n:'청경채',q:10,u:'g'},{n:'물',q:210,u:'ml'}],
+ st:['표고는 기둥을 떼고 갓만 아주 잘게 다집니다.','청경채는 잎 부분만 데쳐 다집니다.','소고기는 삶아 다집니다.','쌀+육수를 12분 끓인 뒤 재료를 넣고 5분 더 끓입니다.'],
+ tip:'버섯은 감칠맛이 있어 간 없이도 맛이 좋아요. 식감이 미끄러워 잘 다져야 합니다.'},
+/* ─── 중기 · 토핑 ─── */
+{id:'mt1',s:'mid',t:'topping',n:'7배죽 + 소고기 · 브로콜리 · 당근',e:'🍲',time:'10분',bad:'토핑 3종',
+ ing:[{n:'7배죽',q:100,u:'g'},{n:'소고기 큐브',q:1,u:'개'},{n:'브로콜리 큐브',q:1,u:'개'},{n:'당근 큐브',q:1,u:'개'}],
+ st:['7배죽과 큐브 3종을 각각 데웁니다.','그릇 가운데 죽을 담고 토핑을 삼각으로 올립니다.','아기가 색을 구경할 시간을 잠깐 준 뒤 먹입니다.'],
+ tip:'중기 큐브는 갈지 않고 2~3mm로 다져 얼립니다.'},
+{id:'mt2',s:'mid',t:'topping',n:'7배죽 + 닭고기 · 시금치 · 애호박',e:'🍲',time:'10분',bad:'토핑 3종',
+ ing:[{n:'7배죽',q:100,u:'g'},{n:'닭고기 큐브',q:1,u:'개'},{n:'시금치 큐브',q:1,u:'개'},{n:'애호박 큐브',q:1,u:'개'}],
+ st:['죽과 큐브를 데워 담아냅니다.'],
+ tip:'초록 채소를 거부하면 고기 토핑과 섞어 한 숟갈에 담아주세요.'},
+{id:'mt3',s:'mid',t:'topping',n:'7배죽 + 흰살생선 · 두부 · 청경채',e:'🐟',time:'10분',bad:'토핑 3종',
+ ing:[{n:'7배죽',q:100,u:'g'},{n:'생선 큐브',q:1,u:'개'},{n:'두부',q:15,u:'g',note:'그때그때 데쳐서'},{n:'청경채 큐브',q:1,u:'개'}],
+ st:['두부는 데쳐 으깨 바로 준비합니다.','죽과 큐브를 데워 함께 담아냅니다.'],
+ tip:'두부는 냉동하면 식감이 퍼석해져요. 그날 데쳐 쓰는 걸 권합니다.'},
+/* ─── 후기 · 죽/진밥 ─── */
+{id:'l1',s:'late',t:'porridge',n:'소고기미역진밥',e:'🌊',time:'30분',bad:'칼슘·요오드',
+ ing:[{n:'불린 쌀',q:50,u:'g'},{n:'소고기',q:20,u:'g'},{n:'불린 미역',q:15,u:'g'},{n:'물',q:250,u:'ml'}],
+ st:['미역은 충분히 불려 여러 번 씻어 염분을 뺀 뒤 잘게 다집니다.','소고기는 0.5cm로 썰거나 굵게 다집니다.','냄비에 참기름 1~2방울로 미역과 고기를 살짝 볶습니다.','쌀과 물을 넣고 15분 끓여 진밥 농도로 맞춥니다.'],
+ tip:'미역은 염분이 많아 반드시 여러 번 헹궈주세요. 간은 하지 않습니다.'},
+{id:'l2',s:'late',t:'porridge',n:'닭고기채소진밥',e:'🍗',time:'30분',bad:'',
+ ing:[{n:'불린 쌀',q:50,u:'g'},{n:'닭 안심',q:20,u:'g'},{n:'양배추',q:15,u:'g'},{n:'당근',q:12,u:'g'},{n:'양파',q:12,u:'g'},{n:'물',q:250,u:'ml'}],
+ st:['닭고기는 삶아 0.5cm로 찢거나 썹니다.','채소는 0.5cm 크기로 썰어둡니다.','냄비에 육수와 쌀을 넣고 12분 끓입니다.','재료를 넣고 5~7분 더 끓여 진밥으로 완성합니다.'],
+ tip:'후기에는 재료 크기를 일부러 키워주세요. 잇몸으로 으깨는 연습이 됩니다.'},
+{id:'l3',s:'late',t:'porridge',n:'새우두부진밥',e:'🍤',time:'25분',bad:'갑각류 첫 시도',
+ ing:[{n:'불린 쌀',q:50,u:'g'},{n:'생새우살',q:20,u:'g'},{n:'두부',q:20,u:'g'},{n:'애호박',q:15,u:'g'},{n:'물',q:250,u:'ml'}],
+ st:['새우는 등 쪽 내장을 제거하고 잘게 다집니다.','끓는 물에 완전히 익힙니다.','두부는 데쳐 으깨고 애호박은 잘게 썹니다.','쌀+물을 12분 끓인 후 재료를 넣고 5분 더 끓입니다.'],
+ tip:'갑각류는 반응이 나타나기 쉬운 재료입니다. 오전에 아주 소량으로 첫 시도하고 2~3일 관찰하세요.',
+ warn:'입 주변 발진·두드러기·구토·심한 보챔이 있으면 중단하고 기록해 두었다가 소아과에 문의하세요. 호흡이 힘들거나 얼굴이 붓는다면 즉시 응급실로 가세요.'},
+{id:'l4',s:'late',t:'porridge',n:'연어애호박진밥',e:'🍣',time:'25분',bad:'오메가3',
+ ing:[{n:'불린 쌀',q:50,u:'g'},{n:'생연어',q:20,u:'g'},{n:'애호박',q:15,u:'g'},{n:'브로콜리',q:12,u:'g'},{n:'물',q:250,u:'ml'}],
+ st:['연어는 껍질·가시를 제거하고 굽거나 쪄서 익힙니다.','잘게 부숴 준비합니다.','채소는 0.5cm로 썰어둡니다.','쌀+물 12분 → 재료 넣고 5분 더 끓입니다.'],
+ tip:'연어는 지방이 있어 고소해서 잘 먹는 편이에요. 훈제 연어는 염분이 높아 사용하지 않습니다.'},
+{id:'l5',s:'late',t:'porridge',n:'소고기토마토진밥',e:'🍅',time:'25분',bad:'',
+ ing:[{n:'불린 쌀',q:50,u:'g'},{n:'소고기',q:20,u:'g'},{n:'토마토',q:30,u:'g'},{n:'양파',q:12,u:'g'},{n:'물',q:240,u:'ml'}],
+ st:['토마토는 열십자로 칼집을 내 데친 후 껍질과 씨를 제거합니다.','과육만 잘게 썰어둡니다.','소고기·양파를 볶다가 토마토를 넣고 졸입니다.','쌀과 물을 넣고 15분 끓입니다.'],
+ tip:'토마토의 산미를 싫어하면 충분히 익혀 단맛을 끌어올려 주세요.'},
+{id:'l6',s:'late',t:'porridge',n:'소고기가지진밥',e:'🍆',time:'25분',bad:'',
+ ing:[{n:'불린 쌀',q:50,u:'g'},{n:'소고기',q:20,u:'g'},{n:'가지',q:20,u:'g'},{n:'표고버섯',q:10,u:'g'},{n:'물',q:250,u:'ml'}],
+ st:['가지는 껍질을 벗기고 속살만 잘게 썹니다.','고기와 함께 기름 소량으로 볶습니다.','쌀+육수를 넣고 15분 끓여 완성합니다.'],
+ tip:'가지는 무르게 익으면 부드러워 후기 아기에게 알맞습니다.'},
+/* ─── 후기 · 토핑 ─── */
+{id:'lt1',s:'late',t:'topping',n:'진밥 + 소고기 · 시금치 · 파프리카',e:'🍛',time:'10분',bad:'토핑 3종',
+ ing:[{n:'진밥',q:120,u:'g'},{n:'소고기 큐브',q:1,u:'개'},{n:'시금치 큐브',q:1,u:'개'},{n:'파프리카 큐브',q:1,u:'개'}],
+ st:['진밥과 큐브를 데워 그릇에 색깔별로 담습니다.','아기가 스스로 숟가락을 쥐어보게 해봅니다.'],
+ tip:'후기 큐브는 0.5cm 크기로 다져 얼립니다.'},
+{id:'lt2',s:'late',t:'topping',n:'진밥 + 닭고기 · 단호박 · 양배추',e:'🍛',time:'10분',bad:'토핑 3종',
+ ing:[{n:'진밥',q:120,u:'g'},{n:'닭고기 큐브',q:1,u:'개'},{n:'단호박 큐브',q:1,u:'개'},{n:'양배추 큐브',q:1,u:'개'}],
+ st:['모두 데워 담아냅니다.','핑거푸드 한 가지를 함께 곁들이면 좋습니다.'],
+ tip:''},
+/* ─── 후기 · 핑거푸드 ─── */
+{id:'f1',s:'late',t:'finger',n:'고구마 스틱',e:'🍠',time:'20분',bad:'첫 핑거푸드',
+ ing:[{n:'고구마',q:100,u:'g'}],
+ st:['고구마를 아기 손가락 굵기, 5cm 길이로 썹니다.','김이 오른 찜기에 12~15분 부드럽게 찝니다.','손으로 눌러 살짝 으깨질 정도가 알맞습니다.','완전히 식혀 아기가 쥐게 해줍니다.'],
+ tip:'아기 주먹에서 살짝 튀어나오는 길이가 잡기 쉬워요. 반드시 앉은 자세로, 어른이 옆에서 지켜봐 주세요.',
+ warn:'딱딱한 생채소·통포도·통견과류·떡·젤리는 질식 위험이 있어 절대 주지 마세요.'},
+{id:'f2',s:'late',t:'finger',n:'두부 채소 동그랑땡',e:'🥘',time:'25분',bad:'',
+ ing:[{n:'두부',q:80,u:'g'},{n:'소고기 간 것',q:30,u:'g'},{n:'애호박·당근 다진 것',q:30,u:'g'},{n:'쌀가루(전분)',q:10,u:'g'}],
+ st:['두부는 데쳐 물기를 꼭 짜서 으깹니다.','모든 재료를 섞어 반죽하고 쌀가루로 농도를 잡습니다.','작고 납작하게 빚습니다.','기름을 아주 얇게 두른 팬에 약불로 양면을 익힙니다.'],
+ tip:'한 번에 넉넉히 만들어 하나씩 소분 냉동하면 간식·외출용으로 편합니다.'},
+{id:'f3',s:'late',t:'finger',n:'감자채전',e:'🥔',time:'20분',bad:'',
+ ing:[{n:'감자',q:100,u:'g'},{n:'애호박',q:20,u:'g'}],
+ st:['감자는 채칼로 얇게 채 썰어 물에 한 번 헹굽니다.','애호박도 가늘게 채 썹니다.','물기를 짜고 감자 전분만으로 뭉쳐 모양을 잡습니다.','약불에서 앞뒤로 노릇하게 익힙니다.'],
+ tip:'감자 자체 전분으로 뭉쳐지니 밀가루는 필요 없습니다.'},
+{id:'f4',s:'late',t:'finger',n:'브로콜리 · 당근 찜',e:'🥦',time:'12분',bad:'가장 쉬움',
+ ing:[{n:'브로콜리',q:40,u:'g'},{n:'당근',q:40,u:'g'}],
+ st:['브로콜리는 줄기를 남겨 잡기 좋게 자릅니다.','당근은 스틱 모양으로 썹니다.','찜기에 8~12분, 잇몸으로 으깨질 만큼 푹 찝니다.','식혀서 손에 쥐어줍니다.'],
+ tip:'브로콜리 줄기가 손잡이 역할을 해서 아기가 잡기 쉬워요.'},
+/* ─── 완료기 ─── */
+{id:'v1',s:'final',t:'meal',n:'소고기채소 볶음밥 (무간)',e:'🍚',time:'20분',bad:'',
+ ing:[{n:'밥',q:120,u:'g'},{n:'소고기 간 것',q:30,u:'g'},{n:'애호박·당근·양파',q:50,u:'g'},{n:'참기름',q:2,u:'방울'}],
+ st:['채소를 잘게 썰어 준비합니다.','팬에 기름을 살짝 두르고 고기를 볶습니다.','채소를 넣고 무르게 볶습니다.','밥을 넣고 고루 섞어 마무리합니다.'],
+ tip:'간은 하지 않아도 충분히 맛있습니다. 어른 반찬을 물에 씻어 주는 방식은 권하지 않아요.'},
+{id:'v2',s:'final',t:'meal',n:'두부 계란찜',e:'🥚',time:'15분',bad:'단백질 반찬',
+ ing:[{n:'달걀',q:1,u:'개'},{n:'두부',q:50,u:'g'},{n:'물 또는 육수',q:60,u:'ml'},{n:'다진 채소',q:20,u:'g'}],
+ st:['달걀을 잘 풀고 물, 으깬 두부, 채소를 섞습니다.','체에 한 번 걸러 부드럽게 만듭니다.','내열 그릇에 담아 찜기에 10분 찝니다.','한 김 식혀 작게 잘라줍니다.'],
+ tip:'부드러워 잘 먹는 반찬. 냉장 1일 이내로 드세요.'},
+{id:'v3',s:'final',t:'meal',n:'순한 채소 카레밥',e:'🍛',time:'25분',bad:'유아용 카레',
+ ing:[{n:'밥',q:120,u:'g'},{n:'닭고기',q:30,u:'g'},{n:'감자·당근·양파',q:70,u:'g'},{n:'유아용 카레가루',q:5,u:'g'},{n:'물',q:150,u:'ml'}],
+ st:['재료를 잘게 썰어 볶습니다.','물을 넣고 채소가 무를 때까지 끓입니다.','카레가루를 아주 소량 풀어 넣고 걸쭉하게 만듭니다.','밥에 곁들여 냅니다.'],
+ tip:'향신료는 아주 조금부터. 매운 성분이 없는 유아용 제품을 확인하세요.'},
+{id:'v4',s:'final',t:'meal',n:'진밥 + 흰살생선구이 + 채소',e:'🐟',time:'20분',bad:'',
+ ing:[{n:'진밥',q:120,u:'g'},{n:'흰살생선',q:40,u:'g'},{n:'브로콜리·애호박',q:50,u:'g'}],
+ st:['생선은 가시를 제거하고 기름 없이 또는 소량으로 굽습니다.','채소는 부드럽게 찝니다.','밥·생선·채소를 한 접시에 담아 스스로 먹게 합니다.'],
+ tip:'가족과 같은 식탁에서 함께 먹으면 식사 태도 형성에 큰 도움이 됩니다.'}
+];
+
+/* 식재료 도감 */
+const FOODS = [
+ {n:'쌀',e:'🍚',c:'곡류',m:6,d:'이유식의 시작. 알레르기가 적고 소화가 쉬워요.'},
+ {n:'오트밀',e:'🌾',c:'곡류',m:6,d:'철분·식이섬유가 풍부. 조리가 간단합니다.'},
+ {n:'찹쌀',e:'🍡',c:'곡류',m:7,d:'점성이 강해 소량만 섞어 쓰세요.'},
+ {n:'감자',e:'🥔',c:'채소',m:6,d:'담백하고 부드러워요. 싹·녹색 부분은 제거.'},
+ {n:'고구마',e:'🍠',c:'채소',m:6,d:'단맛이 좋고 변비에 도움. 핑거푸드로도 좋아요.'},
+ {n:'애호박',e:'🥒',c:'채소',m:6,d:'초기 대표 채소. 껍질과 씨는 제거해 주세요.'},
+ {n:'브로콜리',e:'🥦',c:'채소',m:6,d:'초기엔 꽃 부분만. 데쳐서 사용합니다.'},
+ {n:'청경채',e:'🥬',c:'채소',m:6,d:'잎 부분을 데쳐서 사용하세요.'},
+ {n:'단호박',e:'🎃',c:'채소',m:6,d:'단맛이 강해 거부가 적어요.'},
+ {n:'소고기',e:'🥩',c:'육류',m:6,d:'초기부터 매일 조금씩! 철분·아연 공급의 핵심입니다.'},
+ {n:'닭고기',e:'🍗',c:'육류',m:6,d:'안심 부위, 힘줄 제거 후 완전히 익혀서.'},
+ {n:'양파',e:'🧅',c:'채소',m:7,d:'익히면 단맛이 나 국물 맛을 좋게 합니다.'},
+ {n:'당근',e:'🥕',c:'채소',m:7,d:'기름에 살짝 볶으면 흡수율이 올라갑니다.'},
+ {n:'양배추',e:'🥬',c:'채소',m:7,d:'두꺼운 심은 제거하고 연한 잎만.'},
+ {n:'시금치',e:'🌿',c:'채소',m:7,d:'잎만 데쳐 사용, 데친 물은 버리세요.'},
+ {n:'무',e:'⚪',c:'채소',m:7,d:'푹 익히면 부드럽고 시원한 맛이 납니다.'},
+ {n:'표고버섯',e:'🍄',c:'채소',m:7,d:'갓만 아주 잘게. 감칠맛이 좋아요.'},
+ {n:'두부',e:'⬜',c:'콩·유제품',m:7,d:'데쳐서 사용. 냉동은 식감이 나빠집니다.',al:1},
+ {n:'달걀 노른자',e:'🥚',c:'육류',m:7,d:'완숙으로 익혀 1/4개부터 시작해 늘려가세요.',al:1},
+ {n:'달걀 흰자',e:'🍳',c:'육류',m:8,d:'노른자에 문제 없으면 시도. 늦출 필요는 없습니다.',al:1},
+ {n:'흰살생선',e:'🐟',c:'어패류',m:7,d:'대구·광어 등. 가시 제거를 두 번 확인!',al:1},
+ {n:'배',e:'🍐',c:'과일',m:6,d:'갈아서 소량. 변비에 도움이 됩니다.'},
+ {n:'사과',e:'🍎',c:'과일',m:6,d:'초기엔 익혀서 갈아주면 부담이 적어요.'},
+ {n:'바나나',e:'🍌',c:'과일',m:7,d:'으깨서 소량. 단맛이 강해 양 조절 필요.'},
+ {n:'아보카도',e:'🥑',c:'과일',m:7,d:'좋은 지방이 풍부. 잘 익은 것만 사용.'},
+ {n:'미역·김',e:'🌊',c:'어패류',m:8,d:'염분을 충분히 헹궈내고 사용, 김은 무염 제품.'},
+ {n:'토마토',e:'🍅',c:'채소',m:8,d:'껍질·씨 제거 후 익혀서 사용하세요.'},
+ {n:'가지',e:'🍆',c:'채소',m:8,d:'껍질 벗겨 무르게 익혀주세요.'},
+ {n:'파프리카',e:'🫑',c:'채소',m:8,d:'껍질을 벗기면 더 부드러워요.'},
+ {n:'연어',e:'🍣',c:'어패류',m:8,d:'오메가3 풍부. 훈제 제품은 염분 때문에 부적합.',al:1},
+ {n:'돼지고기',e:'🐖',c:'육류',m:8,d:'기름기 적은 안심 부위로.'},
+ {n:'블루베리',e:'🫐',c:'과일',m:8,d:'통째로는 위험, 으깨거나 4등분해서.'},
+ {n:'딸기',e:'🍓',c:'과일',m:8,d:'잘게 잘라 소량부터.',al:1},
+ {n:'밀(국수·빵)',e:'🍜',c:'곡류',m:8,d:'무염 국수부터 소량. 늦추는 게 예방에 도움되지 않습니다.',al:1},
+ {n:'플레인 요거트',e:'🥛',c:'콩·유제품',m:9,d:'무가당 제품만. 생우유는 아직 안 돼요.',al:1},
+ {n:'새우',e:'🍤',c:'어패류',m:9,d:'완전히 익혀 잘게. 오전에 소량 첫 시도.',al:1},
+ {n:'아기 치즈',e:'🧈',c:'콩·유제품',m:9,d:'나트륨 낮은 제품, 하루 반 장 정도.',al:1},
+ {n:'오이',e:'🥒',c:'채소',m:9,d:'껍질 벗기고 씨 제거해 잘게.'},
+ {n:'콩나물',e:'🌱',c:'채소',m:10,d:'머리 부분만 다져서 사용하세요.'},
+ {n:'참기름·들기름',e:'🫗',c:'기타',m:9,d:'풍미용으로 1~2방울만.'},
+ {n:'생우유',e:'🥛',c:'콩·유제품',m:12,d:'돌 이후부터, 하루 400~500ml 이내로.',al:1},
+ {n:'꿀',e:'🍯',c:'기타',m:12,d:'돌 전에는 보툴리누스 위험으로 절대 금지!',warn:1},
+ {n:'소금·설탕',e:'🧂',c:'기타',m:12,d:'돌까지는 무간이 원칙, 이후에도 최소한으로.',warn:1},
+ {n:'견과류(가루)',e:'🥜',c:'기타',m:8,d:'곱게 갈아 소량. 통째나 알맹이는 4~5세까지 금지!',al:1,warn:1}
+];
+
+/* 기본 원칙 */
+const RULES = [
+ {t:'이유식은 만 6개월에 시작',d:'모유수유아는 만 6개월 무렵이 적절합니다. 만 4개월 이전 시작은 권하지 않고, 반대로 6개월을 크게 넘겨 늦추는 것도 좋지 않습니다.'},
+ {t:'첫 음식은 쌀미음, 그러나 오래 머물지 마세요',d:'쌀미음으로 시작하되 며칠 안에 고기와 채소를 더해 종류를 빠르게 늘립니다. 미음 단계에 길게 머물면 씹기 발달과 영양 모두 불리합니다.'},
+ {t:'고기는 처음부터 매일',d:'생후 6개월 이후에는 모유·분유만으로 철분이 부족해집니다. 소고기·닭고기를 이유식 초기부터 매일 조금씩 먹이세요.'},
+ {t:'알레르기 걱정으로 늦추지 마세요',d:'달걀·생선·밀·땅콩 등을 일부러 늦추는 것은 알레르기 예방에 도움이 되지 않습니다. 6개월 이후 소량씩 다양하게 경험시키는 편이 좋습니다. 단, 가족력이 강하거나 이미 반응이 있었다면 소아과와 먼저 상의하세요.'},
+ {t:'새 음식은 한 가지씩',d:'새 재료는 오전에 소량으로 시작해 2~3일 지켜본 뒤 다음 재료로 넘어갑니다. 문제가 없으면 안전 목록에 추가하세요.'},
+ {t:'돌까지는 간을 하지 않습니다',d:'소금·설탕·간장 등 양념 없이 재료 본래의 맛으로 먹입니다. 어른 음식을 물에 씻어 주는 방식도 권하지 않습니다.'},
+ {t:'숟가락으로 먹이고, 컵을 연습합니다',d:'이유식은 반드시 숟가락으로. 젖병에 넣어 먹이지 않습니다. 6개월부터 컵으로 물 마시기를 연습해 돌 무렵 젖병을 뗍니다.'},
+ {t:'스스로 손으로 집어먹게 하세요',d:'9개월 무렵부터 핑거푸드를 매일 줍니다. 지저분해지는 것을 허용해야 스스로 먹는 힘과 식사 흥미가 자랍니다.'},
+ {t:'시간과 자리를 정해서',d:'정해진 시간, 아기 식탁 의자에서 먹입니다. 돌아다니며 먹이거나 영상을 보여주며 먹이지 마세요.'},
+ {t:'안 먹으면 30분 후 치우기',d:'억지로 먹이거나 쫓아다니지 않습니다. 배고픔을 경험하는 것도 중요한 학습입니다. 한두 끼 덜 먹는 것으로 문제가 생기지 않습니다.'},
+ {t:'이유식 먼저, 수유는 그다음',d:'이유식 후에 수유하는 순서로 진행해 자연스럽게 식사 비중을 늘려갑니다.'},
+ {t:'주스는 권하지 않고, 물은 컵으로',d:'과일주스는 필요하지 않습니다. 과일은 갈거나 잘라서 그대로, 수분은 물로 보충하세요.'},
+ {t:'질식 위험 음식은 피합니다',d:'통포도·통견과류·떡·젤리·딱딱한 생채소·사탕은 주지 않습니다. 견과류 알맹이는 4~5세까지 금지입니다.'},
+ {t:'돌 이후 생우유, 밥과 반찬으로',d:'만 12개월부터 생우유를 하루 400~500ml 이내로 시작하고, 식사는 가족과 같은 밥·반찬 형태로 전환합니다.'}
+];
+
+/* ══════════════════════════════════════════════
+   2. 상태 / 저장
+══════════════════════════════════════════════ */
+const K={b:'bf.baby',l:'bf.logs',f:'bf.foods'};
+let baby=JSON.parse(localStorage.getItem(K.b)||'null');
+let logs=JSON.parse(localStorage.getItem(K.l)||'[]');
+let tried=JSON.parse(localStorage.getItem(K.f)||'{}');
+const save=()=>{localStorage.setItem(K.b,JSON.stringify(baby));localStorage.setItem(K.l,JSON.stringify(logs));localStorage.setItem(K.f,JSON.stringify(tried))};
+
+let tab='home', selStage=null, selType='porridge', qty=1;
+
+/* ══════════════════════════════════════════════
+   3. 날짜 유틸
+══════════════════════════════════════════════ */
+const d0=s=>{const d=new Date(s);d.setHours(0,0,0,0);return d};
+const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
+function ageMonths(){ // 소수 개월
+  const b=d0(baby.birth),n=today();
+  let m=(n.getFullYear()-b.getFullYear())*12+(n.getMonth()-b.getMonth());
+  if(n.getDate()<b.getDate())m--;
+  const anchor=addM(b,m);
+  const days=Math.floor((n-anchor)/86400000);
+  return m+days/30;
+}
+function addM(d,m){const x=new Date(d);const day=x.getDate();x.setMonth(x.getMonth()+m);if(x.getDate()<day)x.setDate(0);return x}
+const days=()=>Math.floor((today()-d0(baby.birth))/86400000);
+const fmt=d=>`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+function ageText(){
+  const m=Math.floor(ageMonths()), b=d0(baby.birth);
+  const dd=Math.floor((today()-addM(b,m))/86400000);
+  return `생후 ${days()}일 · 만 ${m}개월 ${dd}일`;
+}
+const curStage=()=>{const m=ageMonths();return STAGES.find(s=>m>=s.from&&m<s.to)||STAGES[0]};
+
+/* ══════════════════════════════════════════════
+   4. 온보딩
+══════════════════════════════════════════════ */
+function saveBaby(){
+  const n=document.getElementById('inName').value.trim();
+  const b=document.getElementById('inBirth').value;
+  const f=document.getElementById('inFeed').value;
+  if(!n){alert('아기 이름을 입력해 주세요');return}
+  if(!b){alert('태어난 날을 선택해 주세요');return}
+  if(d0(b)>today()){alert('오늘 이후 날짜는 선택할 수 없어요');return}
+  baby={name:n,birth:b,feed:f};save();boot();
+}
+function boot(){
+  if(!baby){document.getElementById('onboard').classList.remove('hide');
+    document.getElementById('main').classList.add('hide');
+    document.getElementById('nav').classList.add('hide');return}
+  document.getElementById('onboard').classList.add('hide');
+  document.getElementById('main').classList.remove('hide');
+  document.getElementById('nav').classList.remove('hide');
+  if(!selStage)selStage=curStage().id==='ready'?'early':curStage().id;
+  render();
+}
+
+/* ══════════════════════════════════════════════
+   5. 렌더
+══════════════════════════════════════════════ */
+function render(){
+  const s=curStage();
+  document.getElementById('hdr').innerHTML=`
+    <div class="hgreet">TODAY · ${fmt(today())}</div>
+    <div class="hname">${esc(baby.name)} <span style="font-size:14px;font-weight:600;color:var(--sub)">이유식 노트</span></div>
+    <div class="hage">${ageText()}</div>
+    <span class="stagepill" style="background:${s.color}">${s.name} · ${s.label}</span>`;
+  const v=document.getElementById('view');
+  v.innerHTML={home:vHome,stage:vStage,food:vFood,log:vLog,rule:vRule}[tab]();
+  v.scrollTop=0;window.scrollTo(0,0);
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
+}
+document.getElementById('nav').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;tab=b.dataset.t;render();
+});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ── 홈 ── */
+function vHome(){
+  const s=curStage(), m=ageMonths();
+  /* 오늘 추천 */
+  let pool=RECIPES.filter(r=>r.s===(s.id==='ready'?'early':s.id));
+  const seed=days();
+  const pick=[];
+  const P=pool.filter(r=>r.t==='porridge'||r.t==='meal'), T=pool.filter(r=>r.t==='topping'), F=pool.filter(r=>r.t==='finger');
+  if(P.length)pick.push(P[seed%P.length]);
+  if(T.length)pick.push(T[seed%T.length]);
+  if(F.length)pick.push(F[seed%F.length]);
+  else if(P.length>1)pick.push(P[(seed+3)%P.length]);
+
+  const nx=nextMile();
+  const prog=Math.max(0,Math.min(100,(m/12)*100));
+  const okCnt=Object.values(tried).filter(x=>x.st==='ok').length;
+  const logN=logs.filter(l=>l.d===fmt(today())).length;
+
+  return `
+  ${s.id==='ready'?`<div class="card" style="background:#FFF6EC">
+     <b>🕒 아직 이유식 시작 전이에요</b>
+     <p class="muted" style="margin:6px 0 0">이유식 시작 예정일은 <b style="color:var(--peach-d)">${fmt(addM(d0(baby.birth),6))}</b> (만 6개월),
+     오늘로부터 <b>${Math.max(0,Math.ceil((addM(d0(baby.birth),6)-today())/86400000))}일</b> 남았습니다.</p></div>`:''}
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:baseline">
+      <b>${s.name} 진행 중</b><span class="muted" style="font-size:12px">돌까지 ${Math.round(prog)}%</span>
+    </div>
+    <div class="pbar"><i style="width:${prog}%"></i></div>
+    <div class="hr"></div>
+    <div class="grid2" style="gap:8px">
+      ${cell('농도',s.ratio)}${cell('횟수',s.count)}
+      ${cell('1회 양',s.amount)}${cell('입자',s.texture)}
+    </div>
+    <p class="muted" style="margin:12px 0 0">${s.desc}</p>
+  </div>
+
+  <div class="sect">오늘의 추천 메뉴</div>
+  ${pick.map(rcard).join('')}
+
+  <div class="sect">다음 단계 안내</div>
+  <div class="card">
+    <div class="row" style="align-items:center;gap:12px">
+      <div style="font-size:28px">📌</div>
+      <div style="flex:1">
+        <b>${nx?nx.title:'완료기 진행 중'}</b>
+        <div class="muted" style="font-size:12.5px">${nx?`${fmt(nx.date)} · ${nx.dday>0?`D-${nx.dday}`:'지금부터'}`:'가족과 같은 식사로 넘어가는 시기예요'}</div>
+      </div>
+    </div>
+    ${nx?`<div class="hr"></div><ul style="margin:0;padding-left:18px;font-size:13.5px;color:var(--sub)">${nx.todo.map(t=>`<li>${t}</li>`).join('')}</ul>`:''}
+    <button class="btn ghost sm" style="margin-top:12px" onclick="tab='home';render();document.getElementById('rmap').scrollIntoView({behavior:'smooth'})">전체 경로 보기 ↓</button>
+  </div>
+
+  <div class="sect">이번 단계 체크리스트</div>
+  <div class="card"><ul style="margin:0;padding-left:18px;font-size:14px">${s.todo.map(t=>`<li style="margin-bottom:5px">${t}</li>`).join('')}</ul></div>
+
+  <div class="sect">한눈에 보기</div>
+  <div class="row">
+    <div class="card" style="flex:1;text-align:center;margin:0">
+      <div style="font-size:22px;font-weight:800;color:var(--mint)">${okCnt}</div><div class="muted" style="font-size:12px">안전 확인 재료</div></div>
+    <div class="card" style="flex:1;text-align:center;margin:0">
+      <div style="font-size:22px;font-weight:800;color:var(--peach)">${logN}</div><div class="muted" style="font-size:12px">오늘 먹은 기록</div></div>
+    <div class="card" style="flex:1;text-align:center;margin:0">
+      <div style="font-size:22px;font-weight:800;color:var(--lav)">${logs.length}</div><div class="muted" style="font-size:12px">전체 기록</div></div>
+  </div>
+
+  <div class="sect" id="rmap">${esc(baby.name)}의 이유식 로드맵</div>
+  <div class="card"><div class="rm">${roadmap()}</div></div>
+
+  <p class="muted" style="text-align:center;font-size:11.5px;margin:18px 6px 0">
+    본 앱의 정보는 일반적으로 알려진 이유식 원칙을 정리한 참고 자료입니다.<br>아기의 상태에 따라 다를 수 있으므로 최종 판단은 담당 소아과와 상의하세요.</p>`;
+}
+const cell=(k,v)=>`<div style="background:#FBF6F2;border-radius:12px;padding:9px 11px">
+  <div class="muted" style="font-size:11px;font-weight:700">${k}</div><div style="font-size:13.5px;font-weight:700;margin-top:1px">${v}</div></div>`;
+
+function miles(){
+  const b=d0(baby.birth);
+  return [
+   {m:4,title:'이유식 준비 관찰',todo:['목을 잘 가누는지, 앉은 자세를 유지하는지 확인','어른 음식에 관심을 보이는지 관찰','아직 이유식은 시작하지 않아요']},
+   {m:6,title:'이유식 시작 · 초기 (10배죽)',todo:['쌀미음 1~2숟갈로 첫 시작','1주 안에 소고기 추가 (철분!)','하루 1회, 오전 수유 전','컵으로 물 연습 시작']},
+   {m:6.5,title:'초기 2단계 · 하루 2회로',todo:['채소 종류 늘리기 (애호박·브로콜리·단호박)','양을 1회 60~80g까지','토핑이유식 큐브 만들어보기']},
+   {m:7,title:'중기 시작 (7배죽)',todo:['체에 걸르지 않고 2~3mm로 다져서','달걀 노른자·두부·흰살생선 도입','하루 2~3회로 늘리기']},
+   {m:9,title:'후기 시작 (진밥 · 핑거푸드)',todo:['하루 3회 + 간식 1~2회','재료를 0.5cm로 크게','핑거푸드 매일 한 가지','숟가락 스스로 쥐어보게 하기']},
+   {m:12,title:'완료기 · 유아식 전환',todo:['밥과 반찬 중심으로','생우유 시작 (하루 400~500ml 이내)','젖병 떼기 완료','꿀 섭취 가능']}
+  ].map(x=>{
+    const dt=addM(b,Math.floor(x.m));
+    if(x.m%1)dt.setDate(dt.getDate()+15);
+    return {...x,date:dt,dday:Math.ceil((dt-today())/86400000)};
+  });
+}
+const nextMile=()=>miles().find(x=>x.dday>0);
+function roadmap(){
+  const M=miles(), ni=M.findIndex(x=>x.dday>0);
+  return M.map((x,i)=>{
+    const cls=x.dday<=0?(i===(ni===-1?M.length-1:ni-1)?'now':'done'):'';
+    return `<div class="rmi ${cls}"><div class="dot"></div>
+      <div class="when">만 ${x.m}개월 · ${fmt(x.date)} ${x.dday>0?`<span style="color:var(--peach-d)">D-${x.dday}</span>`:''}</div>
+      <h4>${x.title}</h4>
+      <ul>${x.todo.map(t=>`<li>${t}</li>`).join('')}</ul></div>`;
+  }).join('');
+}
+
+/* ── 단계별 ── */
+function vStage(){
+  const st=STAGES.find(s=>s.id===selStage)||STAGES[1];
+  const types=[['porridge','🍲 죽 이유식'],['topping','🧊 토핑 이유식']];
+  if(st.id==='late')types.push(['finger','✋ 핑거푸드']);
+  if(st.id==='final')types.length=0,types.push(['meal','🍚 유아식']);
+  if(!types.find(t=>t[0]===selType))selType=types[0][0];
+  const list=RECIPES.filter(r=>r.s===st.id&&r.t===selType);
+  const cur=curStage().id;
+  return `
+  <div class="stab">${STAGES.filter(s=>s.id!=='ready').map(s=>
+    `<button class="${s.id===selStage?'on':''}" style="${s.id===selStage?`background:${s.color}`:''}"
+      onclick="selStage='${s.id}';render()">${s.name}${s.id===cur?' ·':''}</button>`).join('')}</div>
+
+  <div class="card" style="border-left:4px solid ${st.color}">
+    <b style="font-size:17px">${st.name} <span class="muted" style="font-size:13px;font-weight:600">${st.label}</span></b>
+    ${st.id===cur?'<span class="tag p" style="margin-left:6px">지금 여기</span>':''}
+    <p class="muted" style="margin:8px 0 12px">${st.desc}</p>
+    <div class="grid2" style="gap:8px">${cell('농도',st.ratio)}${cell('횟수',st.count)}${cell('1회 양',st.amount)}${cell('입자',st.texture)}</div>
+  </div>
+
+  <div class="ttab">${types.map(t=>`<button class="${t[0]===selType?'on':''}" onclick="selType='${t[0]}';render()">${t[1]}</button>`).join('')}</div>
+  ${selType==='topping'?`<div class="card" style="background:#F3FAF7;font-size:13px">
+    <b>토핑이유식이란?</b><p class="muted" style="margin:5px 0 0">기본 죽(밥)에 재료별 큐브를 따로 올려 주는 방식이에요.
+    재료별 반응을 확인하기 쉽고 미리 만들어 두기 편합니다. 죽 이유식과 번갈아 활용하면 좋습니다.</p></div>`:''}
+  ${list.map(rcard).join('')}
+  ${list.length?'':'<div class="card muted">준비된 메뉴가 없습니다.</div>'}`;
+}
+const rcard=r=>`<button class="rc" onclick="openR('${r.id}')">
+  <div class="emo">${r.e}</div>
+  <div style="flex:1"><div class="nm">${r.n}</div>
+  <div class="ds">⏱ ${r.time}${r.bad?` · ${r.bad}`:''}</div></div><div class="ar">›</div></button>`;
+
+/* ── 레시피 모달 ── */
+function openR(id){
+  const r=RECIPES.find(x=>x.id===id);qty=1;
+  document.getElementById('mbody').innerHTML=rBody(r);
+  document.getElementById('modal').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function rBody(r){
+  const st=STAGES.find(s=>s.id===r.s);
+  return `
+  <div style="font-size:44px;text-align:center">${r.e}</div>
+  <div class="mtitle" style="text-align:center;margin-bottom:6px">${r.n}</div>
+  <div style="text-align:center;margin-bottom:16px">
+    <span class="tag" style="background:${st.color}22;color:${st.color==='#FFC861'?'#B07C13':st.color}">${st.name}</span>
+    <span class="tag">⏱ ${r.time}</span>${r.bad?`<span class="tag p">${r.bad}</span>`:''}</div>
+
+  <div class="qbox">
+    <b style="flex:1;font-size:14px">분량 조절 <span class="muted" style="font-weight:600">(×${qty})</span></b>
+    <button onclick="setQ(-1)">−</button><b style="width:26px;text-align:center">${qty}</b><button onclick="setQ(1)">＋</button>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <b style="font-size:14px">🧾 재료</b><div style="margin-top:8px">
+    ${r.ing.map(i=>`<div class="ingrow"><span>${i.n}${i.note?`<br><span class="muted" style="font-size:11.5px">${i.note}</span>`:''}</span>
+      <b>${round(i.q*qty)}${i.u}</b></div>`).join('')}</div>
+    <div class="muted" style="font-size:11.5px;margin-top:8px">기준 농도: ${st.ratio} · 1회 ${st.amount}</div>
+  </div>
+  <div class="card" style="margin-bottom:12px"><b style="font-size:14px">👩‍🍳 만드는 순서</b>
+    <ol class="stepl" style="margin-top:10px">${r.st.map(s=>`<li>${s}</li>`).join('')}</ol></div>
+  ${r.tip?`<div class="tipbox" style="margin-bottom:10px">💡 <b>TIP</b> ${r.tip}</div>`:''}
+  ${r.warn?`<div class="warn" style="margin-bottom:10px">⚠️ <b>주의</b> ${r.warn}</div>`:''}
+  <button class="btn" onclick="quickLog('${r.id}')">📝 오늘 먹은 기록에 추가</button>
+  <button class="btn ghost" style="margin-top:8px" onclick="closeM()">닫기</button>`;
+}
+function setQ(d){qty=Math.max(1,Math.min(10,qty+d));
+  const r=RECIPES.find(x=>document.getElementById('mbody').innerHTML.includes(x.n)&&true);
+  // 안전하게 현재 열린 레시피 id 보관
+  if(openR.cur)document.getElementById('mbody').innerHTML=rBody(openR.cur);}
+const round=n=>Math.round(n*10)/10;
+const _openR=openR;
+openR=function(id){openR.cur=RECIPES.find(x=>x.id===id);_openR(id)};
+function closeM(){document.getElementById('modal').classList.remove('on');document.body.style.overflow=''}
+
+/* ── 재료 도감 ── */
+let fCat='전체';
+function vFood(){
+  const m=ageMonths();
+  const cats=['전체','곡류','육류','어패류','채소','과일','콩·유제품','기타'];
+  const list=FOODS.filter(f=>fCat==='전체'||f.c===fCat).sort((a,b)=>a.m-b.m);
+  return `
+  <div class="card" style="background:#FFF6EC;font-size:13px">
+    <b>🥕 지금 ${esc(baby.name)}(만 ${Math.floor(m)}개월)이 먹을 수 있는 재료</b>
+    <p class="muted" style="margin:5px 0 0">흐리게 표시된 재료는 아직 이른 시기예요. 시기는 일반적인 기준이며 아기마다 다를 수 있습니다.
+    새 재료는 오전에 소량 → 2~3일 관찰 후 다음 재료로 넘어가세요.</p></div>
+  <div class="stab">${cats.map(c=>`<button class="${c===fCat?'on':''}" style="${c===fCat?'background:var(--ink)':''}" onclick="fCat='${c}';render()">${c}</button>`).join('')}</div>
+  <div class="grid4">${list.map(f=>{
+    const lock=m<f.m, t=tried[f.n];
+    return `<button class="ing ${lock?'locked':''}" onclick="openF('${f.n.replace(/'/g,"\\'")}')">
+      <div class="e">${f.e}</div><div class="n">${f.n}</div>
+      <div class="m">${f.m}개월+</div>
+      ${t&&t.st==='ok'?'<div class="ok">✓ 확인</div>':''}
+      ${t&&t.st==='bad'?'<div class="ok" style="color:#E0563C">⚠ 반응</div>':''}
+      ${f.al?'<div class="m" style="color:#C99">알레르기</div>':''}</button>`}).join('')}</div>`;
+}
+function openF(name){
+  const f=FOODS.find(x=>x.n===name), m=ageMonths(), t=tried[name]||{};
+  document.getElementById('mbody').innerHTML=`
+   <div style="font-size:44px;text-align:center">${f.e}</div>
+   <div class="mtitle" style="text-align:center">${f.n}</div>
+   <div style="text-align:center;margin:6px 0 16px">
+     <span class="tag m">${f.c}</span><span class="tag ${m>=f.m?'p':''}">${f.m}개월부터</span>
+     ${f.al?'<span class="tag v">알레르기 주의</span>':''}</div>
+   <div class="card">${f.d}</div>
+   ${m<f.m?`<div class="warn">아직 이른 재료예요. <b>${fmt(addM(d0(baby.birth),f.m))}</b>(만 ${f.m}개월) 이후에 시도해 보세요.</div>`:''}
+   ${f.warn?`<div class="warn" style="margin-top:10px">⚠️ 특별히 주의가 필요한 식품입니다. 위 설명을 꼭 확인하세요.</div>`:''}
+   <div class="sect">우리 아기 반응 기록</div>
+   <div class="card">
+     <div class="chips">
+       ${[['ok','😊 잘 먹었어요'],['watch','😐 관찰 중'],['bad','😖 반응 있었어요']].map(x=>
+        `<button class="${t.st===x[0]?'on':''}" onclick="setF('${f.n.replace(/'/g,"\\'")}','${x[0]}')">${x[1]}</button>`).join('')}
+     </div>
+     ${t.date?`<p class="muted" style="margin:10px 0 0;font-size:12.5px">첫 시도: ${t.date}</p>`:''}
+     ${t.st==='bad'?'<div class="warn" style="margin-top:10px">호흡 곤란·얼굴 부기·심한 구토가 있으면 즉시 병원에 가세요. 경미한 발진도 사진과 함께 기록해 두었다가 소아과에 보여주세요.</div>':''}
+   </div>
+   ${(()=>{const rs=RECIPES.filter(r=>r.ing.some(i=>i.n.includes(f.n.split(' ')[0])));
+     return rs.length?`<div class="sect">이 재료로 만드는 메뉴</div>${rs.map(rcard).join('')}`:''})()}
+   <button class="btn ghost" style="margin-top:8px" onclick="closeM()">닫기</button>`;
+  document.getElementById('modal').classList.add('on');document.body.style.overflow='hidden';
+}
+function setF(n,st){
+  tried[n]=tried[n]||{date:fmt(today())};
+  tried[n].st=tried[n].st===st?null:st;
+  if(!tried[n].st)delete tried[n];save();openF(n);
+}
+
+/* ── 기록 ── */
+let lRx='😋';
+function vLog(){
+  const byDate={};logs.slice().reverse().forEach(l=>{(byDate[l.d]=byDate[l.d]||[]).push(l)});
+  const s=curStage();
+  const opts=RECIPES.filter(r=>r.s===(s.id==='ready'?'early':s.id));
+  return `
+  <div class="card">
+    <b style="font-size:15px">📝 오늘 먹은 기록 추가</b>
+    <div class="field" style="margin:12px 0 10px"><label>메뉴</label>
+      <input id="lgName" list="lgList" placeholder="메뉴명을 입력하거나 선택">
+      <datalist id="lgList">${opts.map(r=>`<option value="${r.n}">`).join('')}</datalist></div>
+    <div class="row">
+      <div class="field" style="flex:1;margin:0"><label>먹은 양(g)</label><input id="lgAmt" type="number" placeholder="예: 80"></div>
+      <div class="field" style="flex:1;margin:0"><label>시간</label>
+        <select id="lgTime"><option>아침</option><option>점심</option><option>저녁</option><option>간식</option></select></div>
+    </div>
+    <div class="field" style="margin:14px 0 12px"><label>반응</label>
+      <div class="chips">${['😋','😐','😖'].map(x=>`<button class="${lRx===x?'on':''}" onclick="lRx='${x}';render()">${x}</button>`).join('')}</div></div>
+    <button class="btn" onclick="addLog()">기록 저장</button>
+  </div>
+  <div class="sect">지난 기록 ${logs.length?`(${logs.length})`:''}</div>
+  ${logs.length?Object.keys(byDate).map(d=>`<div class="card">
+    <b style="font-size:13.5px;color:var(--peach-d)">${d}</b>
+    ${byDate[d].map((l,i)=>`<div class="logi">
+      <div class="rx">${l.rx}</div>
+      <div style="flex:1"><b style="font-size:14px">${esc(l.n)}</b>
+      <div class="muted" style="font-size:12px">${l.t}${l.a?` · ${l.a}g`:''}</div></div>
+      <button class="muted" style="font-size:18px;padding:4px 8px" onclick="delLog('${l.id}')">×</button></div>`).join('')}
+    </div>`).join(''):'<div class="card muted">아직 기록이 없어요. 첫 이유식을 기록해 보세요!</div>'}
+  ${logs.length?`<button class="btn ghost sm" style="margin-top:6px" onclick="exportCsv()">기록 내보내기 (CSV)</button>`:''}`;
+}
+function addLog(){
+  const n=document.getElementById('lgName').value.trim();
+  if(!n){alert('메뉴명을 입력해 주세요');return}
+  logs.push({id:Date.now()+'',d:fmt(today()),n,a:document.getElementById('lgAmt').value,
+    t:document.getElementById('lgTime').value,rx:lRx});
+  save();render();
+}
+function quickLog(id){
+  const r=RECIPES.find(x=>x.id===id);
+  logs.push({id:Date.now()+'',d:fmt(today()),n:r.n,a:'',t:'식사',rx:'😋'});
+  save();closeM();tab='log';render();
+}
+function delLog(id){logs=logs.filter(l=>l.id!==id);save();render()}
+function exportCsv(){
+  const csv='날짜,시간,메뉴,양(g),반응\n'+logs.map(l=>`${l.d},${l.t},"${l.n}",${l.a||''},${l.rx}`).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));
+  a.download=`${baby.name}_이유식기록.csv`;a.click();
+}
+
+/* ── 원칙 ── */
+function vRule(){
+  return `
+  <div class="card" style="background:#FFF6EC">
+    <b>📖 이유식 기본 원칙</b>
+    <p class="muted" style="margin:6px 0 0;font-size:12.5px">널리 알려진 소아과적 이유식 원칙(하정훈 선생님 육아법 기준)을 정리한 내용입니다.
+    책의 문장을 그대로 옮긴 것이 아니므로, 자세한 내용은 원서와 담당 소아과에서 확인해 주세요.</p></div>
+  ${RULES.map((r,i)=>`<div class="card"><b style="font-size:15px">${i+1}. ${r.t}</b>
+    <p class="muted" style="margin:6px 0 0">${r.d}</p></div>`).join('')}
+  <div class="sect">단계별 요약표</div>
+  <div class="card" style="font-size:13px">
+    ${STAGES.filter(s=>s.id!=='ready').map(s=>`<div style="padding:9px 0;border-bottom:1px solid var(--line)">
+      <b style="color:${s.color==='#FFC861'?'#B07C13':s.color}">${s.name} · ${s.label}</b>
+      <div class="muted" style="font-size:12.5px">${s.ratio} · ${s.count} · ${s.amount}</div></div>`).join('')}
+  </div>
+  <div class="sect">아기 정보</div>
+  <div class="card">
+    <div class="ingrow"><span>이름</span><b>${esc(baby.name)}</b></div>
+    <div class="ingrow"><span>생일</span><b>${fmt(d0(baby.birth))}</b></div>
+    <div class="ingrow"><span>나이</span><b>${ageText()}</b></div>
+    <div class="ingrow"><span>수유</span><b>${{breast:'모유 위주',formula:'분유 위주',mix:'혼합'}[baby.feed]||'-'}</b></div>
+    <button class="btn ghost sm" style="margin-top:12px" onclick="editBaby()">아기 정보 수정</button>
+    <button class="btn ghost sm" style="margin-top:8px;border-color:#E9DDD6;color:var(--sub)" onclick="resetAll()">전체 데이터 초기화</button>
+  </div>`;
+}
+function editBaby(){
+  const n=prompt('아기 이름',baby.name);if(n===null)return;
+  const b=prompt('생년월일 (YYYY-MM-DD)',baby.birth);if(b===null)return;
+  if(isNaN(d0(b))){alert('날짜 형식이 올바르지 않습니다');return}
+  baby.name=n.trim()||baby.name;baby.birth=b;save();render();
+}
+function resetAll(){
+  if(!confirm('모든 기록과 아기 정보가 삭제됩니다. 계속할까요?'))return;
+  localStorage.removeItem(K.b);localStorage.removeItem(K.l);localStorage.removeItem(K.f);
+  baby=null;logs=[];tried={};location.reload();
+}
+boot();
+</script>
+</body>
+</html>
